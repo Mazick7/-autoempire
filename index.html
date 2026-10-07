@@ -247,104 +247,227 @@ button{
   filter:drop-shadow(0 18px 25px rgba(0,0,0,.55));
 }
 
+/* REALISTIC CAR ART */
+
+.realCar{
+  position:relative;
+  width:210px;
+  height:115px;
+}
+
+.realCar .carShadow{
+  position:absolute;
+  width:190px;
+  height:14px;
+  left:10px;
+  bottom:8px;
+  border-radius:50%;
+  background:rgba(0,0,0,.55);
+  filter:blur(7px);
+}
+
+.realCar .carBody{
+  position:absolute;
+  width:190px;
+  height:52px;
+  left:10px;
+  top:43px;
+  border-radius:34px 42px 14px 15px;
+  background:
+    linear-gradient(
+      165deg,
+      #f4f6fa 0%,
+      #bfc5cf 28%,
+      #727986 57%,
+      #282d37 100%
+    );
+  box-shadow:
+    inset 0 4px 5px rgba(255,255,255,.45),
+    inset 0 -9px 13px rgba(0,0,0,.45),
+    0 18px 25px rgba(0,0,0,.4);
+}
+
+.realCar .hood{
+  position:absolute;
+  left:117px;
+  top:47px;
+  width:75px;
+  height:28px;
+  border-radius:5px 30px 7px 5px;
+  background:linear-gradient(165deg,#e9edf2,#707783);
+  opacity:.8;
+}
+
+.realCar .roof{
+  position:absolute;
+  width:105px;
+  height:47px;
+  left:52px;
+  top:16px;
+  border-radius:65px 70px 4px 4px;
+  transform:skewX(-13deg);
+  background:linear-gradient(145deg,#555e6d,#191d27 85%);
+  box-shadow:
+    inset 0 3px 5px rgba(255,255,255,.12);
+}
+
+.realCar .windowFront{
+  position:absolute;
+  width:48px;
+  height:28px;
+  left:104px;
+  top:21px;
+  transform:skewX(-13deg);
+  border-radius:3px 18px 3px 3px;
+  background:
+    linear-gradient(135deg,#a8d9ed 0%,#334656 42%,#111722 100%);
+  border-right:1px solid rgba(255,255,255,.15);
+}
+
+.realCar .windowRear{
+  position:absolute;
+  width:43px;
+  height:28px;
+  left:62px;
+  top:21px;
+  transform:skewX(-13deg);
+  border-radius:17px 3px 3px 3px;
+  background:
+    linear-gradient(135deg,#9ccfe3 0%,#344655 45%,#111722 100%);
+}
+
+.realCar .windowLine{
+  position:absolute;
+  left:101px;
+  top:19px;
+  width:2px;
+  height:32px;
+  background:rgba(255,255,255,.15);
+  transform:rotate(-7deg);
+}
+
+.realCar .sideLine{
+  position:absolute;
+  left:45px;
+  top:67px;
+  width:112px;
+  height:1px;
+  background:rgba(255,255,255,.25);
+}
+
+.realCar .doorLine{
+  position:absolute;
+  left:93px;
+  top:53px;
+  width:1px;
+  height:37px;
+  background:rgba(0,0,0,.22);
+}
+
+.realCar .handle{
+  position:absolute;
+  left:112px;
+  top:62px;
+  width:10px;
+  height:2px;
+  border-radius:2px;
+  background:rgba(20,22,27,.65);
+}
+
+.realCar .wheel{
+  position:absolute;
+  width:36px;
+  height:36px;
+  bottom:1px;
+  border-radius:50%;
+  background:#050608;
+  border:5px solid #262b34;
+  box-shadow:
+    inset 0 0 0 4px #0b0c10,
+    0 4px 7px rgba(0,0,0,.5);
+  z-index:4;
+}
+
+.realCar .wheel:before{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border-radius:50%;
+  border:2px solid #777e89;
+}
+
+.realCar .wheel:after{
+  content:"";
+  position:absolute;
+  width:6px;
+  height:6px;
+  left:10px;
+  top:10px;
+  border-radius:50%;
+  background:#aeb4bd;
+}
+
+.realCar .w1{left:34px}
+.realCar .w2{right:26px}
+
+.realCar .headlight{
+  position:absolute;
+  right:2px;
+  top:55px;
+  width:19px;
+  height:10px;
+  border-radius:9px 3px 4px 9px;
+  background:linear-gradient(90deg,#fff,#c9f8ff);
+  box-shadow:0 0 17px rgba(185,247,255,.85);
+  z-index:5;
+}
+
+.realCar .taillight{
+  position:absolute;
+  left:8px;
+  top:58px;
+  width:14px;
+  height:9px;
+  border-radius:4px 8px 5px 4px;
+  background:#e92848;
+  box-shadow:0 0 10px rgba(255,40,70,.55);
+  z-index:5;
+}
+
+.realCar .grille{
+  position:absolute;
+  right:-1px;
+  top:69px;
+  width:12px;
+  height:17px;
+  border-radius:2px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #080a0d 0,
+      #080a0d 2px,
+      #252a32 2px,
+      #252a32 3px
+    );
+  z-index:5;
+}
+
+.realCar .bumper{
+  position:absolute;
+  right:-1px;
+  top:78px;
+  width:22px;
+  height:14px;
+  border-radius:3px 8px 5px 3px;
+  background:rgba(20,23,28,.65);
+}
+
 .caseArt{
   position:absolute;
   right:10px;
   bottom:25px;
   width:210px;
   height:105px;
-}
-
-.carBody{
-  position:absolute;
-  width:190px;
-  height:54px;
-  left:10px;
-  top:42px;
-  border-radius:28px 35px 14px 13px;
-  background:linear-gradient(170deg,#e8edf7 0%,#8c95a7 42%,#272c38 100%);
-  box-shadow:
-    inset 0 -8px 13px rgba(0,0,0,.35),
-    0 15px 25px rgba(0,0,0,.35);
-}
-
-.carRoof{
-  position:absolute;
-  width:100px;
-  height:45px;
-  left:55px;
-  top:13px;
-  border-radius:60px 60px 5px 5px;
-  background:linear-gradient(150deg,#4d5668,#171b25);
-  transform:skewX(-12deg);
-}
-
-.carGlass{
-  position:absolute;
-  left:64px;
-  top:18px;
-  width:79px;
-  height:30px;
-  border-radius:35px 35px 4px 4px;
-  background:linear-gradient(135deg,#bcefff,#26384e 70%);
-  opacity:.8;
-}
-
-.wheel{
-  position:absolute;
-  width:35px;
-  height:35px;
-  border-radius:50%;
-  bottom:0;
-  background:#050608;
-  border:6px solid #303542;
-  box-shadow:inset 0 0 0 5px #090a0d;
-}
-
-.wheel:after{
-  content:"";
-  position:absolute;
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:#777e8d;
-  top:8px;
-  left:8px;
-}
-
-.w1{left:35px}
-.w2{right:27px}
-
-.headlight{
-  position:absolute;
-  right:2px;
-  top:56px;
-  width:15px;
-  height:8px;
-  border-radius:8px;
-  background:#dfffff;
-  box-shadow:0 0 15px #9ef7ff;
-}
-
-.taillight{
-  position:absolute;
-  left:7px;
-  top:57px;
-  width:9px;
-  height:9px;
-  border-radius:4px;
-  background:#ff345d;
-  box-shadow:0 0 12px #ff345d;
-}
-
-.grille{
-  position:absolute;
-  right:0;
-  top:69px;
-  width:13px;
-  height:17px;
-  border-radius:2px;
-  background:#11141a;
 }
 
 .caseGrid{
@@ -428,10 +551,11 @@ button{
 
 .miniCaseCar{
   position:absolute;
-  right:-18px;
-  top:65px;
-  transform:scale(.68) rotate(-4deg);
-  opacity:.8;
+  right:-25px;
+  top:68px;
+  transform:scale(.62) rotate(-4deg);
+  opacity:.9;
+  transform-origin:center;
 }
 
 .empty{
@@ -1216,6 +1340,31 @@ button{
   color:#818899;
 }
 
+/* MANUAL OPEN BUTTON */
+
+.manualOpenWrap{
+  padding:0 18px 18px;
+}
+
+#manualOpenBtn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#765cff,#5035d5);
+  box-shadow:0 10px 25px rgba(124,92,255,.25);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.4px;
+}
+
+#manualOpenBtn:active{
+  transform:scale(.98);
+}
+
+#manualOpenBtn:disabled{
+  opacity:.5;
+}
+
 .resultCard{
   display:none;
   text-align:center;
@@ -1563,19 +1712,24 @@ button{
 /* RESPONSIVE */
 
 @media(max-width:390px){
+
   .hero{
     min-height:215px;
   }
+
   .hero h1{
     font-size:24px;
   }
+
   .caseCard{
     min-height:180px;
   }
-  .caseArt{
-    transform:scale(.85);
-    right:-35px;
+
+  .miniCaseCar{
+    transform:scale(.55) rotate(-4deg);
+    right:-40px;
   }
+
 }
 </style>
 </head>
@@ -1621,14 +1775,25 @@ button{
   </div>
 
   <div class="heroCar">
-    <div class="carBody">
-      <div class="carRoof"></div>
-      <div class="carGlass"></div>
+    <div class="realCar">
+
+      <div class="carShadow"></div>
+      <div class="carBody"></div>
+      <div class="hood"></div>
+      <div class="roof"></div>
+      <div class="windowRear"></div>
+      <div class="windowFront"></div>
+      <div class="windowLine"></div>
+      <div class="sideLine"></div>
+      <div class="doorLine"></div>
+      <div class="handle"></div>
       <div class="wheel w1"></div>
       <div class="wheel w2"></div>
       <div class="headlight"></div>
       <div class="taillight"></div>
       <div class="grille"></div>
+      <div class="bumper"></div>
+
     </div>
   </div>
 </div>
@@ -1839,8 +2004,18 @@ button{
     </div>
 
     <div class="rouletteStatus" id="rouletteStatus">
-      Подготовка...
+      Нажми «ОТКРЫТЬ КЕЙС»
     </div>
+
+  </div>
+
+  <div class="manualOpenWrap" id="manualOpenWrap">
+
+    <button
+      id="manualOpenBtn"
+      onclick="startCaseOpening()">
+      ОТКРЫТЬ КЕЙС
+    </button>
 
   </div>
 
@@ -2503,6 +2678,7 @@ function showToast(text){
 let audioContext=null;
 let masterGain=null;
 let rouletteTimer=null;
+let noiseBuffer=null;
 
 function initAudio(){
 
@@ -2525,7 +2701,7 @@ function initAudio(){
 
 function tone(freq,duration,type="sine",volume=.08){
 
-  if(!audioContext)
+  if(!audioContext || !masterGain)
     return;
 
   try{
@@ -2537,14 +2713,109 @@ function tone(freq,duration,type="sine",volume=.08){
     osc.frequency.value=freq;
 
     gain.gain.setValueAtTime(.001,audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(volume,audioContext.currentTime+.01);
-    gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration);
+
+    gain.gain.exponentialRampToValueAtTime(
+      volume,
+      audioContext.currentTime+.008
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      audioContext.currentTime+duration
+    );
 
     osc.connect(gain);
     gain.connect(masterGain);
 
     osc.start();
-    osc.stop(audioContext.currentTime+duration+.02);
+
+    osc.stop(
+      audioContext.currentTime+duration+.02
+    );
+
+  }catch(e){}
+
+}
+
+function createNoiseBuffer(){
+
+  if(!audioContext || noiseBuffer)
+    return;
+
+  try{
+
+    const length=Math.floor(
+      audioContext.sampleRate*.12
+    );
+
+    noiseBuffer=
+      audioContext.createBuffer(
+        1,
+        length,
+        audioContext.sampleRate
+      );
+
+    const data=noiseBuffer.getChannelData(0);
+
+    for(let i=0;i<length;i++){
+      data[i]=(Math.random()*2)-1;
+    }
+
+  }catch(e){}
+
+}
+
+function rouletteTick(intensity=.05){
+
+  if(!audioContext || !masterGain)
+    return;
+
+  try{
+
+    createNoiseBuffer();
+
+    if(!noiseBuffer)
+      return;
+
+    const source=
+      audioContext.createBufferSource();
+
+    const filter=
+      audioContext.createBiquadFilter();
+
+    const gain=
+      audioContext.createGain();
+
+    filter.type="bandpass";
+
+    filter.frequency.value=
+      1500+Math.random()*1100;
+
+    filter.Q.value=5;
+
+    const now=audioContext.currentTime;
+
+    gain.gain.setValueAtTime(.001,now);
+
+    gain.gain.exponentialRampToValueAtTime(
+      intensity,
+      now+.002
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      now+.045
+    );
+
+    source.buffer=noiseBuffer;
+
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(masterGain);
+
+    source.start();
+
+    source.stop(now+.05);
 
   }catch(e){}
 
@@ -2554,7 +2825,10 @@ function clickSound(){
 
   initAudio();
 
-  tone(950,.045,"square",.045);
+  if(audioContext && audioContext.state==="suspended")
+    audioContext.resume();
+
+  tone(720,.035,"triangle",.025);
 
 }
 
@@ -2562,11 +2836,14 @@ function heavySound(){
 
   initAudio();
 
-  tone(80,.45,"sine",.15);
+  if(audioContext && audioContext.state==="suspended")
+    audioContext.resume();
+
+  tone(70,.32,"sine",.13);
 
   setTimeout(()=>{
-    tone(140,.28,"sawtooth",.08);
-  },50);
+    tone(105,.18,"triangle",.07);
+  },35);
 
 }
 
@@ -2574,31 +2851,152 @@ function startRouletteSound(){
 
   initAudio();
 
+  if(audioContext && audioContext.state==="suspended")
+    audioContext.resume();
+
+  clearTimeout(rouletteTimer);
+
   let count=0;
+  const total=58;
 
-  clearInterval(rouletteTimer);
-
-  rouletteTimer=setInterval(()=>{
+  function tick(){
 
     count++;
 
-    tone(
-      260+count*3,
-      .035,
-      "square",
-      .025
+    const progress=count/total;
+
+    /*
+      Настоящий механический характер:
+      сначала редкие тики,
+      затем рулетка ускоряется.
+    */
+
+    rouletteTick(
+      .025+(progress*.05)
     );
 
-    if(count>=52)
-      clearInterval(rouletteTimer);
+    /*
+      Низкий металлический щелчок
+      смешивается с шумовым тиком.
+    */
 
-  },79);
+    if(count%2===0){
+
+      tone(
+        125+progress*55,
+        .025,
+        "triangle",
+        .012+progress*.008
+      );
+
+    }
+
+    if(count<total){
+
+      const delay=
+        92-(progress*56);
+
+      rouletteTimer=
+        setTimeout(tick,delay);
+
+    }
+
+  }
+
+  tick();
 
 }
 
 function stopRouletteSound(){
 
-  clearInterval(rouletteTimer);
+  clearTimeout(rouletteTimer);
+
+  rouletteTimer=null;
+
+  /*
+    Финальный механический стоп.
+  */
+
+  rouletteTick(.10);
+
+  setTimeout(()=>{
+    rouletteTick(.07);
+  },65);
+
+  tone(82,.24,"sine",.11);
+
+}
+
+/* =========================================================
+   CASE COVER CAR
+========================================================= */
+
+function getCaseCarArt(caseId){
+
+  const colors={
+    starter:["#d7dbe2","#6c7480"],
+    street:["#c7cdd6","#4e5663"],
+    premium:["#3d4653","#10141b"],
+    elite:["#202631","#090b10"],
+    imperial:["#f1f2f4","#555b65"]
+  };
+
+  const pair=colors[caseId]||colors.starter;
+
+  return `
+
+    <div class="realCar"
+         style="
+           --body1:${pair[0]};
+           --body2:${pair[1]};
+         ">
+
+      <div class="carShadow"></div>
+
+      <div
+        class="carBody"
+        style="
+          background:
+            linear-gradient(
+              165deg,
+              ${pair[0]} 0%,
+              ${pair[1]} 55%,
+              #181c23 100%
+            );
+        ">
+      </div>
+
+      <div class="hood"></div>
+
+      <div class="roof"></div>
+
+      <div class="windowRear"></div>
+
+      <div class="windowFront"></div>
+
+      <div class="windowLine"></div>
+
+      <div class="sideLine"></div>
+
+      <div class="doorLine"></div>
+
+      <div class="handle"></div>
+
+      <div class="wheel w1"></div>
+
+      <div class="wheel w2"></div>
+
+      <div class="headlight"></div>
+
+      <div class="taillight"></div>
+
+      <div class="grille"></div>
+
+      <div class="bumper"></div>
+
+    </div>
+
+  `;
 
 }
 
@@ -2627,32 +3025,41 @@ function renderCases(){
     card.innerHTML=`
 
       <div class="caseTop">
+
         <div>
-          <div class="caseRarity">${rarityNames[c.rarity]}</div>
+
+          <div class="caseRarity">
+            ${rarityNames[c.rarity]}
+          </div>
+
           <h3>${c.name}</h3>
-          <div class="caseDesc">${c.description}</div>
+
+          <div class="caseDesc">
+            ${c.description}
+          </div>
+
         </div>
+
       </div>
 
       <div class="miniCaseCar">
-        <div class="carBody">
-          <div class="carRoof"></div>
-          <div class="carGlass"></div>
-          <div class="wheel w1"></div>
-          <div class="wheel w2"></div>
-          <div class="headlight"></div>
-          <div class="taillight"></div>
-        </div>
+        ${getCaseCarArt(c.id)}
       </div>
 
-      <div class="casePrice">${money(c.price)}</div>
+      <div class="casePrice">
+        ${money(c.price)}
+      </div>
 
       <div class="caseButton">
         ОТКРЫТЬ
       </div>
+
     `;
 
-    card.addEventListener("click",()=>openCase(c));
+    card.addEventListener(
+      "click",
+      ()=>openCase(c)
+    );
 
     grid.appendChild(card);
 
@@ -2665,15 +3072,17 @@ function renderCases(){
 
 /* =========================================================
    OPEN CASE
+   ПЕРВЫЙ КЛИК — ТОЛЬКО ЭКРАН КЕЙСА
 ========================================================= */
 
 let currentCase=null;
 let currentResult=null;
 let caseBusy=false;
+let casePrepared=false;
 
 function openCase(c){
 
-  if(caseBusy)
+  if(caseBusy || casePrepared)
     return;
 
   if(save.balance<c.price){
@@ -2690,64 +3099,155 @@ function openCase(c){
   if(audioContext && audioContext.state==="suspended")
     audioContext.resume();
 
-  caseBusy=true;
+  currentCase=c;
+  currentResult=null;
+  casePrepared=true;
 
-  save.balance-=c.price;
+  const modal=
+    document.getElementById("rouletteModal");
+
+  modal.classList.add("show");
+
+  const resultCard=
+    document.getElementById("resultCard");
+
+  resultCard.classList.remove("show");
+
+  const openingCase=
+    document.getElementById("openingCase");
+
+  openingCase.className="openingCase";
+
+  const burst=
+    document.getElementById("lightBurst");
+
+  burst.classList.remove("active");
+
+  const track=
+    document.getElementById("rouletteTrack");
+
+  track.innerHTML="";
+
+  track.style.transition="none";
+  track.style.transform="translateX(0)";
+
+  document.getElementById(
+    "rouletteTitle"
+  ).textContent=
+    c.name+" кейс";
+
+  document.getElementById(
+    "rouletteStatus"
+  ).textContent=
+    "Нажми «ОТКРЫТЬ КЕЙС»";
+
+  const manualBtn=
+    document.getElementById("manualOpenBtn");
+
+  manualBtn.style.display="block";
+  manualBtn.disabled=false;
+
+  document.getElementById(
+    "manualOpenWrap"
+  ).style.display="block";
+
+  vibrate(20);
+
+}
+
+/* =========================================================
+   SECOND CLICK — START OPENING
+========================================================= */
+
+function startCaseOpening(){
+
+  if(!currentCase)
+    return;
+
+  if(caseBusy)
+    return;
+
+  if(save.balance<currentCase.price){
+
+    showToast("Недостаточно средств");
+
+    closeRoulette();
+
+    vibrate(80);
+
+    return;
+  }
+
+  caseBusy=true;
+  casePrepared=false;
+
+  const manualBtn=
+    document.getElementById("manualOpenBtn");
+
+  manualBtn.disabled=true;
+  manualBtn.style.display="none";
+
+  document.getElementById(
+    "manualOpenWrap"
+  ).style.display="none";
+
+  /*
+    Деньги списываются только здесь —
+    после реального нажатия ОТКРЫТЬ КЕЙС.
+  */
+
+  save.balance-=currentCase.price;
 
   save.casesOpened++;
 
-  currentCase=c;
-
   /*
-    ВАЖНО:
     Результат выбирается ОДИН РАЗ.
-    Именно его потом ставим в рулетку.
+    Именно этот результат попадёт
+    под центральную линию рулетки.
   */
-  currentResult=weightedRandom(c.items);
+
+  currentResult=
+    weightedRandom(currentCase.items);
 
   persist();
   updateAll();
 
-  const modal=document.getElementById("rouletteModal");
+  const c=currentCase;
 
-  modal.classList.add("show");
+  createRoulette(
+    c,
+    currentResult
+  );
 
-  const resultCard=document.getElementById("resultCard");
+  const openingCase=
+    document.getElementById("openingCase");
 
-  resultCard.classList.remove("show");
-
-  document.getElementById("rouletteStatus").textContent=
-    "Кейс активирован...";
-
-  document.getElementById("rouletteTitle").textContent=
-    c.name+" кейс";
-
-  const openingCase=document.getElementById("openingCase");
+  const burst=
+    document.getElementById("lightBurst");
 
   openingCase.className="openingCase";
 
-  const burst=document.getElementById("lightBurst");
-
   burst.classList.remove("active");
 
-  createRoulette(c,currentResult);
+  document.getElementById(
+    "rouletteStatus"
+  ).textContent=
+    "Система определяет автомобиль...";
 
   setTimeout(()=>{
 
     openingCase.classList.add("opening");
 
-    document.getElementById("rouletteStatus").textContent=
-      "Система определяет автомобиль...";
-
     startRouletteSound();
 
     vibrate(30);
 
-  },400);
+  },250);
 
   setTimeout(()=>{
 
     openingCase.classList.remove("opening");
+
     openingCase.classList.add("explode");
 
     burst.classList.add("active");
@@ -2756,15 +3256,20 @@ function openCase(c){
 
     vibrate([40,30,80]);
 
-    animateRoulette(currentResult);
+    animateRoulette(
+      currentResult
+    );
 
-  },1700);
+  },1450);
 
 }
 
 function createRoulette(c,resultName){
 
-  const track=document.getElementById("rouletteTrack");
+  const track=
+    document.getElementById(
+      "rouletteTrack"
+    );
 
   track.innerHTML="";
 
@@ -2772,28 +3277,38 @@ function createRoulette(c,resultName){
 
   for(let i=0;i<35;i++){
 
-    items.push(randomItem(c.items));
+    items.push(
+      randomItem(c.items)
+    );
 
   }
 
   /*
     Критически важно:
-    визуальный результат = реальный результат.
+    визуальный результат =
+    реальный результат.
   */
+
   items[28]=resultName;
 
   items.forEach(name=>{
 
     const car=cars[name];
 
-    const el=document.createElement("div");
+    const el=
+      document.createElement("div");
 
     el.className="rouletteItem";
 
     el.innerHTML=`
 
-      <div class="emoji">${car.emoji}</div>
-      <div class="name">${name}</div>
+      <div class="emoji">
+        ${car.emoji}
+      </div>
+
+      <div class="name">
+        ${name}
+      </div>
 
     `;
 
@@ -2808,7 +3323,10 @@ function createRoulette(c,resultName){
 
 function animateRoulette(resultName){
 
-  const track=document.getElementById("rouletteTrack");
+  const track=
+    document.getElementById(
+      "rouletteTrack"
+    );
 
   const index=28;
 
@@ -2816,12 +3334,18 @@ function animateRoulette(resultName){
   const gap=8;
   const step=itemWidth+gap;
 
-  const roulette=document.getElementById("roulette");
+  const roulette=
+    document.getElementById(
+      "roulette"
+    );
 
-  const center=roulette.clientWidth/2;
+  const center=
+    roulette.clientWidth/2;
 
   const target=
-    -(index*step)+center-itemWidth/2;
+    -(index*step)
+    +center
+    -itemWidth/2;
 
   setTimeout(()=>{
 
@@ -2839,7 +3363,9 @@ function animateRoulette(resultName){
 
     heavySound();
 
-    showResult(resultName);
+    showResult(
+      resultName
+    );
 
   },4400);
 
@@ -2849,27 +3375,43 @@ function showResult(resultName){
 
   const car=cars[resultName];
 
-  document.getElementById("rouletteStatus").textContent=
+  document.getElementById(
+    "rouletteStatus"
+  ).textContent=
     "РЕЗУЛЬТАТ ПОЛУЧЕН";
 
-  document.getElementById("resultRarity").textContent=
+  document.getElementById(
+    "resultRarity"
+  ).textContent=
     rarityNames[car.rarity];
 
-  document.getElementById("resultRarity").style.color=
+  document.getElementById(
+    "resultRarity"
+  ).style.color=
     rarityColors[car.rarity];
 
-  document.getElementById("resultEmoji").textContent=
+  document.getElementById(
+    "resultEmoji"
+  ).textContent=
     car.emoji;
 
-  document.getElementById("resultName").textContent=
+  document.getElementById(
+    "resultName"
+  ).textContent=
     resultName;
 
-  document.getElementById("resultPrice").textContent=
+  document.getElementById(
+    "resultPrice"
+  ).textContent=
     money(car.price);
 
-  document.getElementById("resultCard").classList.add("show");
+  document.getElementById(
+    "resultCard"
+  ).classList.add("show");
 
-  rarityEffect(car.rarity);
+  rarityEffect(
+    car.rarity
+  );
 
   if(car.rarity==="mythic"){
 
@@ -2883,13 +3425,19 @@ function showResult(resultName){
 
 function rarityEffect(rarity){
 
-  const fx=document.getElementById("rarityFX");
+  const fx=
+    document.getElementById(
+      "rarityFX"
+    );
 
   fx.className="rarityFX";
 
   void fx.offsetWidth;
 
-  fx.classList.add("show",rarity);
+  fx.classList.add(
+    "show",
+    rarity
+  );
 
   createParticles(
     rarity==="mythic" ? 80 :
@@ -2901,27 +3449,36 @@ function rarityEffect(rarity){
 
 function createParticles(count){
 
-  const container=document.getElementById("particles");
+  const container=
+    document.getElementById(
+      "particles"
+    );
 
   container.innerHTML="";
 
   for(let i=0;i<count;i++){
 
-    const p=document.createElement("div");
+    const p=
+      document.createElement("div");
 
     p.className="particle";
 
-    p.style.left=(50+Math.random()*10-5)+"%";
-    p.style.top=(50+Math.random()*10-5)+"%";
+    p.style.left=
+      (50+Math.random()*10-5)+"%";
+
+    p.style.top=
+      (50+Math.random()*10-5)+"%";
 
     p.style.setProperty(
       "--x",
-      (Math.random()*window.innerWidth-window.innerWidth/2)+"px"
+      (Math.random()*window.innerWidth-
+       window.innerWidth/2)+"px"
     );
 
     p.style.setProperty(
       "--y",
-      (Math.random()*window.innerHeight-window.innerHeight/2)+"px"
+      (Math.random()*window.innerHeight-
+       window.innerHeight/2)+"px"
     );
 
     p.style.animationDelay=
@@ -2937,12 +3494,16 @@ function createParticles(count){
    RESULT ACTIONS
 ========================================================= */
 
-document.getElementById("keepResult").onclick=()=>{
+document.getElementById(
+  "keepResult"
+).onclick=()=>{
 
   if(!currentResult)
     return;
 
-  save.garage.push(currentResult);
+  save.garage.push(
+    currentResult
+  );
 
   addHistory(
     "open",
@@ -2954,7 +3515,10 @@ document.getElementById("keepResult").onclick=()=>{
 
   persist();
 
-  showToast("🚗 "+currentResult+" добавлен в гараж");
+  showToast(
+    "🚗 "+currentResult+
+    " добавлен в гараж"
+  );
 
   closeRoulette();
 
@@ -2962,14 +3526,20 @@ document.getElementById("keepResult").onclick=()=>{
 
 };
 
-document.getElementById("sellResult").onclick=()=>{
+document.getElementById(
+  "sellResult"
+).onclick=()=>{
 
   if(!currentResult)
     return;
 
-  const car=cars[currentResult];
+  const car=
+    cars[currentResult];
 
-  const sellPrice=Math.round(car.price*.75);
+  const sellPrice=
+    Math.round(
+      car.price*.75
+    );
 
   save.balance+=sellPrice;
   save.sold++;
@@ -2984,7 +3554,10 @@ document.getElementById("sellResult").onclick=()=>{
 
   persist();
 
-  showToast("Продано за "+money(sellPrice));
+  showToast(
+    "Продано за "+
+    money(sellPrice)
+  );
 
   closeRoulette();
 
@@ -2994,13 +3567,25 @@ document.getElementById("sellResult").onclick=()=>{
 
 function closeRoulette(){
 
-  document.getElementById("rouletteModal")
-    .classList.remove("show");
+  stopRouletteSound();
+
+  document.getElementById(
+    "rouletteModal"
+  ).classList.remove("show");
 
   caseBusy=false;
+  casePrepared=false;
 
   currentCase=null;
   currentResult=null;
+
+  document.getElementById(
+    "manualOpenBtn"
+  ).style.display="block";
+
+  document.getElementById(
+    "manualOpenWrap"
+  ).style.display="block";
 
 }
 
@@ -3012,28 +3597,38 @@ function showJackpot(name){
 
   const car=cars[name];
 
-  document.getElementById("jackpotCar").textContent=
+  document.getElementById(
+    "jackpotCar"
+  ).textContent=
     car.emoji;
 
-  document.getElementById("jackpotName").textContent=
+  document.getElementById(
+    "jackpotName"
+  ).textContent=
     name;
 
-  document.getElementById("jackpotPrice").textContent=
+  document.getElementById(
+    "jackpotPrice"
+  ).textContent=
     money(car.price);
 
-  document.getElementById("jackpot")
-    .classList.add("show");
+  document.getElementById(
+    "jackpot"
+  ).classList.add("show");
 
   heavySound();
 
-  vibrate([100,60,100,60,180]);
+  vibrate(
+    [100,60,100,60,180]
+  );
 
 }
 
 function closeJackpot(){
 
-  document.getElementById("jackpot")
-    .classList.remove("show");
+  document.getElementById(
+    "jackpot"
+  ).classList.remove("show");
 
 }
 
@@ -3047,9 +3642,13 @@ function addXP(amount){
 
   let leveled=false;
 
-  while(save.xp>=getXPNeed(save.level)){
+  while(
+    save.xp>=
+    getXPNeed(save.level)
+  ){
 
-    save.xp-=getXPNeed(save.level);
+    save.xp-=
+      getXPNeed(save.level);
 
     save.level++;
 
@@ -3061,7 +3660,9 @@ function addXP(amount){
 
     showLevelModal();
 
-    vibrate([70,40,100]);
+    vibrate(
+      [70,40,100]
+    );
 
   }
 
@@ -3071,23 +3672,33 @@ function addXP(amount){
 
 function showLevelModal(){
 
-  const level=save.level;
+  const level=
+    save.level;
 
-  document.getElementById("levelUpNumber").textContent=
+  document.getElementById(
+    "levelUpNumber"
+  ).textContent=
     level;
 
-  document.getElementById("levelUpReward").textContent=
-    "Награда: "+money(getLevelReward(level));
+  document.getElementById(
+    "levelUpReward"
+  ).textContent=
+    "Награда: "+
+    money(
+      getLevelReward(level)
+    );
 
-  document.getElementById("levelModal")
-    .classList.add("show");
+  document.getElementById(
+    "levelModal"
+  ).classList.add("show");
 
 }
 
 function closeLevelModal(){
 
-  document.getElementById("levelModal")
-    .classList.remove("show");
+  document.getElementById(
+    "levelModal"
+  ).classList.remove("show");
 
 }
 
@@ -3096,10 +3707,13 @@ function claimReward(level){
   if(level>save.level)
     return;
 
-  if(save.claimedRewards.includes(level))
+  if(
+    save.claimedRewards.includes(level)
+  )
     return;
 
-  const reward=getLevelReward(level);
+  const reward=
+    getLevelReward(level);
 
   if(!reward)
     return;
@@ -3116,7 +3730,10 @@ function claimReward(level){
 
   persist();
 
-  showToast("🎁 Получено "+money(reward));
+  showToast(
+    "🎁 Получено "+
+    money(reward)
+  );
 
   updateAll();
 
@@ -3130,35 +3747,61 @@ let garageFilter="all";
 
 function renderGarage(){
 
-  const grid=document.getElementById("garageGrid");
+  const grid=
+    document.getElementById(
+      "garageGrid"
+    );
 
   grid.innerHTML="";
 
-  const filtered=save.garage.filter(name=>{
+  const filtered=
+    save.garage.filter(name=>{
 
-    if(garageFilter==="all")
-      return true;
+      if(garageFilter==="all")
+        return true;
 
-    return cars[name]?.rarity===garageFilter;
+      return cars[name]?.rarity===
+        garageFilter;
 
-  });
+    });
 
-  document.getElementById("garageCount").textContent=
+  document.getElementById(
+    "garageCount"
+  ).textContent=
     save.garage.length;
 
-  document.getElementById("garageValue").textContent=
-    compactMoney(garageValue());
+  document.getElementById(
+    "garageValue"
+  ).textContent=
+    compactMoney(
+      garageValue()
+    );
 
   if(!filtered.length){
 
     grid.innerHTML=`
-      <div class="empty" style="grid-column:1/-1">
-        <div class="emptyIcon">🚗</div>
-        <div>Здесь пока нет автомобилей</div>
-        <div style="font-size:9px;margin-top:5px">
-          Открывай кейсы и собирай коллекцию
+
+      <div class="empty"
+           style="grid-column:1/-1">
+
+        <div class="emptyIcon">
+          🚗
         </div>
+
+        <div>
+          Здесь пока нет автомобилей
+        </div>
+
+        <div style="
+          font-size:9px;
+          margin-top:5px
+        ">
+          Открывай кейсы и
+          собирай коллекцию
+        </div>
+
       </div>
+
     `;
 
     renderCollections();
@@ -3167,95 +3810,121 @@ function renderGarage(){
 
   }
 
-  /*
-    Группируем одинаковые машины,
-    чтобы гараж выглядел аккуратно.
-  */
-
   const grouped={};
 
   filtered.forEach(name=>{
-    grouped[name]=(grouped[name]||0)+1;
+
+    grouped[name]=
+      (grouped[name]||0)+1;
+
   });
 
-  Object.entries(grouped).forEach(([name,count])=>{
+  Object.entries(grouped)
+    .forEach(([name,count])=>{
 
-    const car=cars[name];
+      const car=cars[name];
 
-    const card=document.createElement("div");
+      const card=
+        document.createElement("div");
 
-    card.className="carCard";
+      card.className="carCard";
 
-    card.innerHTML=`
-
-      <div
-        class="carGlow"
-        style="background:${rarityColors[car.rarity]}"
-      ></div>
-
-      <div class="carVisual">
-
-        <div class="carEmoji">
-          ${car.emoji}
-        </div>
-
-      </div>
-
-      <div class="carCardInfo">
-
-        <div class="carName">${name}</div>
+      card.innerHTML=`
 
         <div
-          class="carRarity"
-          style="color:${rarityColors[car.rarity]}"
-        >
-          ${rarityNames[car.rarity]}
-        </div>
+          class="carGlow"
+          style="
+            background:
+              ${rarityColors[car.rarity]}
+          "
+        ></div>
 
-        <div class="carBottom">
+        <div class="carVisual">
 
-          <div class="carPrice">
-            ${compactMoney(car.price)}
-          </div>
-
-          <div class="carCount">
-            ×${count}
+          <div class="carEmoji">
+            ${car.emoji}
           </div>
 
         </div>
 
-      </div>
+        <div class="carCardInfo">
 
-    `;
+          <div class="carName">
+            ${name}
+          </div>
 
-    card.onclick=()=>openDetail(name);
+          <div
+            class="carRarity"
+            style="
+              color:
+              ${rarityColors[car.rarity]}
+            "
+          >
+            ${rarityNames[car.rarity]}
+          </div>
 
-    grid.appendChild(card);
+          <div class="carBottom">
 
-  });
+            <div class="carPrice">
+              ${compactMoney(car.price)}
+            </div>
+
+            <div class="carCount">
+              ×${count}
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+      card.onclick=
+        ()=>openDetail(name);
+
+      grid.appendChild(card);
+
+    });
 
   renderCollections();
 
 }
 
-document.getElementById("garageFilters")
-  .addEventListener("click",e=>{
+document.getElementById(
+  "garageFilters"
+)
+.addEventListener(
+  "click",
+  e=>{
 
-    const btn=e.target.closest(".filterBtn");
+    const btn=
+      e.target.closest(
+        ".filterBtn"
+      );
 
     if(!btn)
       return;
 
-    document.querySelectorAll(".filterBtn")
-      .forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(
+      ".filterBtn"
+    )
+    .forEach(x=>
+      x.classList.remove(
+        "active"
+      )
+    );
 
-    btn.classList.add("active");
+    btn.classList.add(
+      "active"
+    );
 
-    garageFilter=btn.dataset.filter;
+    garageFilter=
+      btn.dataset.filter;
 
     renderGarage();
 
-  });
+  }
+);
 
 /* =========================================================
    CAR DETAIL
@@ -3272,43 +3941,66 @@ function openDetail(name){
 
   detailCar=name;
 
-  const modal=document.getElementById("detailModal");
+  const modal=
+    document.getElementById(
+      "detailModal"
+    );
 
   modal.classList.add("show");
 
-  document.getElementById("detailEmoji").textContent=
+  document.getElementById(
+    "detailEmoji"
+  ).textContent=
     car.emoji;
 
-  document.getElementById("detailName").textContent=
+  document.getElementById(
+    "detailName"
+  ).textContent=
     name;
 
-  document.getElementById("detailRarity").textContent=
+  document.getElementById(
+    "detailRarity"
+  ).textContent=
     rarityNames[car.rarity];
 
-  document.getElementById("detailRarity").style.color=
+  document.getElementById(
+    "detailRarity"
+  ).style.color=
     rarityColors[car.rarity];
 
-  document.getElementById("detailHero")
-    .style.setProperty(
-      "--detailGlow",
-      rarityColors[car.rarity]+"30"
-    );
+  document.getElementById(
+    "detailHero"
+  )
+  .style.setProperty(
+    "--detailGlow",
+    rarityColors[car.rarity]+"30"
+  );
 
-  document.getElementById("detailPrice").textContent=
+  document.getElementById(
+    "detailPrice"
+  ).textContent=
     money(car.price);
 
-  document.getElementById("detailQuantity").textContent=
+  document.getElementById(
+    "detailQuantity"
+  ).textContent=
     "×"+garageCount(name);
 
-  document.getElementById("detailRarity2").textContent=
+  document.getElementById(
+    "detailRarity2"
+  ).textContent=
     rarityNames[car.rarity];
 
-  document.getElementById("detailPrimary").textContent=
+  document.getElementById(
+    "detailPrimary"
+  ).textContent=
     save.primaryCar===name
       ? "Основной"
       : "В гараже";
 
-  document.getElementById("primaryCarBtn").textContent=
+  document.getElementById(
+    "primaryCarBtn"
+  ).textContent=
     save.primaryCar===name
       ? "✓ Основной автомобиль"
       : "⭐ Сделать основным";
@@ -3317,80 +4009,107 @@ function openDetail(name){
 
 function closeDetail(){
 
-  document.getElementById("detailModal")
-    .classList.remove("show");
+  document.getElementById(
+    "detailModal"
+  ).classList.remove("show");
 
   detailCar=null;
 
 }
 
-document.getElementById("primaryCarBtn")
-  .onclick=()=>{
+document.getElementById(
+  "primaryCarBtn"
+)
+.onclick=()=>{
 
-    if(!detailCar)
-      return;
+  if(!detailCar)
+    return;
 
-    save.primaryCar=detailCar;
+  save.primaryCar=
+    detailCar;
 
-    persist();
+  persist();
 
-    showToast("⭐ Основной автомобиль изменён");
+  showToast(
+    "⭐ Основной автомобиль изменён"
+  );
 
-    openDetail(detailCar);
+  openDetail(
+    detailCar
+  );
 
-  };
+};
 
-document.getElementById("detailSellBtn")
-  .onclick=()=>{
+document.getElementById(
+  "detailSellBtn"
+)
+.onclick=()=>{
 
-    if(!detailCar)
-      return;
+  if(!detailCar)
+    return;
 
-    const index=save.garage.indexOf(detailCar);
-
-    if(index===-1){
-
-      showToast("Автомобиля нет в гараже");
-
-      return;
-
-    }
-
-    const car=cars[detailCar];
-
-    const sellPrice=Math.round(car.price*.75);
-
-    save.garage.splice(index,1);
-
-    save.balance+=sellPrice;
-
-    save.sold++;
-
-    addHistory(
-      "sell",
-      detailCar,
-      sellPrice
+  const index=
+    save.garage.indexOf(
+      detailCar
     );
 
-    addXP(15);
-
-    if(save.primaryCar===detailCar){
-
-      save.primaryCar=null;
-
-    }
-
-    persist();
-
-    closeDetail();
+  if(index===-1){
 
     showToast(
-      "Продано за "+money(sellPrice)
+      "Автомобиля нет в гараже"
     );
 
-    updateAll();
+    return;
 
-  };
+  }
+
+  const car=
+    cars[detailCar];
+
+  const sellPrice=
+    Math.round(
+      car.price*.75
+    );
+
+  save.garage.splice(
+    index,
+    1
+  );
+
+  save.balance+=
+    sellPrice;
+
+  save.sold++;
+
+  addHistory(
+    "sell",
+    detailCar,
+    sellPrice
+  );
+
+  addXP(15);
+
+  if(
+    save.primaryCar===
+    detailCar
+  ){
+
+    save.primaryCar=null;
+
+  }
+
+  persist();
+
+  closeDetail();
+
+  showToast(
+    "Продано за "+
+    money(sellPrice)
+  );
+
+  updateAll();
+
+};
 
 /* =========================================================
    MARKET
@@ -3398,78 +4117,94 @@ document.getElementById("detailSellBtn")
 
 function renderMarket(){
 
-  const list=document.getElementById("marketList");
+  const list=
+    document.getElementById(
+      "marketList"
+    );
 
   list.innerHTML="";
 
-  marketCars.forEach(([name,basePrice])=>{
+  marketCars.forEach(
+    ([name,basePrice])=>{
 
-    const car=cars[name];
+      const car=cars[name];
 
-    if(!car)
-      return;
+      if(!car)
+        return;
 
-    const owned=garageCount(name);
+      const owned=
+        garageCount(name);
 
-    /*
-      Небольшая динамика рынка.
-      В этой версии она локальная.
-      После подключения backend её можно
-      заменить на общую серверную цену.
-    */
+      const seed=
+        name.length*17+
+        name.charCodeAt(0);
 
-    const seed=name.length*17+name.charCodeAt(0);
+      const change=
+        ((seed%13)-6)/100;
 
-    const change=((seed%13)-6)/100;
+      const currentPrice=
+        Math.round(
+          basePrice*(1+change)
+        );
 
-    const currentPrice=
-      Math.round(basePrice*(1+change));
+      const item=
+        document.createElement(
+          "div"
+        );
 
-    const item=document.createElement("div");
+      item.className=
+        "marketItem";
 
-    item.className="marketItem";
+      item.innerHTML=`
 
-    item.innerHTML=`
-
-      <div class="marketEmoji">
-        ${car.emoji}
-      </div>
-
-      <div class="marketMain">
-
-        <div class="marketName">
-          ${name}
+        <div class="marketEmoji">
+          ${car.emoji}
         </div>
 
-        <div
-          class="marketRarity"
-          style="color:${rarityColors[car.rarity]}"
-        >
-          ${rarityNames[car.rarity]}
+        <div class="marketMain">
+
+          <div class="marketName">
+            ${name}
+          </div>
+
+          <div
+            class="marketRarity"
+            style="
+              color:
+              ${rarityColors[car.rarity]}
+            "
+          >
+            ${rarityNames[car.rarity]}
+          </div>
+
         </div>
 
-      </div>
+        <div>
 
-      <div>
+          <div class="marketPrice">
+            ${compactMoney(currentPrice)}
+          </div>
 
-        <div class="marketPrice">
-          ${compactMoney(currentPrice)}
+          <div class="marketChange">
+            ${change>=0?"+":""}
+            ${(change*100).toFixed(1)}%
+            ${owned
+              ?` • ×${owned}`
+              :""
+            }
+          </div>
+
         </div>
 
-        <div class="marketChange">
-          ${change>=0?"+":""}${(change*100).toFixed(1)}%
-          ${owned?` • ×${owned}`:""}
-        </div>
+      `;
 
-      </div>
+      item.onclick=
+        ()=>openDetail(name);
 
-    `;
+      list.appendChild(item);
 
-    item.onclick=()=>openDetail(name);
-
-    list.appendChild(item);
-
-  });
+    }
+  );
 
 }
 
@@ -3485,172 +4220,255 @@ function hasCar(name){
 
 function collectionProgress(collection){
 
-  const done=collection.cars.filter(hasCar).length;
+  const done=
+    collection.cars.filter(
+      hasCar
+    ).length;
 
   return {
     done,
-    total:collection.cars.length,
-    percent:Math.round(done/collection.cars.length*100)
+    total:
+      collection.cars.length,
+    percent:
+      Math.round(
+        done/
+        collection.cars.length*
+        100
+      )
   };
 
 }
 
 function renderCollections(){
 
-  const grid=document.getElementById("collectionGrid");
+  const grid=
+    document.getElementById(
+      "collectionGrid"
+    );
 
   if(!grid)
     return;
 
   grid.innerHTML="";
 
-  collections.forEach(collection=>{
+  collections.forEach(
+    collection=>{
 
-    const p=collectionProgress(collection);
+      const p=
+        collectionProgress(
+          collection
+        );
 
-    const div=document.createElement("div");
+      const div=
+        document.createElement(
+          "div"
+        );
 
-    div.className="collection";
+      div.className=
+        "collection";
 
-    div.innerHTML=`
+      div.innerHTML=`
 
-      <div class="collectionTop">
+        <div class="collectionTop">
 
-        <div class="collectionName">
-          ${collection.name}
+          <div class="collectionName">
+            ${collection.name}
+          </div>
+
+          <div class="collectionCount">
+            ${p.done}/${p.total}
+          </div>
+
         </div>
 
-        <div class="collectionCount">
-          ${p.done}/${p.total}
+        <div class="collectionBar">
+
+          <div
+            class="collectionFill"
+            style="
+              width:${p.percent}%
+            "
+          ></div>
+
         </div>
 
-      </div>
+        <div class="collectionReward">
 
-      <div class="collectionBar">
-        <div
-          class="collectionFill"
-          style="width:${p.percent}%"
-        ></div>
-      </div>
+          ${
+            p.percent===100
+              ?"✓ Коллекция собрана"
+              :"Награда: "+
+               compactMoney(
+                 collection.reward
+               )
+          }
 
-      <div class="collectionReward">
-        ${p.percent===100
-          ?"✓ Коллекция собрана"
-          :"Награда: "+compactMoney(collection.reward)}
-      </div>
+        </div>
 
-    `;
+      `;
 
-    div.onclick=()=>openCollection(collection);
+      div.onclick=
+        ()=>openCollection(
+          collection
+        );
 
-    grid.appendChild(div);
+      grid.appendChild(div);
 
-  });
+    }
+  );
 
 }
 
 function openCollection(collection){
 
-  const modal=document.getElementById("collectionModal");
+  const modal=
+    document.getElementById(
+      "collectionModal"
+    );
 
   modal.classList.add("show");
 
-  document.getElementById("collectionTitle").textContent=
+  document.getElementById(
+    "collectionTitle"
+  ).textContent=
     collection.name;
 
-  const box=document.getElementById("collectionDetail");
+  const box=
+    document.getElementById(
+      "collectionDetail"
+    );
 
   box.innerHTML="";
 
-  collection.cars.forEach(name=>{
+  collection.cars.forEach(
+    name=>{
 
-    const car=cars[name];
+      const car=cars[name];
 
-    const owned=hasCar(name);
+      const owned=
+        hasCar(name);
 
-    const row=document.createElement("div");
+      const row=
+        document.createElement(
+          "div"
+        );
 
-    row.className="collectionCar "+(owned?"done":"");
+      row.className=
+        "collectionCar "+
+        (owned?"done":"");
 
-    row.innerHTML=`
+      row.innerHTML=`
 
-      <div class="collectionCarIcon">
-        ${owned?car.emoji:"🔒"}
-      </div>
-
-      <div class="collectionCarInfo">
-
-        <div class="collectionCarName">
-          ${name}
-        </div>
-
-        <div class="collectionCarStatus">
-          ${
-            owned
-              ?"Получено"
-              :"Автомобиль ещё не получен"
+        <div class="collectionCarIcon">
+          ${owned
+            ?car.emoji
+            :"🔒"
           }
         </div>
 
-      </div>
+        <div class="collectionCarInfo">
 
-      <div style="
-        color:${owned?"#38e08b":"#626979"};
-        font-size:12px;
-      ">
-        ${owned?"✓":"—"}
-      </div>
+          <div class="collectionCarName">
+            ${name}
+          </div>
 
-    `;
+          <div class="collectionCarStatus">
+            ${
+              owned
+                ?"Получено"
+                :"Автомобиль ещё не получен"
+            }
+          </div>
 
-    box.appendChild(row);
+        </div>
 
-  });
+        <div style="
+          color:
+          ${owned
+            ?" #38e08b"
+            :"#626979"};
+          font-size:12px;
+        ">
+          ${owned?"✓":"—"}
+        </div>
 
-  const p=collectionProgress(collection);
+      `;
 
-  const reward=document.createElement("button");
+      box.appendChild(row);
 
-  reward.className="fullBtn primary";
+    }
+  );
 
-  reward.style.marginTop="10px";
+  const p=
+    collectionProgress(
+      collection
+    );
+
+  const reward=
+    document.createElement(
+      "button"
+    );
+
+  reward.className=
+    "fullBtn primary";
+
+  reward.style.marginTop=
+    "10px";
 
   reward.textContent=
     p.percent===100
-      ? "ЗАБРАТЬ "+compactMoney(collection.reward)
+      ? "ЗАБРАТЬ "+
+        compactMoney(
+          collection.reward
+        )
       : `СОБРАНО ${p.done}/${p.total}`;
 
-  reward.disabled=p.percent!==100;
+  reward.disabled=
+    p.percent!==100;
 
   reward.onclick=()=>{
 
     if(p.percent!==100)
       return;
 
-    const key="collection_"+collection.id;
+    const key=
+      "collection_"+
+      collection.id;
 
-    if(save.claimedRewards.includes(key)){
+    if(
+      save.claimedRewards
+      .includes(key)
+    ){
 
-      showToast("Награда уже получена");
+      showToast(
+        "Награда уже получена"
+      );
 
       return;
 
     }
 
-    save.balance+=collection.reward;
+    save.balance+=
+      collection.reward;
 
-    save.claimedRewards.push(key);
+    save.claimedRewards.push(
+      key
+    );
 
     addHistory(
       "reward",
-      "Коллекция "+collection.name,
+      "Коллекция "+
+      collection.name,
       collection.reward
     );
 
     persist();
 
     showToast(
-      "🏆 Получено "+compactMoney(collection.reward)
+      "🏆 Получено "+
+      compactMoney(
+        collection.reward
+      )
     );
 
     closeCollection();
@@ -3659,14 +4477,19 @@ function openCollection(collection){
 
   };
 
-  box.appendChild(reward);
+  box.appendChild(
+    reward
+  );
 
 }
 
 function closeCollection(){
 
-  document.getElementById("collectionModal")
-    .classList.remove("show");
+  document.getElementById(
+    "collectionModal"
+  ).classList.remove(
+    "show"
+  );
 
 }
 
@@ -3676,90 +4499,121 @@ function closeCollection(){
 
 function renderHistory(){
 
-  const list=document.getElementById("historyList");
+  const list=
+    document.getElementById(
+      "historyList"
+    );
 
   list.innerHTML="";
 
   if(!save.history.length){
 
     list.innerHTML=`
+
       <div class="empty">
-        <div class="emptyIcon">📜</div>
+
+        <div class="emptyIcon">
+          📜
+        </div>
+
         Пока здесь ничего нет
+
       </div>
+
     `;
 
     return;
 
   }
 
-  save.history.slice(0,12).forEach(item=>{
+  save.history
+    .slice(0,12)
+    .forEach(item=>{
 
-    const row=document.createElement("div");
+      const row=
+        document.createElement(
+          "div"
+        );
 
-    row.className="historyItem";
+      row.className=
+        "historyItem";
 
-    let icon="📦";
-    let sign="";
-    let cls="";
+      let icon="📦";
+      let sign="";
+      let cls="";
 
-    if(item.type==="open"){
-      icon="🎁";
-      sign="";
-    }
+      if(item.type==="open"){
 
-    if(item.type==="sell"){
-      icon="💰";
-      sign="+";
-      cls="green";
-    }
+        icon="🎁";
+        sign="";
 
-    if(item.type==="reward"){
-      icon="🏆";
-      sign="+";
-      cls="green";
-    }
+      }
 
-    const date=new Date(item.time);
+      if(item.type==="sell"){
 
-    const dateText=
-      date.toLocaleDateString("ru-RU",{
-        day:"2-digit",
-        month:"2-digit"
-      })+
-      " "+
-      date.toLocaleTimeString("ru-RU",{
-        hour:"2-digit",
-        minute:"2-digit"
-      });
+        icon="💰";
+        sign="+";
+        cls="green";
 
-    row.innerHTML=`
+      }
 
-      <div class="historyIcon">
-        ${icon}
-      </div>
+      if(item.type==="reward"){
 
-      <div class="historyMain">
+        icon="🏆";
+        sign="+";
+        cls="green";
 
-        <div class="historyTitle">
-          ${item.name}
+      }
+
+      const date=
+        new Date(item.time);
+
+      const dateText=
+        date.toLocaleDateString(
+          "ru-RU",
+          {
+            day:"2-digit",
+            month:"2-digit"
+          }
+        )+
+        " "+
+        date.toLocaleTimeString(
+          "ru-RU",
+          {
+            hour:"2-digit",
+            minute:"2-digit"
+          }
+        );
+
+      row.innerHTML=`
+
+        <div class="historyIcon">
+          ${icon}
         </div>
 
-        <div class="historyDate">
-          ${dateText}
+        <div class="historyMain">
+
+          <div class="historyTitle">
+            ${item.name}
+          </div>
+
+          <div class="historyDate">
+            ${dateText}
+          </div>
+
         </div>
 
-      </div>
+        <div
+          class="historyAmount ${cls}">
+          ${sign}
+          ${compactMoney(item.amount)}
+        </div>
 
-      <div class="historyAmount ${cls}">
-        ${sign}${compactMoney(item.amount)}
-      </div>
+      `;
 
-    `;
+      list.appendChild(row);
 
-    list.appendChild(row);
-
-  });
+    });
 
 }
 
@@ -3769,25 +4623,45 @@ function renderHistory(){
 
 function renderRewards(){
 
-  const list=document.getElementById("rewardList");
+  const list=
+    document.getElementById(
+      "rewardList"
+    );
 
   list.innerHTML="";
 
-  const max=Math.max(20,Math.min(50,save.level+5));
+  const max=
+    Math.max(
+      20,
+      Math.min(
+        50,
+        save.level+5
+      )
+    );
 
-  for(let level=2;level<=max;level++){
+  for(
+    let level=2;
+    level<=max;
+    level++
+  ){
 
-    const reward=getLevelReward(level);
+    const reward=
+      getLevelReward(level);
 
     const claimed=
-      save.claimedRewards.includes(level);
+      save.claimedRewards
+      .includes(level);
 
     const unlocked=
       level<=save.level;
 
-    const row=document.createElement("div");
+    const row=
+      document.createElement(
+        "div"
+      );
 
-    row.className="reward";
+    row.className=
+      "reward";
 
     row.innerHTML=`
 
@@ -3808,8 +4682,12 @@ function renderRewards(){
       </div>
 
       <button
-        ${!unlocked||claimed?"disabled":""}
+        ${!unlocked||claimed
+          ?"disabled"
+          :""
+        }
       >
+
         ${
           claimed
             ?"✓"
@@ -3817,15 +4695,20 @@ function renderRewards(){
               ?"ЗАБРАТЬ"
               :"🔒"
         }
+
       </button>
 
     `;
 
-    const button=row.querySelector("button");
+    const button=
+      row.querySelector(
+        "button"
+      );
 
     if(unlocked&&!claimed){
 
-      button.onclick=()=>claimReward(level);
+      button.onclick=
+        ()=>claimReward(level);
 
     }
 
@@ -3852,30 +4735,57 @@ function renderProfile(){
         )
       : "Игрок";
 
-  document.getElementById("profileName").textContent=
+  document.getElementById(
+    "profileName"
+  ).textContent=
     username;
 
-  document.getElementById("profileAvatar").textContent=
-    username.charAt(0).toUpperCase();
+  document.getElementById(
+    "profileAvatar"
+  ).textContent=
+    username
+      .charAt(0)
+      .toUpperCase();
 
-  document.getElementById("profileLevel").textContent=
-    "Уровень "+save.level;
+  document.getElementById(
+    "profileLevel"
+  ).textContent=
+    "Уровень "+
+    save.level;
 
-  const need=getXPNeed(save.level);
+  const need=
+    getXPNeed(
+      save.level
+    );
 
-  document.getElementById("xpText").textContent=
+  document.getElementById(
+    "xpText"
+  ).textContent=
     `${save.xp} / ${need} XP`;
 
-  document.getElementById("xpFill").style.width=
-    Math.min(100,save.xp/need*100)+"%";
+  document.getElementById(
+    "xpFill"
+  ).style.width=
+    Math.min(
+      100,
+      save.xp/need*100
+    )+"%";
 
-  document.getElementById("statBalance").textContent=
-    compactMoney(save.balance);
+  document.getElementById(
+    "statBalance"
+  ).textContent=
+    compactMoney(
+      save.balance
+    );
 
-  document.getElementById("statCars").textContent=
+  document.getElementById(
+    "statCars"
+  ).textContent=
     save.garage.length;
 
-  document.getElementById("statOpens").textContent=
+  document.getElementById(
+    "statOpens"
+  ).textContent=
     save.casesOpened;
 
   renderHistory();
@@ -3889,11 +4799,19 @@ function renderProfile(){
 
 function updateAll(){
 
-  document.getElementById("topBalance").textContent=
-    compactMoney(save.balance);
+  document.getElementById(
+    "topBalance"
+  ).textContent=
+    compactMoney(
+      save.balance
+    );
 
-  document.getElementById("marketBalance").textContent=
-    compactMoney(save.balance);
+  document.getElementById(
+    "marketBalance"
+  ).textContent=
+    compactMoney(
+      save.balance
+    );
 
   renderCases();
   renderGarage();
@@ -3906,23 +4824,46 @@ function updateAll(){
    NAVIGATION
 ========================================================= */
 
-document.querySelectorAll(".navBtn")
-  .forEach(btn=>{
+document.querySelectorAll(
+  ".navBtn"
+)
+.forEach(btn=>{
 
-    btn.addEventListener("click",()=>{
+  btn.addEventListener(
+    "click",
+    ()=>{
 
-      const page=btn.dataset.page;
+      const page=
+        btn.dataset.page;
 
-      document.querySelectorAll(".navBtn")
-        .forEach(x=>x.classList.remove("active"));
+      document.querySelectorAll(
+        ".navBtn"
+      )
+      .forEach(x=>
+        x.classList.remove(
+          "active"
+        )
+      );
 
-      btn.classList.add("active");
+      btn.classList.add(
+        "active"
+      );
 
-      document.querySelectorAll(".page")
-        .forEach(x=>x.classList.remove("active"));
+      document.querySelectorAll(
+        ".page"
+      )
+      .forEach(x=>
+        x.classList.remove(
+          "active"
+        )
+      );
 
-      document.getElementById("page-"+page)
-        .classList.add("active");
+      document.getElementById(
+        "page-"+page
+      )
+      .classList.add(
+        "active"
+      );
 
       window.scrollTo({
         top:0,
@@ -3931,30 +4872,52 @@ document.querySelectorAll(".navBtn")
 
       clickSound();
 
-    });
+    }
+  );
 
-  });
+});
 
 /* =========================================================
    MODAL BACKDROP
 ========================================================= */
 
-document.querySelectorAll(".modal")
-  .forEach(modal=>{
+document.querySelectorAll(
+  ".modal"
+)
+.forEach(modal=>{
 
-    modal.addEventListener("click",e=>{
+  modal.addEventListener(
+    "click",
+    e=>{
 
       if(e.target!==modal)
         return;
 
-      if(modal.id==="rouletteModal" && caseBusy)
+      if(
+        modal.id==="rouletteModal"
+        && caseBusy
+      )
         return;
 
-      modal.classList.remove("show");
+      modal.classList.remove(
+        "show"
+      );
 
-    });
+      if(
+        modal.id==="rouletteModal"
+      ){
 
-  });
+        caseBusy=false;
+        casePrepared=false;
+        currentCase=null;
+        currentResult=null;
+
+      }
+
+    }
+  );
+
+});
 
 /* =========================================================
    INITIAL
