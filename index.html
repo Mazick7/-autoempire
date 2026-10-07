@@ -2,18 +2,27 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width,
-      initial-scale=1.0,
-      maximum-scale=1.0,
-      user-scalable=no,
-      viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 
 <title>Автоимперия</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
+:root{
+  --bg:#070910;
+  --panel:rgba(20,24,36,.78);
+  --panel2:rgba(28,33,48,.72);
+  --text:#fff;
+  --muted:#7f8799;
+  --line:rgba(255,255,255,.08);
+  --blue:#4d8dff;
+  --cyan:#55e7ff;
+  --purple:#a56cff;
+  --green:#48e18a;
+  --gold:#ffd34f;
+  --red:#ff5368;
+}
 
 *{
   box-sizing:border-box;
@@ -23,22 +32,32 @@
 html,body{
   margin:0;
   padding:0;
-  width:100%;
   min-height:100%;
-  background:#08090d;
+  background:#070910;
   color:#fff;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "Segoe UI",
-    Arial,
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
 }
 
 body{
   overflow-x:hidden;
-  padding-bottom:92px;
+  padding-bottom:95px;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-5;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(63,113,255,.20),transparent 25%),
+    radial-gradient(circle at 90% 15%,rgba(162,80,255,.15),transparent 27%),
+    radial-gradient(circle at 60% 90%,rgba(0,209,255,.09),transparent 28%);
+  animation:bgMove 12s ease-in-out infinite alternate;
+}
+
+@keyframes bgMove{
+  from{transform:translate3d(-2%,-1%,0) scale(1)}
+  to{transform:translate3d(2%,2%,0) scale(1.06)}
 }
 
 button{
@@ -46,43 +65,43 @@ button{
   color:inherit;
   border:0;
   outline:0;
+  cursor:pointer;
 }
 
 button:active{
-  transform:scale(.97);
+  transform:scale(.96);
 }
 
 .app{
   width:100%;
-  max-width:620px;
-  margin:0 auto;
+  max-width:650px;
   min-height:100vh;
+  margin:auto;
 }
 
-/* =========================
-   HEADER
-========================= */
+/* ================= HEADER ================= */
 
 .header{
   position:sticky;
   top:0;
-  z-index:50;
+  z-index:100;
   padding:
     calc(env(safe-area-inset-top) + 12px)
-    16px
-    12px;
+    15px
+    13px;
 
   background:
     linear-gradient(
       180deg,
-      rgba(8,9,13,.98),
-      rgba(8,9,13,.91)
+      rgba(7,9,16,.97),
+      rgba(7,9,16,.82),
+      rgba(7,9,16,.55)
     );
 
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
 
-  border-bottom:1px solid rgba(255,255,255,.055);
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .headerTop{
@@ -94,46 +113,53 @@ button:active{
 .logo{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:11px;
 }
 
 .logoIcon{
-  width:38px;
-  height:38px;
-  border-radius:12px;
-
+  position:relative;
+  width:43px;
+  height:43px;
   display:flex;
   align-items:center;
   justify-content:center;
+  border-radius:14px;
 
   background:
-    linear-gradient(
-      145deg,
-      #20242d,
-      #101218
-    );
+    linear-gradient(145deg,#263c73,#141a2c);
 
-  border:1px solid rgba(255,255,255,.08);
+  border:1px solid rgba(104,157,255,.32);
 
   box-shadow:
-    0 8px 25px rgba(0,0,0,.35);
+    0 0 25px rgba(67,126,255,.18),
+    inset 0 1px rgba(255,255,255,.16);
+}
+
+.logoIcon:after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent 45%);
+  pointer-events:none;
 }
 
 .logoIcon span{
-  font-size:20px;
+  font-size:22px;
+  filter:drop-shadow(0 0 8px rgba(255,255,255,.4));
 }
 
 .logoText{
-  font-size:16px;
-  font-weight:900;
-  letter-spacing:.3px;
+  font-size:17px;
+  font-weight:950;
+  letter-spacing:.5px;
 }
 
 .logoSub{
   margin-top:2px;
-  font-size:10px;
-  color:#777d88;
-  letter-spacing:.5px;
+  font-size:8px;
+  color:#6f7890;
+  letter-spacing:1.2px;
 }
 
 .balanceBox{
@@ -141,49 +167,45 @@ button:active{
 }
 
 .balanceLabel{
-  font-size:9px;
-  color:#707681;
+  font-size:8px;
+  color:#747d91;
   text-transform:uppercase;
   letter-spacing:1px;
 }
 
 .balance{
-  font-size:18px;
-  font-weight:900;
   margin-top:2px;
+  font-size:19px;
+  font-weight:950;
+  text-shadow:0 0 18px rgba(255,255,255,.12);
 }
 
-/* =========================
-   LEVEL
-========================= */
-
 .levelRow{
-  margin-top:12px;
   display:flex;
   align-items:center;
   gap:10px;
+  margin-top:13px;
 }
 
 .levelBadge{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-
+  width:36px;
+  height:36px;
   display:flex;
   align-items:center;
   justify-content:center;
+  border-radius:11px;
 
   background:
-    linear-gradient(
-      145deg,
-      #1e222a,
-      #111319
-    );
+    linear-gradient(145deg,#27304a,#151927);
 
-  border:1px solid rgba(255,255,255,.08);
+  border:1px solid rgba(103,146,255,.25);
 
-  font-size:13px;
-  font-weight:900;
+  color:#fff;
+  font-size:12px;
+  font-weight:950;
+
+  box-shadow:
+    0 0 20px rgba(71,119,255,.12);
 }
 
 .levelProgressWrap{
@@ -193,45 +215,47 @@ button:active{
 .levelProgressTop{
   display:flex;
   justify-content:space-between;
-  margin-bottom:5px;
-
-  font-size:10px;
-  color:#7e8490;
+  margin-bottom:6px;
+  color:#7e8799;
+  font-size:9px;
 }
 
 .progress{
-  height:6px;
+  height:7px;
   border-radius:99px;
-  background:#191c23;
   overflow:hidden;
+  background:#171b27;
+  border:1px solid rgba(255,255,255,.04);
 }
 
 .progressBar{
   height:100%;
-  width:0%;
+  width:0;
   border-radius:99px;
 
   background:
     linear-gradient(
       90deg,
-      #5f8cff,
-      #8f6cff
+      #4b86ff,
+      #6e9cff,
+      #a46cff
     );
 
-  transition:width .35s ease;
+  box-shadow:
+    0 0 14px rgba(92,135,255,.55);
+
+  transition:width .45s cubic-bezier(.2,.8,.2,1);
 }
 
-/* =========================
-   CONTENT
-========================= */
+/* ================= CONTENT ================= */
 
 .content{
-  padding:16px;
+  padding:17px 14px;
 }
 
 .page{
   display:none;
-  animation:pageIn .25s ease;
+  animation:pageIn .28s ease;
 }
 
 .page.active{
@@ -241,7 +265,7 @@ button:active{
 @keyframes pageIn{
   from{
     opacity:0;
-    transform:translateY(6px);
+    transform:translateY(8px);
   }
   to{
     opacity:1;
@@ -250,654 +274,505 @@ button:active{
 }
 
 .pageTitle{
-  font-size:26px;
+  font-size:28px;
   font-weight:950;
-  margin:5px 0 4px;
+  letter-spacing:-.8px;
 }
 
 .pageSubtitle{
-  color:#737984;
-  font-size:12px;
+  margin-top:3px;
   margin-bottom:18px;
+  color:#717b8e;
+  font-size:11px;
 }
 
-/* =========================
-   CASES
-========================= */
+/* ================= CASES ================= */
 
 .caseGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
 
 .caseCard{
   position:relative;
+  min-height:285px;
   overflow:hidden;
 
-  min-height:285px;
+  padding:15px;
 
-  padding:13px;
-
-  border-radius:20px;
+  border-radius:24px;
 
   background:
     linear-gradient(
-      145deg,
-      #151820,
-      #0e1015
-    );
-
-  border:1px solid rgba(255,255,255,.07);
-
-  box-shadow:
-    0 12px 35px rgba(0,0,0,.22);
-
-  transition:
-    transform .2s ease,
-    border-color .2s ease;
-}
-
-.caseCard:active{
-  transform:scale(.985);
-}
-
-.caseTop{
-  position:relative;
-  z-index:3;
-
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.caseName{
-  font-size:15px;
-  font-weight:900;
-}
-
-.casePrice{
-  font-size:11px;
-  font-weight:800;
-  color:#dce0e7;
-}
-
-.rarityTag{
-  display:inline-flex;
-  margin-top:6px;
-
-  padding:4px 7px;
-
-  border-radius:7px;
-
-  font-size:8px;
-  font-weight:900;
-  letter-spacing:.7px;
-  text-transform:uppercase;
-}
-
-/* =========================
-   CASE COLORS
-========================= */
-
-.common{
-  --rarity:#8b929d;
-  --rarity2:#565d67;
-  --glow:rgba(139,146,157,.15);
-}
-
-.uncommon{
-  --rarity:#4792ff;
-  --rarity2:#2260c4;
-  --glow:rgba(71,146,255,.16);
-}
-
-.rare{
-  --rarity:#42d883;
-  --rarity2:#19884e;
-  --glow:rgba(66,216,131,.16);
-}
-
-.epic{
-  --rarity:#a66cff;
-  --rarity2:#6937c8;
-  --glow:rgba(166,108,255,.18);
-}
-
-.legendary{
-  --rarity:#ffc83d;
-  --rarity2:#b87900;
-  --glow:rgba(255,200,61,.19);
-}
-
-.mythic{
-  --rarity:#ff4f5e;
-  --rarity2:#9b1724;
-  --glow:rgba(255,79,94,.22);
-}
-
-.caseCard{
-  border-color:
-    color-mix(
-      in srgb,
-      var(--rarity) 16%,
-      transparent
-    );
-}
-
-.rarityTag{
-  color:var(--rarity);
-  background:
-    color-mix(
-      in srgb,
-      var(--rarity) 10%,
-      transparent
+      135deg,
+      rgba(28,33,47,.94),
+      rgba(12,15,23,.94)
     );
 
   border:1px solid
-    color-mix(
-      in srgb,
-      var(--rarity) 20%,
-      transparent
-    );
+    color-mix(in srgb,var(--rarity) 22%,transparent);
+
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.30),
+    inset 0 1px rgba(255,255,255,.07);
+
+  isolation:isolate;
 }
 
-/* =========================
-   CASE ART
-========================= */
-
-.caseArt{
-  height:145px;
-  margin-top:12px;
-
-  position:relative;
-  overflow:hidden;
-
-  border-radius:15px;
-
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      var(--glow),
-      transparent 65%
-    );
-}
-
-.caseArt::before{
+.caseCard:before{
   content:"";
   position:absolute;
-
-  width:180px;
-  height:180px;
-
-  left:50%;
-  top:50%;
-
-  transform:
-    translate(-50%,-50%);
-
+  width:240px;
+  height:240px;
+  right:-100px;
+  top:-110px;
   border-radius:50%;
 
   background:
     radial-gradient(
       circle,
-      color-mix(
-        in srgb,
-        var(--rarity) 13%,
-        transparent
-      ),
-      transparent 65%
+      color-mix(in srgb,var(--rarity) 30%,transparent),
+      transparent 70%
     );
 
-  filter:blur(10px);
+  filter:blur(4px);
+  z-index:-1;
 }
 
-/* CAR ART */
-
-.coverCar{
-  position:absolute;
-
-  left:50%;
-  bottom:22px;
-
-  width:150px;
-  height:65px;
-
-  transform:
-    translateX(-50%);
-
-  filter:
-    drop-shadow(
-      0 15px 12px rgba(0,0,0,.65)
-    );
-}
-
-.coverBody{
-  position:absolute;
-
-  left:8px;
-  right:8px;
-  bottom:8px;
-
-  height:39px;
-
-  border-radius:
-    18px 20px 10px 10px;
-
-  background:
-    linear-gradient(
-      160deg,
-      var(--car1,#b9bec7),
-      var(--car2,#535963)
-    );
-
-  border:
-    1px solid rgba(255,255,255,.3);
-
-  box-shadow:
-    inset 0 7px 10px rgba(255,255,255,.14),
-    inset 0 -9px 10px rgba(0,0,0,.25);
-}
-
-.coverRoof{
-  position:absolute;
-
-  left:39px;
-  top:7px;
-
-  width:73px;
-  height:34px;
-
-  border-radius:
-    31px 31px 5px 5px;
-
-  background:
-    linear-gradient(
-      160deg,
-      var(--car1,#b9bec7),
-      var(--car2,#535963)
-    );
-
-  border:
-    1px solid rgba(255,255,255,.25);
-}
-
-.coverGlass{
-  position:absolute;
-
-  left:47px;
-  top:12px;
-
-  width:58px;
-  height:22px;
-
-  border-radius:
-    20px 20px 3px 3px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(210,235,255,.42),
-      rgba(18,27,39,.9)
-    );
-
-  border:
-    1px solid rgba(255,255,255,.12);
-}
-
-.coverGlass::after{
+.caseCard:after{
   content:"";
-
   position:absolute;
-
-  left:50%;
-  top:1px;
-  bottom:1px;
-
-  width:1px;
-
-  background:
-    rgba(255,255,255,.16);
-}
-
-.coverWheel{
-  position:absolute;
-
-  bottom:1px;
-
-  width:27px;
-  height:27px;
-
-  border-radius:50%;
-
-  background:#07080b;
-
-  border:
-    5px solid #24272d;
-
-  box-shadow:
-    inset 0 0 0 3px #0c0d10;
-}
-
-.coverWheel::after{
-  content:"";
-
-  position:absolute;
-
-  width:7px;
-  height:7px;
-
-  left:50%;
-  top:50%;
-
-  transform:
-    translate(-50%,-50%);
-
-  border-radius:50%;
-
-  background:#777d86;
-}
-
-.coverWheel.left{
-  left:22px;
-}
-
-.coverWheel.right{
-  right:22px;
-}
-
-/* sedan */
-
-.coverCar.sedan{
-  --car1:#d8dbe0;
-  --car2:#656b75;
-}
-
-/* blue BMW-like */
-
-.coverCar.bmw{
-  --car1:#4f9bff;
-  --car2:#1854a5;
-}
-
-.coverCar.bmw .coverBody{
-  border-radius:
-    14px 23px 9px 9px;
-}
-
-.coverCar.bmw .coverRoof{
-  left:36px;
-  width:77px;
-}
-
-/* green sport */
-
-.coverCar.sport{
-  --car1:#64e39b;
-  --car2:#13834d;
-}
-
-.coverCar.sport .coverBody{
-  height:31px;
-  bottom:10px;
-
-  border-radius:
-    20px 28px 8px 8px;
-}
-
-.coverCar.sport .coverRoof{
-  left:43px;
-  top:14px;
-  width:64px;
-  height:25px;
-}
-
-.coverCar.sport .coverGlass{
-  left:49px;
-  top:18px;
-  width:51px;
-  height:17px;
-}
-
-/* supercar */
-
-.coverCar.supercar{
-  width:170px;
-  height:70px;
-
-  --car1:#bd7cff;
-  --car2:#5d20ac;
-}
-
-.coverCar.supercar .coverBody{
-  left:3px;
-  right:3px;
-
-  height:29px;
-  bottom:10px;
-
-  border-radius:
-    22px 36px 7px 7px;
-}
-
-.coverCar.supercar .coverRoof{
-  left:50px;
-  top:18px;
-
-  width:58px;
-  height:25px;
-
-  border-radius:
-    25px 25px 3px 3px;
-}
-
-.coverCar.supercar .coverGlass{
-  left:55px;
-  top:21px;
-
-  width:48px;
-  height:16px;
-}
-
-/* hyper */
-
-.coverCar.hyper{
-  width:175px;
-  height:72px;
-
-  --car1:#ffe58a;
-  --car2:#b98210;
-}
-
-.coverCar.hyper .coverBody{
-  left:2px;
-  right:2px;
-
-  height:31px;
-  bottom:10px;
-
-  border-radius:
-    17px 38px 6px 6px;
-}
-
-.coverCar.hyper .coverRoof{
-  left:51px;
-  top:17px;
-
-  width:61px;
-  height:26px;
-}
-
-.coverCar.hyper .coverGlass{
-  left:57px;
-  top:20px;
-
-  width:49px;
-  height:17px;
-}
-
-/* mythic */
-
-.coverCar.mythicCar{
-  width:180px;
-  height:74px;
-
-  --car1:#ff6b74;
-  --car2:#97131e;
-}
-
-.coverCar.mythicCar .coverBody{
-  left:1px;
-  right:1px;
-
-  height:31px;
-  bottom:10px;
-
-  border-radius:
-    15px 38px 5px 5px;
-}
-
-.coverCar.mythicCar .coverRoof{
-  left:52px;
-  top:17px;
-
-  width:61px;
-  height:26px;
-}
-
-.coverCar.mythicCar .coverGlass{
-  left:58px;
-  top:20px;
-
-  width:49px;
-  height:17px;
-}
-
-/* lights */
-
-.coverBody::before{
-  content:"";
-
-  position:absolute;
-
-  right:3px;
-  top:13px;
-
-  width:10px;
-  height:7px;
-
-  border-radius:5px 2px 2px 5px;
+  left:-30%;
+  top:-50%;
+  width:70%;
+  height:200%;
+  transform:rotate(25deg);
 
   background:
     linear-gradient(
       90deg,
-      #fff,
-      var(--rarity)
+      transparent,
+      rgba(255,255,255,.055),
+      transparent
     );
 
-  box-shadow:
-    0 0 10px var(--rarity);
+  animation:shine 7s linear infinite;
+  pointer-events:none;
 }
 
-.coverBody::after{
-  content:"";
-
-  position:absolute;
-
-  left:3px;
-  top:14px;
-
-  width:8px;
-  height:6px;
-
-  border-radius:2px 5px 5px 2px;
-
-  background:#ff3544;
-
-  box-shadow:
-    0 0 8px #ff3544;
+@keyframes shine{
+  from{left:-80%}
+  to{left:150%}
 }
 
-.caseFooter{
-  position:absolute;
-  bottom:12px;
-  left:13px;
-  right:13px;
+.common{
+  --rarity:#929aa7;
+  --rarity2:#515966;
+  --glow:rgba(146,154,167,.20);
+}
 
+.uncommon{
+  --rarity:#4b9aff;
+  --rarity2:#205bb5;
+  --glow:rgba(75,154,255,.20);
+}
+
+.rare{
+  --rarity:#48df88;
+  --rarity2:#167c4b;
+  --glow:rgba(72,223,136,.20);
+}
+
+.epic{
+  --rarity:#aa6cff;
+  --rarity2:#672dbd;
+  --glow:rgba(170,108,255,.22);
+}
+
+.legendary{
+  --rarity:#ffd044;
+  --rarity2:#a86e00;
+  --glow:rgba(255,208,68,.24);
+}
+
+.mythic{
+  --rarity:#ff5368;
+  --rarity2:#9b1627;
+  --glow:rgba(255,83,104,.26);
+}
+
+.caseTop{
+  position:relative;
+  z-index:4;
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:8px;
+  align-items:flex-start;
 }
 
-.caseDescription{
-  font-size:9px;
-  line-height:1.3;
-  color:#6f7580;
-  max-width:58%;
+.caseName{
+  font-size:17px;
+  font-weight:950;
 }
 
-.openButton{
-  min-width:92px;
-  padding:10px 11px;
+.casePrice{
+  padding:6px 8px;
+  border-radius:9px;
 
-  border-radius:11px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.07);
+
+  color:#dce2ed;
+  font-size:10px;
+  font-weight:900;
+}
+
+.rarityTag{
+  display:inline-flex;
+  margin-top:6px;
+  padding:5px 8px;
+  border-radius:8px;
+
+  color:var(--rarity);
 
   background:
-    linear-gradient(
-      145deg,
-      color-mix(
-        in srgb,
-        var(--rarity) 18%,
-        #171a21
-      ),
-      #101218
+    color-mix(
+      in srgb,
+      var(--rarity) 11%,
+      transparent
     );
 
   border:1px solid
     color-mix(
       in srgb,
-      var(--rarity) 35%,
+      var(--rarity) 24%,
       transparent
     );
 
-  color:#fff;
-
-  font-size:10px;
-  font-weight:900;
+  font-size:8px;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.9px;
 
   box-shadow:
-    0 7px 18px rgba(0,0,0,.25);
+    0 0 14px
+    color-mix(
+      in srgb,
+      var(--rarity) 10%,
+      transparent
+    );
 }
 
-/* =========================
-   GARAGE
-========================= */
+/* ================= CASE ART ================= */
 
-.empty{
-  padding:40px 15px;
-  text-align:center;
+.caseArt{
+  position:relative;
+  height:150px;
+  margin-top:8px;
+  overflow:hidden;
   border-radius:18px;
 
-  background:#101218;
-  border:1px solid rgba(255,255,255,.05);
+  background:
+    radial-gradient(
+      circle at 50% 60%,
+      var(--glow),
+      transparent 58%
+    );
 }
 
-.emptyIcon{
-  font-size:42px;
-  margin-bottom:10px;
+.caseArt:before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:18px;
+  width:240px;
+  height:60px;
+  transform:translateX(-50%);
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      ellipse,
+      color-mix(in srgb,var(--rarity) 18%,transparent),
+      transparent 70%
+    );
+
+  filter:blur(8px);
 }
 
-.emptyTitle{
-  font-size:15px;
-  font-weight:900;
+.coverCar{
+  position:absolute;
+  left:50%;
+  bottom:29px;
+  width:205px;
+  height:90px;
+  transform:translateX(-50%);
+
+  filter:
+    drop-shadow(0 20px 14px rgba(0,0,0,.7));
+
+  transition:
+    transform .4s cubic-bezier(.2,.8,.2,1);
 }
 
-.emptyText{
-  margin-top:5px;
-  color:#6f7580;
-  font-size:11px;
+.caseCard:hover .coverCar{
+  transform:
+    translateX(-50%)
+    translateY(-4px)
+    scale(1.035);
 }
+
+.coverBody{
+  position:absolute;
+  left:3px;
+  right:3px;
+  bottom:9px;
+  height:48px;
+
+  border-radius:22px 34px 10px 10px;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--car1),
+      var(--car2) 65%,
+      #11141b
+    );
+
+  border:1px solid rgba(255,255,255,.28);
+
+  box-shadow:
+    inset 0 9px 13px rgba(255,255,255,.16),
+    inset 0 -14px 17px rgba(0,0,0,.35);
+}
+
+.coverBody:before{
+  content:"";
+  position:absolute;
+  top:7px;
+  left:12px;
+  right:24px;
+  height:2px;
+  border-radius:99px;
+  background:rgba(255,255,255,.25);
+  filter:blur(.4px);
+}
+
+.coverBody:after{
+  content:"";
+  position:absolute;
+  right:3px;
+  top:18px;
+  width:18px;
+  height:9px;
+  border-radius:9px 3px 3px 9px;
+  background:#eef8ff;
+  box-shadow:0 0 15px rgba(185,224,255,.95);
+}
+
+.coverRoof{
+  position:absolute;
+  left:51px;
+  top:7px;
+  width:105px;
+  height:51px;
+
+  border-radius:50px 50px 9px 9px;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--car1),
+      var(--car2)
+    );
+
+  border:1px solid rgba(255,255,255,.22);
+}
+
+.coverGlass{
+  position:absolute;
+  left:61px;
+  top:14px;
+  width:84px;
+  height:35px;
+
+  border-radius:32px 32px 6px 6px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(215,240,255,.58),
+      rgba(15,25,39,.94)
+    );
+
+  border:1px solid rgba(255,255,255,.15);
+
+  box-shadow:
+    inset 0 0 16px rgba(95,171,255,.10);
+}
+
+.coverGlass:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:2px;
+  bottom:2px;
+  width:1px;
+  background:rgba(255,255,255,.18);
+}
+
+.coverWheel{
+  position:absolute;
+  bottom:-3px;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #8d96a3 0 11%,
+      #171a21 12% 42%,
+      #050609 43% 100%
+    );
+
+  border:4px solid #0d1015;
+
+  box-shadow:
+    0 0 0 2px #343b47,
+    inset 0 0 0 2px #08090b;
+}
+
+.coverWheel.left{
+  left:25px;
+}
+
+.coverWheel.right{
+  right:25px;
+}
+
+.coverWheel:after{
+  content:"";
+  position:absolute;
+  inset:7px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+}
+
+.sedan{
+  --car1:#d6dbe2;
+  --car2:#545c68;
+}
+
+.bmw{
+  --car1:#65a7ff;
+  --car2:#164d9e;
+}
+
+.sport{
+  --car1:#68e9a3;
+  --car2:#117849;
+}
+
+.supercar{
+  --car1:#c17cff;
+  --car2:#5421a3;
+}
+
+.hyper{
+  --car1:#ffe894;
+  --car2:#aa740c;
+}
+
+.mythicCar{
+  --car1:#ff6875;
+  --car2:#8f111d;
+}
+
+.supercar,
+.hyper,
+.mythicCar{
+  width:225px;
+}
+
+.supercar .coverBody,
+.hyper .coverBody,
+.mythicCar .coverBody{
+  height:38px;
+  bottom:12px;
+  border-radius:18px 40px 7px 7px;
+}
+
+.supercar .coverRoof,
+.hyper .coverRoof,
+.mythicCar .coverRoof{
+  left:64px;
+  top:20px;
+  width:85px;
+  height:35px;
+}
+
+.supercar .coverGlass,
+.hyper .coverGlass,
+.mythicCar .coverGlass{
+  left:72px;
+  top:24px;
+  width:69px;
+  height:25px;
+}
+
+.caseFooter{
+  position:absolute;
+  left:15px;
+  right:15px;
+  bottom:14px;
+  z-index:5;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.caseDescription{
+  color:#798296;
+  font-size:9px;
+  line-height:1.35;
+  max-width:58%;
+}
+
+.openButton{
+  min-width:105px;
+  padding:12px 13px;
+
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb,var(--rarity) 27%,#171b26),
+      #10131b
+    );
+
+  border:1px solid
+    color-mix(in srgb,var(--rarity) 40%,transparent);
+
+  font-size:10px;
+  font-weight:950;
+
+  box-shadow:
+    0 7px 22px rgba(0,0,0,.28),
+    0 0 20px
+    color-mix(in srgb,var(--rarity) 10%,transparent);
+}
+
+.openButton:active{
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.4);
+}
+
+/* ================= GARAGE ================= */
 
 .carList{
   display:flex;
@@ -905,45 +780,69 @@ button:active{
   gap:10px;
 }
 
+.empty{
+  padding:45px 20px;
+  text-align:center;
+  border-radius:22px;
+
+  background:
+    linear-gradient(145deg,rgba(25,29,41,.85),rgba(12,15,22,.9));
+
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.emptyIcon{
+  font-size:45px;
+  filter:drop-shadow(0 0 15px rgba(100,150,255,.2));
+}
+
+.emptyTitle{
+  margin-top:10px;
+  font-size:16px;
+  font-weight:950;
+}
+
+.emptyText{
+  margin-top:5px;
+  color:#727b8d;
+  font-size:10px;
+}
+
 .carCard{
+  position:relative;
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:11px;
 
   padding:12px;
 
-  border-radius:16px;
+  border-radius:18px;
 
   background:
-    linear-gradient(
-      145deg,
-      #151820,
-      #0e1015
-    );
+    linear-gradient(135deg,rgba(28,33,46,.86),rgba(13,16,24,.94));
 
-  border:1px solid rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.065);
+
+  box-shadow:
+    0 10px 28px rgba(0,0,0,.18);
 }
 
 .carMini{
-  width:62px;
-  height:52px;
-
-  flex:none;
-
-  border-radius:13px;
-
+  width:64px;
+  height:55px;
   display:flex;
   align-items:center;
   justify-content:center;
+  flex:none;
+
+  border-radius:15px;
 
   background:
-    radial-gradient(
-      circle,
-      #252a33,
-      #12151b
-    );
+    radial-gradient(circle,#293243,#121620);
 
-  font-size:31px;
+  font-size:30px;
+
+  border:1px solid rgba(255,255,255,.07);
 }
 
 .carInfo{
@@ -953,40 +852,39 @@ button:active{
 
 .carName{
   font-size:13px;
-  font-weight:900;
-
+  font-weight:950;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 
 .carRarity{
-  font-size:9px;
-  color:#747b86;
   margin-top:3px;
+  color:#778093;
+  font-size:9px;
 }
 
 .carValue{
+  margin-top:4px;
   font-size:12px;
   font-weight:900;
-  margin-top:4px;
 }
 
 .sellButton{
-  padding:9px 10px;
+  padding:10px 11px;
+  border-radius:11px;
 
-  border-radius:10px;
+  background:
+    linear-gradient(145deg,#242a37,#171b24);
 
-  background:#1b1e25;
-  border:1px solid rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.08);
 
+  color:#dbe0ea;
   font-size:9px;
-  font-weight:900;
+  font-weight:950;
 }
 
-/* =========================
-   MARKET
-========================= */
+/* ================= MARKET ================= */
 
 .marketGrid{
   display:flex;
@@ -1001,25 +899,27 @@ button:active{
 
   padding:12px;
 
-  border-radius:16px;
+  border-radius:18px;
 
-  background:#11141a;
-  border:1px solid rgba(255,255,255,.055);
+  background:
+    linear-gradient(135deg,rgba(28,33,46,.86),rgba(13,16,24,.94));
+
+  border:1px solid rgba(255,255,255,.06);
 }
 
 .marketIcon{
-  width:55px;
-  height:55px;
-
+  width:57px;
+  height:57px;
   display:flex;
   align-items:center;
   justify-content:center;
 
-  border-radius:14px;
+  border-radius:15px;
 
-  background:#181b22;
+  background:
+    radial-gradient(circle,#293243,#11151e);
 
-  font-size:27px;
+  font-size:28px;
 }
 
 .marketInfo{
@@ -1028,97 +928,117 @@ button:active{
 
 .marketName{
   font-size:13px;
-  font-weight:900;
+  font-weight:950;
 }
 
 .marketPrice{
   margin-top:5px;
-  font-size:11px;
-  color:#9da3ad;
+  color:#8992a3;
+  font-size:10px;
 }
 
 .buyButton{
   padding:10px 13px;
-
-  border-radius:10px;
-
-  background:#20242c;
-
-  font-size:10px;
-  font-weight:900;
-}
-
-/* =========================
-   PROFILE
-========================= */
-
-.profileHero{
-  padding:18px;
-
-  border-radius:20px;
+  border-radius:11px;
 
   background:
-    linear-gradient(
-      145deg,
-      #171a22,
-      #0e1015
-    );
+    linear-gradient(145deg,#315ca9,#203d73);
 
-  border:1px solid rgba(255,255,255,.06);
+  border:1px solid rgba(102,156,255,.25);
+
+  font-size:9px;
+  font-weight:950;
+}
+
+/* ================= PROFILE ================= */
+
+.profileHero{
+  position:relative;
+  overflow:hidden;
+
+  padding:20px;
+
+  border-radius:23px;
+
+  background:
+    linear-gradient(135deg,rgba(31,37,54,.92),rgba(11,14,21,.94));
+
+  border:1px solid rgba(255,255,255,.07);
+
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.25);
+}
+
+.profileHero:after{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  right:-70px;
+  top:-80px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(78,128,255,.18),transparent 70%);
 }
 
 .profileAvatar{
-  width:65px;
-  height:65px;
+  position:relative;
+  z-index:2;
+
+  width:68px;
+  height:68px;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  border-radius:20px;
+  border-radius:21px;
 
   background:
-    linear-gradient(
-      145deg,
-      #272c36,
-      #13161c
-    );
+    linear-gradient(145deg,#34476e,#151c2d);
+
+  border:1px solid rgba(110,157,255,.25);
 
   font-size:29px;
 
-  border:1px solid rgba(255,255,255,.08);
+  box-shadow:
+    0 0 25px rgba(72,120,255,.13);
 }
 
 .profileName{
-  margin-top:12px;
+  position:relative;
+  z-index:2;
 
-  font-size:20px;
+  margin-top:12px;
+  font-size:21px;
   font-weight:950;
 }
 
 .profileStatus{
-  margin-top:3px;
+  position:relative;
+  z-index:2;
 
-  color:#6f7580;
-  font-size:11px;
+  margin-top:3px;
+  color:#7a8497;
+  font-size:10px;
 }
 
 .statsGrid{
-  margin-top:15px;
+  position:relative;
+  z-index:2;
+
+  margin-top:17px;
 
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-
+  grid-template-columns:repeat(3,1fr);
   gap:8px;
 }
 
 .stat{
-  padding:11px;
+  padding:12px;
+  border-radius:13px;
 
-  border-radius:12px;
-
-  background:#11141a;
-  border:1px solid rgba(255,255,255,.045);
+  background:rgba(10,13,20,.52);
+  border:1px solid rgba(255,255,255,.055);
 }
 
 .statValue{
@@ -1128,18 +1048,15 @@ button:active{
 
 .statLabel{
   margin-top:4px;
-
+  color:#737c8e;
   font-size:8px;
-  color:#707681;
   text-transform:uppercase;
 }
 
 .rewardsTitle{
-  margin-top:18px;
-  margin-bottom:10px;
-
+  margin:20px 0 10px;
   font-size:15px;
-  font-weight:900;
+  font-weight:950;
 }
 
 .rewardList{
@@ -1153,12 +1070,14 @@ button:active{
   align-items:center;
   justify-content:space-between;
 
-  padding:10px 12px;
+  padding:11px 12px;
 
-  border-radius:12px;
+  border-radius:14px;
 
-  background:#11141a;
-  border:1px solid rgba(255,255,255,.045);
+  background:
+    linear-gradient(135deg,rgba(25,30,42,.84),rgba(13,16,23,.94));
+
+  border:1px solid rgba(255,255,255,.05);
 }
 
 .rewardLeft{
@@ -1168,86 +1087,103 @@ button:active{
 }
 
 .rewardLevel{
-  width:30px;
-  height:30px;
-
+  width:31px;
+  height:31px;
   display:flex;
   align-items:center;
   justify-content:center;
 
-  border-radius:9px;
+  border-radius:10px;
 
-  background:#1c2028;
+  background:
+    linear-gradient(145deg,#252d3f,#151a25);
 
+  color:#b8c9ff;
   font-size:10px;
-  font-weight:900;
+  font-weight:950;
 }
 
 .rewardText{
-  font-size:11px;
-  font-weight:800;
+  font-size:10px;
+  font-weight:850;
 }
 
 .rewardAmount{
-  color:#bfc4cc;
+  color:#c5ccd8;
   font-size:10px;
-  font-weight:900;
+  font-weight:950;
 }
 
 .rewardClaimed{
-  color:#4fd58a;
+  color:#4fe39a;
 }
 
-/* =========================
-   BOTTOM NAV
-========================= */
+/* ================= BOTTOM NAV ================= */
 
 .bottomNav{
   position:fixed;
-
-  z-index:100;
+  z-index:150;
 
   left:50%;
   bottom:0;
-
   transform:translateX(-50%);
 
   width:100%;
-  max-width:620px;
+  max-width:650px;
 
   padding:
-    8px
-    10px
+    8px 10px
     calc(env(safe-area-inset-bottom) + 8px);
 
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:5px;
+  gap:6px;
 
   background:
-    rgba(10,11,15,.94);
+    rgba(8,10,16,.88);
 
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(25px);
+  -webkit-backdrop-filter:blur(25px);
 
-  border-top:1px solid rgba(255,255,255,.06);
+  border-top:1px solid rgba(255,255,255,.07);
 }
 
 .navButton{
+  position:relative;
+
   padding:8px 3px;
 
-  border-radius:12px;
+  border-radius:13px;
 
   background:transparent;
 
-  color:#626872;
-
-  transition:.2s;
+  color:#687185;
 }
 
 .navButton.active{
-  background:#171a21;
   color:#fff;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(71,109,184,.23),
+      rgba(28,35,52,.48)
+    );
+
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.06);
+}
+
+.navButton.active:after{
+  content:"";
+  position:absolute;
+  left:30%;
+  right:30%;
+  bottom:2px;
+  height:2px;
+  border-radius:99px;
+  background:#5d94ff;
+  box-shadow:0 0 9px #5d94ff;
 }
 
 .navIcon{
@@ -1258,29 +1194,24 @@ button:active{
 .navText{
   margin-top:4px;
   font-size:8px;
-  font-weight:800;
+  font-weight:850;
 }
 
-/* =========================
-   ROULETTE MODAL
-========================= */
+/* ================= ROULETTE MODAL ================= */
 
 .modal{
   position:fixed;
-
-  z-index:200;
-
+  z-index:300;
   inset:0;
 
   display:none;
   align-items:flex-end;
   justify-content:center;
 
-  background:
-    rgba(0,0,0,.72);
+  background:rgba(1,3,8,.78);
 
-  backdrop-filter:blur(9px);
-  -webkit-backdrop-filter:blur(9px);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
 }
 
 .modal.show{
@@ -1289,31 +1220,25 @@ button:active{
 
 .modalBox{
   width:100%;
-  max-width:620px;
-
+  max-width:650px;
   max-height:94vh;
-
   overflow:auto;
 
   padding:
-    15px
-    15px
+    15px 14px
     calc(env(safe-area-inset-bottom) + 20px);
 
-  border-radius:
-    25px 25px 0 0;
+  border-radius:28px 28px 0 0;
 
   background:
-    linear-gradient(
-      180deg,
-      #14171e,
-      #0b0d11
-    );
+    linear-gradient(180deg,#151a26,#090c12);
 
-  border-top:1px solid rgba(255,255,255,.08);
+  border-top:1px solid rgba(255,255,255,.1);
 
-  animation:
-    modalUp .3s ease;
+  box-shadow:
+    0 -25px 80px rgba(0,0,0,.5);
+
+  animation:modalUp .32s cubic-bezier(.2,.8,.2,1);
 }
 
 @keyframes modalUp{
@@ -1337,94 +1262,75 @@ button:active{
 }
 
 .closeButton{
-  width:34px;
-  height:34px;
+  width:35px;
+  height:35px;
 
-  border-radius:10px;
+  border-radius:11px;
 
-  background:#1b1e25;
+  background:#202532;
 
-  color:#888e98;
+  color:#929aaa;
 
-  font-size:17px;
+  font-size:18px;
 }
 
-/* =========================
-   ROULETTE
-========================= */
+/* roulette */
 
 .roulette{
   position:relative;
 
   margin-top:16px;
 
-  height:144px;
+  height:155px;
 
   overflow:hidden;
 
-  border-radius:18px;
+  border-radius:20px;
 
   background:
-    linear-gradient(
-      180deg,
-      #090b0f,
-      #12151b
-    );
+    radial-gradient(
+      ellipse at center,
+      rgba(62,88,145,.15),
+      transparent 60%
+    ),
+    #090c12;
 
-  border:1px solid rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.08);
 
   box-shadow:
-    inset 0 0 40px rgba(0,0,0,.5);
+    inset 0 0 45px rgba(0,0,0,.7),
+    0 10px 35px rgba(0,0,0,.3);
 }
 
-.roulette::before,
-.roulette::after{
+.roulette:after{
   content:"";
 
   position:absolute;
-
-  top:0;
-  bottom:0;
-
-  width:55px;
-
-  z-index:4;
+  inset:0;
 
   pointer-events:none;
-}
-
-.roulette::before{
-  left:0;
 
   background:
     linear-gradient(
       90deg,
-      #090b0f,
-      transparent
+      rgba(5,7,11,.95),
+      transparent 15%,
+      transparent 85%,
+      rgba(5,7,11,.95)
     );
-}
 
-.roulette::after{
-  right:0;
-
-  background:
-    linear-gradient(
-      270deg,
-      #090b0f,
-      transparent
-    );
+  z-index:5;
 }
 
 .centerLine{
   position:absolute;
-
-  z-index:6;
+  z-index:10;
 
   left:50%;
   top:0;
   bottom:0;
 
-  width:2px;
+  width:3px;
 
   transform:translateX(-50%);
 
@@ -1432,19 +1338,19 @@ button:active{
     linear-gradient(
       180deg,
       transparent,
-      #fff,
+      #fff 25%,
+      #75a9ff 50%,
+      #fff 75%,
       transparent
     );
 
-  opacity:.8;
-
   box-shadow:
-    0 0 12px rgba(255,255,255,.55);
+    0 0 15px #5e91ff,
+    0 0 30px rgba(82,135,255,.45);
 }
 
 .rouletteTrack{
   position:absolute;
-
   left:0;
   top:0;
 
@@ -1453,15 +1359,13 @@ button:active{
   display:flex;
   align-items:center;
   gap:8px;
-
-  padding-left:0;
-
-  transform:translateX(0);
 }
 
 .rouletteItem{
+  position:relative;
+
   width:120px;
-  height:110px;
+  height:115px;
 
   flex:none;
 
@@ -1470,36 +1374,32 @@ button:active{
   align-items:center;
   justify-content:center;
 
-  border-radius:14px;
+  border-radius:16px;
 
   background:
-    linear-gradient(
-      145deg,
-      #191c23,
-      #111319
-    );
+    linear-gradient(145deg,#1a1f2b,#10131a);
 
-  border:1px solid rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.07);
 
-  overflow:hidden;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.05);
 }
 
 .rouletteItem .emoji{
-  font-size:37px;
-  line-height:1;
+  font-size:38px;
+  filter:drop-shadow(0 5px 8px rgba(0,0,0,.5));
 }
 
 .rouletteItem .name{
-  margin-top:8px;
-
-  width:105px;
+  width:104px;
+  margin-top:9px;
 
   text-align:center;
 
-  font-size:9px;
-  font-weight:800;
+  color:#c6ccd7;
 
-  color:#c4c8cf;
+  font-size:9px;
+  font-weight:850;
 
   white-space:nowrap;
   overflow:hidden;
@@ -1507,122 +1407,106 @@ button:active{
 }
 
 .rouletteHint{
-  margin-top:9px;
-
+  margin-top:10px;
   text-align:center;
-
-  color:#686f79;
-
+  color:#697386;
   font-size:9px;
 }
 
-/* =========================
-   RESULT
-========================= */
+/* result */
 
 .resultBox{
   display:none;
 
   margin-top:15px;
-
-  padding:15px;
-
-  border-radius:18px;
-
-  background:#11141a;
-
-  border:1px solid rgba(255,255,255,.06);
+  padding:16px;
 
   text-align:center;
+
+  border-radius:21px;
+
+  background:
+    linear-gradient(145deg,rgba(30,36,50,.9),rgba(13,16,23,.96));
+
+  border:1px solid rgba(255,255,255,.07);
+
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.3);
 }
 
 .resultBox.show{
   display:block;
-  animation:resultIn .35s ease;
+  animation:resultIn .42s cubic-bezier(.2,.9,.2,1);
 }
 
 @keyframes resultIn{
   from{
     opacity:0;
-    transform:scale(.95);
+    transform:scale(.92) translateY(10px);
   }
   to{
     opacity:1;
-    transform:scale(1);
+    transform:scale(1) translateY(0);
   }
 }
 
 .resultLabel{
-  color:#777e89;
-
-  font-size:9px;
+  color:#788296;
+  font-size:8px;
+  letter-spacing:1.4px;
   text-transform:uppercase;
-  letter-spacing:1px;
 }
 
 .resultName{
   margin-top:5px;
-
-  font-size:21px;
+  font-size:22px;
   font-weight:950;
 }
 
 .resultPrice{
-  margin-top:5px;
-
-  font-size:12px;
-  color:#bfc4cb;
+  margin-top:4px;
+  color:#c1c8d4;
+  font-size:11px;
 }
 
 .resultCar{
-  height:145px;
-  margin:8px 0 5px;
-
   position:relative;
+  height:160px;
+  margin:0;
 }
 
 .resultButtons{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
-
-  margin-top:13px;
+  margin-top:5px;
 }
 
 .resultButton{
-  padding:12px;
-
-  border-radius:12px;
-
+  padding:13px;
+  border-radius:13px;
   font-size:10px;
-  font-weight:900;
+  font-weight:950;
 }
 
 .keepButton{
   background:
-    linear-gradient(
-      145deg,
-      #262b34,
-      #171a20
-    );
+    linear-gradient(145deg,#293142,#171d29);
 
-  border:1px solid rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.08);
 }
 
 .sellNowButton{
   background:
-    linear-gradient(
-      145deg,
-      #1e8b58,
-      #125b39
-    );
+    linear-gradient(145deg,#239765,#12613f);
 
-  border:1px solid rgba(94,231,153,.25);
+  border:1px solid rgba(85,233,158,.25);
+
+  box-shadow:
+    0 7px 20px rgba(25,151,99,.14);
 }
 
-/* =========================
-   RESULT 3D CAR
-========================= */
+/* ================= NEW 3D CAR ================= */
 
 .carScene{
   position:absolute;
@@ -1630,348 +1514,423 @@ button:active{
   left:50%;
   top:50%;
 
-  width:280px;
-  height:135px;
+  width:330px;
+  height:160px;
 
   transform:
-    translate(-50%,-50%);
+    translate(-50%,-50%)
+    perspective(700px);
 }
 
 .carFloorShadow{
   position:absolute;
 
   left:50%;
-  bottom:17px;
+  bottom:13px;
 
-  width:205px;
-  height:20px;
+  width:245px;
+  height:27px;
 
   transform:translateX(-50%);
 
   border-radius:50%;
 
   background:
-    rgba(0,0,0,.75);
+    radial-gradient(
+      ellipse,
+      rgba(0,0,0,.8),
+      transparent 70%
+    );
 
-  filter:blur(7px);
+  filter:blur(5px);
 }
 
 .realCar{
   position:absolute;
 
   left:50%;
-  bottom:31px;
+  bottom:35px;
 
-  width:210px;
-  height:75px;
+  width:245px;
+  height:90px;
 
   transform:
-    translateX(-50%);
+    translateX(-50%)
+    rotateX(2deg)
+    rotateY(-5deg);
 
   filter:
-    drop-shadow(
-      0 13px 8px rgba(0,0,0,.45)
-    );
+    drop-shadow(0 17px 9px rgba(0,0,0,.55));
 }
 
 .carLower{
   position:absolute;
 
-  left:5px;
-  right:5px;
-  bottom:7px;
+  left:3px;
+  right:3px;
+  bottom:5px;
 
-  height:48px;
+  height:55px;
 
   border-radius:
-    22px 28px 12px 12px;
+    24px 37px 12px 12px;
 
   background:
     linear-gradient(
       145deg,
-      #d8dce1 0%,
-      #747b85 35%,
-      #333840 75%,
-      #17191e 100%
+      var(--car1,#d9dde2) 0%,
+      var(--car2,#555c68) 52%,
+      #15181f 100%
     );
 
-  border:
-    1px solid rgba(255,255,255,.27);
+  border:1px solid rgba(255,255,255,.30);
 
   box-shadow:
-    inset 0 8px 13px rgba(255,255,255,.14),
-    inset 0 -13px 15px rgba(0,0,0,.32);
+    inset 0 9px 15px rgba(255,255,255,.17),
+    inset 0 -15px 18px rgba(0,0,0,.35);
+}
+
+.carLower:before{
+  content:"";
+
+  position:absolute;
+  left:20px;
+  right:45px;
+  top:7px;
+
+  height:2px;
+
+  border-radius:99px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.38),
+      transparent
+    );
+
+  filter:blur(.3px);
+}
+
+.carLower:after{
+  content:"";
+
+  position:absolute;
+
+  left:15px;
+  right:15px;
+  bottom:4px;
+
+  height:8px;
+
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(0,0,0,.5),
+      transparent
+    );
 }
 
 .carHood{
   position:absolute;
 
-  right:0;
-  top:23px;
+  right:-1px;
+  top:30px;
 
-  width:74px;
-  height:31px;
+  width:88px;
+  height:37px;
 
   border-radius:
-    8px 25px 7px 4px;
+    8px 31px 8px 4px;
 
   background:
     linear-gradient(
       145deg,
-      #bfc4ca,
-      #555b64
+      var(--car1,#c7ccd2),
+      #4d545e
     );
 
+  border:
+    1px solid rgba(255,255,255,.18);
+
   transform:
-    skewX(-11deg);
+    skewX(-9deg);
+
+  box-shadow:
+    inset 0 5px 8px rgba(255,255,255,.10);
 }
 
 .carRoof{
   position:absolute;
 
-  left:51px;
-  top:2px;
+  left:57px;
+  top:3px;
 
-  width:103px;
-  height:49px;
+  width:121px;
+  height:57px;
 
   border-radius:
-    48px 48px 9px 9px;
+    55px 55px 9px 9px;
 
   background:
     linear-gradient(
       145deg,
-      #bec4cb,
-      #4e555f
+      var(--car1,#c8cdd4),
+      var(--car2,#555c67)
     );
 
   border:
-    1px solid rgba(255,255,255,.2);
+    1px solid rgba(255,255,255,.25);
+
+  box-shadow:
+    inset 0 7px 10px rgba(255,255,255,.12);
 }
 
 .glassFront,
 .glassRear{
   position:absolute;
 
-  top:8px;
+  top:11px;
 
-  height:30px;
+  height:39px;
 
   background:
     linear-gradient(
       135deg,
-      rgba(225,241,255,.65),
-      rgba(18,27,38,.92)
+      rgba(230,245,255,.65),
+      rgba(13,23,38,.96)
     );
 
   border:
-    1px solid rgba(255,255,255,.13);
+    1px solid rgba(255,255,255,.14);
 
   box-shadow:
-    inset 0 0 10px rgba(255,255,255,.06);
+    inset 0 0 18px rgba(73,160,255,.12);
 }
 
 .glassFront{
-  left:58px;
-  width:43px;
+  left:65px;
+  width:51px;
 
   border-radius:
-    35px 4px 4px 4px;
+    42px 4px 4px 4px;
 
-  transform:
-    skewX(-10deg);
+  transform:skewX(-9deg);
 }
 
 .glassRear{
-  left:104px;
-  width:43px;
+  left:119px;
+  width:50px;
 
   border-radius:
-    4px 35px 4px 4px;
+    4px 42px 4px 4px;
 
-  transform:
-    skewX(10deg);
+  transform:skewX(9deg);
 }
 
 .windowLine{
   position:absolute;
 
-  left:102px;
-  top:8px;
+  left:117px;
+  top:11px;
 
   width:1px;
-  height:30px;
+  height:39px;
 
-  background:
-    rgba(255,255,255,.18);
+  background:rgba(255,255,255,.20);
 
-  transform:rotate(3deg);
+  transform:rotate(2deg);
 }
 
 .sideMirror{
   position:absolute;
 
-  top:32px;
+  top:38px;
 
-  width:11px;
-  height:6px;
+  width:13px;
+  height:7px;
 
-  border-radius:4px;
+  border-radius:5px;
 
-  background:#353a42;
+  background:#252a32;
 
-  box-shadow:
-    0 1px 2px rgba(0,0,0,.6);
+  border:1px solid rgba(255,255,255,.12);
 }
 
 .sideMirror.left{
-  left:45px;
+  left:51px;
 }
 
 .sideMirror.right{
-  right:46px;
+  right:54px;
 }
 
 .wheel{
   position:absolute;
 
-  bottom:0;
+  bottom:-2px;
 
-  width:36px;
-  height:36px;
+  width:42px;
+  height:42px;
 
   border-radius:50%;
 
   background:
     radial-gradient(
       circle,
-      #7f858c 0 16%,
-      #16181c 18% 42%,
-      #050609 44% 100%
+      #d2d6dc 0 9%,
+      #555d69 10% 19%,
+      #12151b 20% 48%,
+      #030406 49% 100%
     );
 
-  border:
-    4px solid #111318;
+  border:4px solid #101319;
 
   box-shadow:
-    0 0 0 2px #3b4048,
-    inset 0 0 0 2px #08090b;
+    0 0 0 2px #404753,
+    inset 0 0 0 3px #08090c;
+}
+
+.wheel:before,
+.wheel:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:2px;
+  height:30px;
+  background:#717987;
+  transform:translate(-50%,-50%) rotate(45deg);
+  opacity:.55;
+}
+
+.wheel:after{
+  transform:translate(-50%,-50%) rotate(-45deg);
 }
 
 .wheel.left{
-  left:25px;
+  left:27px;
 }
 
 .wheel.right{
-  right:24px;
+  right:27px;
 }
 
 .headLight{
   position:absolute;
 
-  right:5px;
-  top:34px;
+  right:2px;
+  top:40px;
 
-  width:18px;
-  height:10px;
+  width:23px;
+  height:12px;
 
   border-radius:
-    9px 3px 3px 9px;
+    12px 3px 3px 12px;
 
   background:
     linear-gradient(
       90deg,
-      #f4f8ff,
-      #8fb8ff
+      #fff,
+      #8cc8ff
     );
 
   box-shadow:
-    0 0 13px rgba(130,180,255,.9);
+    0 0 17px rgba(131,194,255,.95),
+    0 0 30px rgba(90,159,255,.35);
 }
 
 .taillight{
   position:absolute;
 
-  left:5px;
-  top:35px;
+  left:3px;
+  top:41px;
 
-  width:11px;
-  height:9px;
+  width:14px;
+  height:10px;
 
   border-radius:
-    3px 7px 7px 3px;
+    3px 8px 8px 3px;
 
-  background:#ff3447;
+  background:
+    linear-gradient(
+      90deg,
+      #ff233b,
+      #ff6976
+    );
 
   box-shadow:
-    0 0 10px rgba(255,52,71,.7);
+    0 0 13px rgba(255,42,62,.85);
 }
 
 .grille{
   position:absolute;
 
-  right:18px;
-  bottom:15px;
+  right:23px;
+  bottom:18px;
 
-  width:27px;
-  height:13px;
+  width:32px;
+  height:16px;
 
-  border-radius:3px;
+  border-radius:4px;
 
   background:
     repeating-linear-gradient(
       90deg,
-      #0b0c0f 0 3px,
-      #242830 3px 5px
+      #050609 0 3px,
+      #363d48 3px 5px
     );
+
+  border:1px solid rgba(255,255,255,.08);
 }
 
 .plate{
   position:absolute;
 
   left:50%;
-  bottom:16px;
+  bottom:18px;
 
   transform:translateX(-50%);
 
-  width:31px;
-  height:8px;
+  width:37px;
+  height:9px;
 
   border-radius:2px;
 
-  background:#e9eaec;
+  background:#f0f1f2;
 
-  color:#16181c;
+  color:#111;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
   font-size:4px;
-  font-weight:900;
+  font-weight:950;
+
+  box-shadow:0 1px 3px rgba(0,0,0,.4);
 }
 
-/* =========================
-   LEVEL MODAL
-========================= */
+/* ================= LEVEL POPUP ================= */
 
 .levelModal{
   position:fixed;
-
-  z-index:300;
-
+  z-index:400;
   inset:0;
 
   display:none;
-
   align-items:center;
   justify-content:center;
 
   padding:20px;
 
-  background:rgba(0,0,0,.78);
+  background:rgba(0,0,0,.80);
 
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(13px);
 }
 
 .levelModal.show{
@@ -1979,35 +1938,46 @@ button:active{
 }
 
 .levelPopup{
+  position:relative;
+  overflow:hidden;
+
   width:100%;
   max-width:350px;
 
-  padding:28px 20px;
+  padding:30px 20px;
 
   text-align:center;
 
-  border-radius:25px;
+  border-radius:26px;
 
   background:
-    linear-gradient(
-      145deg,
-      #191c24,
-      #0d0f14
-    );
+    linear-gradient(145deg,#20283b,#0d111a);
 
-  border:1px solid rgba(255,255,255,.08);
+  border:1px solid rgba(115,156,255,.22);
 
   box-shadow:
-    0 25px 70px rgba(0,0,0,.65);
+    0 25px 90px rgba(0,0,0,.65),
+    0 0 60px rgba(74,126,255,.12);
 
-  animation:
-    popupIn .35s cubic-bezier(.2,.9,.2,1);
+  animation:popupIn .4s cubic-bezier(.2,.9,.2,1);
+}
+
+.levelPopup:before{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  left:50%;
+  top:-100px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(84,138,255,.22),transparent 70%);
 }
 
 @keyframes popupIn{
   from{
     opacity:0;
-    transform:scale(.8);
+    transform:scale(.78);
   }
   to{
     opacity:1;
@@ -2016,152 +1986,139 @@ button:active{
 }
 
 .levelIcon{
-  font-size:42px;
+  position:relative;
+  font-size:44px;
+  filter:drop-shadow(0 0 18px rgba(255,211,79,.3));
 }
 
 .levelSmall{
   margin-top:8px;
-
-  color:#858b95;
-
-  font-size:9px;
+  color:#8993a8;
+  font-size:8px;
+  letter-spacing:1.5px;
   text-transform:uppercase;
-  letter-spacing:1.4px;
 }
 
 .levelNew{
   margin-top:5px;
-
-  font-size:30px;
+  font-size:34px;
   font-weight:950;
 }
 
 .levelReward{
-  margin-top:13px;
-
-  color:#ffc83d;
-
+  margin-top:12px;
+  color:#ffd34f;
   font-size:18px;
   font-weight:950;
 }
 
 .levelContinue{
-  margin-top:20px;
-
+  margin-top:21px;
   width:100%;
-
   padding:13px;
 
   border-radius:13px;
 
-  background:#22262f;
+  background:
+    linear-gradient(145deg,#2b3854,#192235);
 
-  font-size:11px;
-  font-weight:900;
+  border:1px solid rgba(103,153,255,.22);
+
+  font-size:10px;
+  font-weight:950;
 }
 
-/* =========================
-   TOAST
-========================= */
+/* ================= TOAST ================= */
 
 .toast{
   position:fixed;
-
   z-index:500;
 
   left:50%;
-  bottom:100px;
-
-  transform:
-    translate(-50%,20px);
-
-  opacity:0;
-
-  pointer-events:none;
-
-  padding:11px 15px;
+  bottom:105px;
 
   max-width:90%;
 
-  border-radius:12px;
+  transform:translate(-50%,25px);
+
+  opacity:0;
+
+  padding:12px 16px;
+
+  border-radius:13px;
 
   background:
-    rgba(25,28,35,.96);
+    rgba(24,29,40,.96);
 
   border:1px solid rgba(255,255,255,.08);
 
   box-shadow:
-    0 12px 30px rgba(0,0,0,.35);
-
-  color:#fff;
+    0 15px 40px rgba(0,0,0,.4);
 
   font-size:10px;
-  font-weight:800;
-
-  transition:
-    opacity .25s ease,
-    transform .25s ease;
+  font-weight:850;
 
   text-align:center;
+
+  pointer-events:none;
+
+  transition:
+    opacity .25s,
+    transform .25s;
 }
 
 .toast.show{
   opacity:1;
-
-  transform:
-    translate(-50%,0);
+  transform:translate(-50%,0);
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* ================= RESPONSIVE ================= */
 
 @media(max-width:390px){
 
   .content{
-    padding:13px;
-  }
-
-  .caseGrid{
-    gap:9px;
+    padding:14px 11px;
   }
 
   .caseCard{
     min-height:275px;
-    padding:11px;
   }
 
-  .caseFooter{
-    left:11px;
-    right:11px;
-  }
-
-  .caseDescription{
-    font-size:8px;
+  .caseArt{
+    height:142px;
   }
 
   .openButton{
-    min-width:82px;
-    padding:9px 7px;
+    min-width:92px;
   }
 
 }
 
-/* =========================
-   REDUCED MOTION
-========================= */
+@media(min-width:500px){
+
+  .caseGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .caseCard{
+    min-height:300px;
+  }
+
+}
+
+/* ================= REDUCED MOTION ================= */
 
 @media(prefers-reduced-motion:reduce){
 
   *,
-  *::before,
-  *::after{
-    animation-duration:.01ms !important;
-    transition-duration:.01ms !important;
+  *:before,
+  *:after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
   }
 
 }
-
 </style>
 </head>
 
@@ -2169,316 +2126,278 @@ button:active{
 
 <div class="app">
 
-  <!-- HEADER -->
+<header class="header">
 
-  <header class="header">
+  <div class="headerTop">
 
-    <div class="headerTop">
+    <div class="logo">
 
-      <div class="logo">
+      <div class="logoIcon">
+        <span>🚘</span>
+      </div>
 
-        <div class="logoIcon">
-          <span>🚘</span>
+      <div>
+        <div class="logoText">
+          АВТОИМПЕРИЯ
         </div>
 
-        <div>
-          <div class="logoText">
-            АВТОИМПЕРИЯ
-          </div>
-
-          <div class="logoSub">
-            CASE • GARAGE • MARKET
-          </div>
+        <div class="logoSub">
+          CASE • GARAGE • MARKET
         </div>
+      </div>
+
+    </div>
+
+    <div class="balanceBox">
+
+      <div class="balanceLabel">
+        Баланс
+      </div>
+
+      <div
+        class="balance"
+        id="balance">
+        5 000 000 ₽
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="levelRow">
+
+    <div
+      class="levelBadge"
+      id="levelBadge">
+      1
+    </div>
+
+    <div class="levelProgressWrap">
+
+      <div class="levelProgressTop">
+
+        <span id="levelText">
+          Уровень 1
+        </span>
+
+        <span id="xpText">
+          0 / 100 XP
+        </span>
 
       </div>
 
-      <div class="balanceBox">
-
-        <div class="balanceLabel">
-          Баланс
-        </div>
+      <div class="progress">
 
         <div
-          class="balance"
-          id="balance">
-          5 000 000 ₽
+          class="progressBar"
+          id="xpBar">
         </div>
 
       </div>
 
     </div>
 
-    <div class="levelRow">
+  </div>
 
-      <div
-        class="levelBadge"
-        id="levelBadge">
-        1
-      </div>
+</header>
 
-      <div class="levelProgressWrap">
 
-        <div class="levelProgressTop">
+<main class="content">
 
-          <span id="levelText">
-            Уровень 1
-          </span>
+<section
+  class="page active"
+  id="page-cases">
 
-          <span id="xpText">
-            0 / 100 XP
-          </span>
+  <div class="pageTitle">
+    Кейсы
+  </div>
 
+  <div class="pageSubtitle">
+    Открывай кейсы. Собирай редкие автомобили.
+  </div>
+
+  <div
+    class="caseGrid"
+    id="caseGrid">
+  </div>
+
+</section>
+
+
+<section
+  class="page"
+  id="page-garage">
+
+  <div class="pageTitle">
+    Гараж
+  </div>
+
+  <div class="pageSubtitle">
+    Твоя коллекция автомобилей
+  </div>
+
+  <div
+    class="carList"
+    id="garageList">
+  </div>
+
+</section>
+
+
+<section
+  class="page"
+  id="page-market">
+
+  <div class="pageTitle">
+    Рынок
+  </div>
+
+  <div class="pageSubtitle">
+    Покупай автомобили напрямую
+  </div>
+
+  <div
+    class="marketGrid"
+    id="marketGrid">
+  </div>
+
+</section>
+
+
+<section
+  class="page"
+  id="page-profile">
+
+  <div class="pageTitle">
+    Профиль
+  </div>
+
+  <div class="pageSubtitle">
+    Статистика и награды
+  </div>
+
+  <div class="profileHero">
+
+    <div class="profileAvatar">
+      👤
+    </div>
+
+    <div
+      class="profileName"
+      id="profileName">
+      Игрок
+    </div>
+
+    <div class="profileStatus">
+      Владелец автоимперии
+    </div>
+
+    <div class="statsGrid">
+
+      <div class="stat">
+
+        <div
+          class="statValue"
+          id="statCases">
+          0
         </div>
 
-        <div class="progress">
+        <div class="statLabel">
+          Кейсов
+        </div>
 
-          <div
-            class="progressBar"
-            id="xpBar">
-          </div>
+      </div>
 
+      <div class="stat">
+
+        <div
+          class="statValue"
+          id="statCars">
+          0
+        </div>
+
+        <div class="statLabel">
+          Машин
+        </div>
+
+      </div>
+
+      <div class="stat">
+
+        <div
+          class="statValue"
+          id="statSold">
+          0
+        </div>
+
+        <div class="statLabel">
+          Продано
         </div>
 
       </div>
 
     </div>
 
-  </header>
+  </div>
 
+  <div class="rewardsTitle">
+    Награды за уровни
+  </div>
 
-  <!-- CONTENT -->
+  <div
+    class="rewardList"
+    id="rewardList">
+  </div>
 
-  <main class="content">
+</section>
 
-
-    <!-- CASES -->
-
-    <section
-      class="page active"
-      id="page-cases">
-
-      <div class="pageTitle">
-        Кейсы
-      </div>
-
-      <div class="pageSubtitle">
-        Открывай кейсы и собирай свою автоимперию
-      </div>
-
-      <div
-        class="caseGrid"
-        id="caseGrid">
-      </div>
-
-    </section>
-
-
-    <!-- GARAGE -->
-
-    <section
-      class="page"
-      id="page-garage">
-
-      <div class="pageTitle">
-        Гараж
-      </div>
-
-      <div class="pageSubtitle">
-        Твои автомобили
-      </div>
-
-      <div
-        class="carList"
-        id="garageList">
-      </div>
-
-    </section>
-
-
-    <!-- MARKET -->
-
-    <section
-      class="page"
-      id="page-market">
-
-      <div class="pageTitle">
-        Рынок
-      </div>
-
-      <div class="pageSubtitle">
-        Покупай автомобили напрямую
-      </div>
-
-      <div
-        class="marketGrid"
-        id="marketGrid">
-      </div>
-
-    </section>
-
-
-    <!-- PROFILE -->
-
-    <section
-      class="page"
-      id="page-profile">
-
-      <div class="pageTitle">
-        Профиль
-      </div>
-
-      <div class="pageSubtitle">
-        Статистика и награды
-      </div>
-
-      <div class="profileHero">
-
-        <div class="profileAvatar">
-          👤
-        </div>
-
-        <div
-          class="profileName"
-          id="profileName">
-          Игрок
-        </div>
-
-        <div class="profileStatus">
-          Владелец автоимперии
-        </div>
-
-        <div class="statsGrid">
-
-          <div class="stat">
-
-            <div
-              class="statValue"
-              id="statCases">
-              0
-            </div>
-
-            <div class="statLabel">
-              Кейсов
-            </div>
-
-          </div>
-
-          <div class="stat">
-
-            <div
-              class="statValue"
-              id="statCars">
-              0
-            </div>
-
-            <div class="statLabel">
-              Машин
-            </div>
-
-          </div>
-
-          <div class="stat">
-
-            <div
-              class="statValue"
-              id="statSold">
-              0
-            </div>
-
-            <div class="statLabel">
-              Продано
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="rewardsTitle">
-        Награды за уровни
-      </div>
-
-      <div
-        class="rewardList"
-        id="rewardList">
-      </div>
-
-    </section>
-
-  </main>
+</main>
 
 </div>
 
 
-<!-- BOTTOM NAV -->
-
 <nav class="bottomNav">
 
-  <button
-    class="navButton active"
-    onclick="switchPage('cases',this)">
+<button
+  class="navButton active"
+  onclick="switchPage('cases',this)">
 
-    <div class="navIcon">
-      📦
-    </div>
+  <div class="navIcon">📦</div>
+  <div class="navText">Кейсы</div>
 
-    <div class="navText">
-      Кейсы
-    </div>
+</button>
 
-  </button>
+<button
+  class="navButton"
+  onclick="switchPage('garage',this)">
 
+  <div class="navIcon">🚘</div>
+  <div class="navText">Гараж</div>
 
-  <button
-    class="navButton"
-    onclick="switchPage('garage',this)">
+</button>
 
-    <div class="navIcon">
-      🚘
-    </div>
+<button
+  class="navButton"
+  onclick="switchPage('market',this)">
 
-    <div class="navText">
-      Гараж
-    </div>
+  <div class="navIcon">🏪</div>
+  <div class="navText">Рынок</div>
 
-  </button>
+</button>
 
+<button
+  class="navButton"
+  onclick="switchPage('profile',this)">
 
-  <button
-    class="navButton"
-    onclick="switchPage('market',this)">
+  <div class="navIcon">👤</div>
+  <div class="navText">Профиль</div>
 
-    <div class="navIcon">
-      🏪
-    </div>
-
-    <div class="navText">
-      Рынок
-    </div>
-
-  </button>
-
-
-  <button
-    class="navButton"
-    onclick="switchPage('profile',this)">
-
-    <div class="navIcon">
-      👤
-    </div>
-
-    <div class="navText">
-      Профиль
-    </div>
-
-  </button>
+</button>
 
 </nav>
 
 
-<!-- ROULETTE MODAL -->
+<!-- ROULETTE -->
 
 <div
   class="modal"
@@ -2502,14 +2421,11 @@ button:active{
 
     </div>
 
-
     <div
       class="roulette"
       id="roulette">
 
-      <div
-        class="centerLine">
-      </div>
+      <div class="centerLine"></div>
 
       <div
         class="rouletteTrack"
@@ -2518,11 +2434,9 @@ button:active{
 
     </div>
 
-
     <div class="rouletteHint">
-      Следи за центральной линией — именно там определяется результат
+      Центральная линия определяет выпавший автомобиль
     </div>
-
 
     <div
       class="resultBox"
@@ -2547,7 +2461,6 @@ button:active{
         id="resultPrice">
       </div>
 
-
       <div class="resultButtons">
 
         <button
@@ -2571,7 +2484,7 @@ button:active{
 </div>
 
 
-<!-- LEVEL MODAL -->
+<!-- LEVEL -->
 
 <div
   class="levelModal"
@@ -2610,8 +2523,6 @@ button:active{
 </div>
 
 
-<!-- TOAST -->
-
 <div
   class="toast"
   id="toast">
@@ -2620,9 +2531,7 @@ button:active{
 
 <script>
 
-/* =========================================================
-   TELEGRAM
-========================================================= */
+/* TELEGRAM */
 
 const tg =
   window.Telegram &&
@@ -2633,514 +2542,233 @@ const tg =
 if(tg){
 
   try{
+
     tg.ready();
     tg.expand();
 
-    if(tg.setHeaderColor){
-      tg.setHeaderColor("#08090d");
-    }
-
-    if(tg.setBackgroundColor){
-      tg.setBackgroundColor("#08090d");
-    }
+    tg.setHeaderColor("#070910");
+    tg.setBackgroundColor("#070910");
 
   }catch(e){}
 
 }
 
 
-/* =========================================================
-   CARS
-========================================================= */
+/* CARS */
 
-const cars = {
+const cars={
 
-  "Lada VAZ 2114":{
-    price:180000,
-    rarity:"common",
-    emoji:"🚗"
-  },
+"Lada VAZ 2114":{price:180000,rarity:"common",emoji:"🚗"},
+"Lada VAZ 2109":{price:160000,rarity:"common",emoji:"🚗"},
+"Lada VAZ 2115":{price:190000,rarity:"common",emoji:"🚗"},
+"Lada Priora":{price:350000,rarity:"common",emoji:"🚗"},
+"Lada Granta":{price:550000,rarity:"common",emoji:"🚗"},
+"Daewoo Matiz":{price:280000,rarity:"common",emoji:"🚗"},
+"Daewoo Nexia":{price:420000,rarity:"common",emoji:"🚗"},
+"УАЗ Patriot":{price:750000,rarity:"common",emoji:"🚙"},
+"УАЗ Hunter":{price:850000,rarity:"common",emoji:"🚙"},
 
-  "Lada VAZ 2109":{
-    price:160000,
-    rarity:"common",
-    emoji:"🚗"
-  },
+"Lada Vesta":{price:1000000,rarity:"uncommon",emoji:"🚗"},
+"Hyundai Solaris":{price:1100000,rarity:"uncommon",emoji:"🚗"},
+"Kia Rio":{price:1150000,rarity:"uncommon",emoji:"🚗"},
+"Renault Logan":{price:850000,rarity:"uncommon",emoji:"🚗"},
+"Ford Focus":{price:1300000,rarity:"uncommon",emoji:"🚗"},
+"Skoda Octavia":{price:1700000,rarity:"uncommon",emoji:"🚗"},
+"Toyota Corolla":{price:1800000,rarity:"uncommon",emoji:"🚗"},
+"Volkswagen Passat":{price:1900000,rarity:"uncommon",emoji:"🚗"},
+"Subaru WRX":{price:3000000,rarity:"uncommon",emoji:"🏎️"},
+"Haval F7":{price:2200000,rarity:"uncommon",emoji:"🚙"},
 
-  "Lada VAZ 2115":{
-    price:190000,
-    rarity:"common",
-    emoji:"🚗"
-  },
+"Toyota Camry 70":{price:3000000,rarity:"rare",emoji:"🚘"},
+"Toyota Land Cruiser 200":{price:6500000,rarity:"rare",emoji:"🚙"},
+"BMW E60":{price:2200000,rarity:"rare",emoji:"🚘"},
+"BMW E90":{price:2400000,rarity:"rare",emoji:"🚘"},
+"Mercedes W212":{price:3000000,rarity:"rare",emoji:"🚘"},
+"Audi A6 C7":{price:3000000,rarity:"rare",emoji:"🚘"},
+"Mercedes W222":{price:6000000,rarity:"rare",emoji:"🚘"},
+"BMW X5 F15":{price:4500000,rarity:"rare",emoji:"🚙"},
+"Range Rover Sport":{price:5000000,rarity:"rare",emoji:"🚙"},
 
-  "Lada Priora":{
-    price:350000,
-    rarity:"common",
-    emoji:"🚗"
-  },
+"BMW M4 F82":{price:5000000,rarity:"epic",emoji:"🏎️"},
+"Audi RS4":{price:5000000,rarity:"epic",emoji:"🏎️"},
+"BMW M5 F10":{price:6000000,rarity:"epic",emoji:"🏎️"},
+"BMW M6":{price:7000000,rarity:"epic",emoji:"🏎️"},
+"BMW M3 Competition":{price:7500000,rarity:"epic",emoji:"🏎️"},
+"BMW M4 Competition":{price:8500000,rarity:"epic",emoji:"🏎️"},
+"Mercedes-AMG GT":{price:9000000,rarity:"epic",emoji:"🏎️"},
+"Nissan GT-R R35":{price:9500000,rarity:"epic",emoji:"🏎️"},
+"Porsche 911":{price:8500000,rarity:"epic",emoji:"🏎️"},
 
-  "Lada Granta":{
-    price:550000,
-    rarity:"common",
-    emoji:"🚗"
-  },
+"Audi RS6 C8":{price:10000000,rarity:"legendary",emoji:"🏎️"},
+"BMW M5 CS":{price:10000000,rarity:"legendary",emoji:"🏎️"},
+"BMW M8 Competition":{price:12000000,rarity:"legendary",emoji:"🏎️"},
+"Mercedes-AMG GT 63":{price:14000000,rarity:"legendary",emoji:"🏎️"},
+"Porsche 911 Turbo S":{price:16000000,rarity:"legendary",emoji:"🏎️"},
+"Lamborghini Huracan":{price:20000000,rarity:"legendary",emoji:"🏎️"},
+"Lamborghini Urus":{price:22000000,rarity:"legendary",emoji:"🚙"},
+"McLaren 720S":{price:25000000,rarity:"legendary",emoji:"🏎️"},
 
-  "Daewoo Matiz":{
-    price:280000,
-    rarity:"common",
-    emoji:"🚗"
-  },
-
-  "Daewoo Nexia":{
-    price:420000,
-    rarity:"common",
-    emoji:"🚗"
-  },
-
-  "УАЗ Patriot":{
-    price:750000,
-    rarity:"common",
-    emoji:"🚙"
-  },
-
-  "УАЗ Hunter":{
-    price:850000,
-    rarity:"common",
-    emoji:"🚙"
-  },
-
-  "Lada Vesta":{
-    price:1000000,
-    rarity:"uncommon",
-    emoji:"🚗"
-  },
-
-  "Hyundai Solaris":{
-    price:1100000,
-    rarity:"uncommon",
-    emoji:"🚗"
-  },
-
-  "Kia Rio":{
-    price:1150000,
-    rarity:"uncommon",
-    emoji:"🚗"
-  },
-
-  "Renault Logan":{
-    price:850000,
-    rarity:"uncommon",
-    emoji:"🚗"
-  },
-
-  "Ford Focus":{
-    price:1300000,
-    rarity:"uncommon",
-    emoji:"🚗"
-  },
-
-  "Skoda Octavia":{
-    price:1700000,
-    rarity:"uncommon",
-    emoji:"🚗"
-  },
-
-  "Toyota Corolla":{
-    price:1800000,
-    rarity:"uncommon",
-    emoji:"🚗"
-  },
-
-  "Volkswagen Passat":{
-    price:1900000,
-    rarity:"uncommon",
-    emoji:"🚗"
-  },
-
-  "Subaru WRX":{
-    price:3000000,
-    rarity:"uncommon",
-    emoji:"🏎️"
-  },
-
-  "Haval F7":{
-    price:2200000,
-    rarity:"uncommon",
-    emoji:"🚙"
-  },
-
-  "Toyota Camry 70":{
-    price:3000000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "Toyota Land Cruiser 200":{
-    price:6500000,
-    rarity:"rare",
-    emoji:"🚙"
-  },
-
-  "BMW E60":{
-    price:2200000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "BMW E90":{
-    price:2400000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "Mercedes W212":{
-    price:3000000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "Audi A6 C7":{
-    price:3000000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "Mercedes W222":{
-    price:6000000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "BMW X5 F15":{
-    price:4500000,
-    rarity:"rare",
-    emoji:"🚙"
-  },
-
-  "Range Rover Sport":{
-    price:5000000,
-    rarity:"rare",
-    emoji:"🚙"
-  },
-
-  "BMW M4 F82":{
-    price:5000000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "Audi RS4":{
-    price:5000000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "BMW M5 F10":{
-    price:6000000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "BMW M6":{
-    price:7000000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "BMW M3 Competition":{
-    price:7500000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "BMW M4 Competition":{
-    price:8500000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "Mercedes-AMG GT":{
-    price:9000000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "Nissan GT-R R35":{
-    price:9500000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "Porsche 911":{
-    price:8500000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "Audi RS6 C8":{
-    price:10000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "BMW M5 CS":{
-    price:10000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "BMW M8 Competition":{
-    price:12000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "Mercedes-AMG GT 63":{
-    price:14000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "Porsche 911 Turbo S":{
-    price:16000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "Lamborghini Huracan":{
-    price:20000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "Lamborghini Urus":{
-    price:22000000,
-    rarity:"legendary",
-    emoji:"🚙"
-  },
-
-  "McLaren 720S":{
-    price:25000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "Lamborghini Aventador":{
-    price:25000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Ferrari 488":{
-    price:28000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Ferrari F8 Tributo":{
-    price:32000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "McLaren 765LT":{
-    price:35000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Bentley Continental GT":{
-    price:15000000,
-    rarity:"mythic",
-    emoji:"🚘"
-  },
-
-  "Porsche 918 Spyder":{
-    price:45000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Rolls-Royce Phantom":{
-    price:50000000,
-    rarity:"mythic",
-    emoji:"🚘"
-  },
-
-  "Bugatti Chiron":{
-    price:100000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  }
+"Lamborghini Aventador":{price:25000000,rarity:"mythic",emoji:"🏎️"},
+"Ferrari 488":{price:28000000,rarity:"mythic",emoji:"🏎️"},
+"Ferrari F8 Tributo":{price:32000000,rarity:"mythic",emoji:"🏎️"},
+"McLaren 765LT":{price:35000000,rarity:"mythic",emoji:"🏎️"},
+"Bentley Continental GT":{price:15000000,rarity:"mythic",emoji:"🚘"},
+"Porsche 918 Spyder":{price:45000000,rarity:"mythic",emoji:"🏎️"},
+"Rolls-Royce Phantom":{price:50000000,rarity:"mythic",emoji:"🚘"},
+"Bugatti Chiron":{price:100000000,rarity:"mythic",emoji:"🏎️"}
 
 };
 
 
-/* =========================================================
-   RARITIES
-========================================================= */
+/* RARITY */
 
-const rarityNames = {
-
+const rarityNames={
   common:"Обычная",
   uncommon:"Низкая",
   rare:"Редкая",
   epic:"Эпическая",
   legendary:"Легендарная",
   mythic:"Мифическая"
-
 };
 
-
-const rarityWeights = {
-
+const rarityWeights={
   common:42,
   uncommon:27,
   rare:17,
   epic:9,
   legendary:4,
   mythic:1
-
 };
 
 
-/* =========================================================
-   CASES
-========================================================= */
+/* CASES */
 
-const cases = [
+const cases=[
 
-  {
-    id:"starter",
-    name:"Стартовый",
-    rarity:"common",
-    price:300000,
-    description:"Бюджетные автомобили",
-    art:"sedan",
-    items:[
-      "Lada VAZ 2114",
-      "Lada VAZ 2109",
-      "Lada Priora",
-      "Lada Granta",
-      "Daewoo Matiz",
-      "Daewoo Nexia",
-      "УАЗ Patriot",
-      "Lada Vesta"
-    ]
-  },
+{
+  id:"starter",
+  name:"Стартовый",
+  rarity:"common",
+  price:300000,
+  description:"Бюджетные автомобили",
+  art:"sedan",
+  items:[
+    "Lada VAZ 2114",
+    "Lada VAZ 2109",
+    "Lada Priora",
+    "Lada Granta",
+    "Daewoo Matiz",
+    "Daewoo Nexia",
+    "УАЗ Patriot",
+    "Lada Vesta"
+  ]
+},
 
-  {
-    id:"street",
-    name:"Уличный",
-    rarity:"uncommon",
-    price:900000,
-    description:"Средний класс",
-    art:"bmw",
-    items:[
-      "Hyundai Solaris",
-      "Kia Rio",
-      "Ford Focus",
-      "Skoda Octavia",
-      "Toyota Corolla",
-      "Volkswagen Passat",
-      "Haval F7",
-      "Subaru WRX",
-      "Toyota Camry 70"
-    ]
-  },
+{
+  id:"street",
+  name:"Уличный",
+  rarity:"uncommon",
+  price:900000,
+  description:"Популярные автомобили",
+  art:"bmw",
+  items:[
+    "Hyundai Solaris",
+    "Kia Rio",
+    "Ford Focus",
+    "Skoda Octavia",
+    "Toyota Corolla",
+    "Volkswagen Passat",
+    "Haval F7",
+    "Subaru WRX",
+    "Toyota Camry 70"
+  ]
+},
 
-  {
-    id:"premium",
-    name:"Премиум",
-    rarity:"epic",
-    price:5000000,
-    description:"Премиальные автомобили",
-    art:"sport",
-    items:[
-      "BMW E60",
-      "BMW E90",
-      "Mercedes W212",
-      "Audi A6 C7",
-      "BMW M4 F82",
-      "BMW M5 F10",
-      "BMW M6",
-      "BMW M3 Competition",
-      "BMW M4 Competition",
-      "Mercedes-AMG GT",
-      "Nissan GT-R R35"
-    ]
-  },
+{
+  id:"premium",
+  name:"Премиум",
+  rarity:"epic",
+  price:5000000,
+  description:"Премиальные автомобили",
+  art:"sport",
+  items:[
+    "BMW E60",
+    "BMW E90",
+    "Mercedes W212",
+    "Audi A6 C7",
+    "BMW M4 F82",
+    "BMW M5 F10",
+    "BMW M6",
+    "BMW M3 Competition",
+    "BMW M4 Competition",
+    "Mercedes-AMG GT",
+    "Nissan GT-R R35"
+  ]
+},
 
-  {
-    id:"elite",
-    name:"Элитный",
-    rarity:"legendary",
-    price:15000000,
-    description:"Очень дорогой дроп",
-    art:"supercar",
-    items:[
-      "BMW M5 CS",
-      "BMW M8 Competition",
-      "Mercedes-AMG GT 63",
-      "Porsche 911 Turbo S",
-      "Lamborghini Huracan",
-      "Lamborghini Urus",
-      "McLaren 720S"
-    ]
-  },
+{
+  id:"elite",
+  name:"Элитный",
+  rarity:"legendary",
+  price:15000000,
+  description:"Суперкары высокого класса",
+  art:"supercar",
+  items:[
+    "BMW M5 CS",
+    "BMW M8 Competition",
+    "Mercedes-AMG GT 63",
+    "Porsche 911 Turbo S",
+    "Lamborghini Huracan",
+    "Lamborghini Urus",
+    "McLaren 720S"
+  ]
+},
 
-  {
-    id:"imperial",
-    name:"Императорский",
-    rarity:"mythic",
-    price:100000000,
-    description:"Максимальная редкость",
-    art:"mythicCar",
-    items:[
-      "Lamborghini Aventador",
-      "Ferrari 488",
-      "Ferrari F8 Tributo",
-      "McLaren 765LT",
-      "Bentley Continental GT",
-      "Porsche 918 Spyder",
-      "Rolls-Royce Phantom",
-      "Bugatti Chiron"
-    ]
-  }
+{
+  id:"imperial",
+  name:"Императорский",
+  rarity:"mythic",
+  price:100000000,
+  description:"Самые редкие автомобили",
+  art:"mythicCar",
+  items:[
+    "Lamborghini Aventador",
+    "Ferrari 488",
+    "Ferrari F8 Tributo",
+    "McLaren 765LT",
+    "Bentley Continental GT",
+    "Porsche 918 Spyder",
+    "Rolls-Royce Phantom",
+    "Bugatti Chiron"
+  ]
+}
 
 ];
 
 
-/* =========================================================
-   MARKET
-========================================================= */
+/* MARKET */
 
-const marketCars = [
-
-  ["Lada Vesta",1000000],
-  ["BMW E60",2200000],
-  ["Toyota Camry 70",3000000],
-  ["BMW M4 F82",5000000],
-  ["BMW M5 F10",6000000],
-  ["Nissan GT-R R35",9500000],
-  ["BMW M5 CS",10000000],
-  ["Mercedes-AMG GT 63",14000000],
-  ["Porsche 911 Turbo S",16000000],
-  ["Lamborghini Huracan",20000000],
-  ["Lamborghini Aventador",25000000],
-  ["Ferrari 488",28000000],
-  ["Rolls-Royce Phantom",50000000],
-  ["Bugatti Chiron",100000000]
-
+const marketCars=[
+["Lada Vesta",1000000],
+["BMW E60",2200000],
+["Toyota Camry 70",3000000],
+["BMW M4 F82",5000000],
+["BMW M5 F10",6000000],
+["Nissan GT-R R35",9500000],
+["BMW M5 CS",10000000],
+["Mercedes-AMG GT 63",14000000],
+["Porsche 911 Turbo S",16000000],
+["Lamborghini Huracan",20000000],
+["Lamborghini Aventador",25000000],
+["Ferrari 488",28000000],
+["Rolls-Royce Phantom",50000000],
+["Bugatti Chiron",100000000]
 ];
 
 
-/* =========================================================
-   LEVEL REWARDS
-========================================================= */
+/* REWARDS */
 
-const levelRewards = {
-
+const levelRewards={
   2:100000,
   3:300000,
   4:500000,
@@ -3160,69 +2788,42 @@ const levelRewards = {
   18:20000000,
   19:25000000,
   20:30000000
-
 };
 
 
-/* =========================================================
-   SAVE
-========================================================= */
+/* SAVE */
 
-const SAVE_KEY =
-  "autoimperiya_save_v3";
+const SAVE_KEY="autoimperiya_save_v3";
 
-
-let save = {
-
+let save={
   balance:5000000,
-
   level:1,
-
   xp:0,
-
   garage:[],
-
   casesOpened:0,
-
   sold:0,
-
   claimedRewards:[]
-
 };
-
 
 function loadSave(){
 
   try{
 
-    const raw =
-      localStorage.getItem(
-        SAVE_KEY
-      );
+    const raw=
+      localStorage.getItem(SAVE_KEY);
 
     if(raw){
 
-      const parsed =
-        JSON.parse(raw);
-
-      save = {
+      save={
         ...save,
-        ...parsed
+        ...JSON.parse(raw)
       };
 
     }
 
-  }catch(e){
-
-    console.log(
-      "Save load error",
-      e
-    );
-
-  }
+  }catch(e){}
 
 }
-
 
 function saveGame(){
 
@@ -3233,24 +2834,14 @@ function saveGame(){
       JSON.stringify(save)
     );
 
-  }catch(e){
-
-    console.log(
-      "Save error",
-      e
-    );
-
-  }
+  }catch(e){}
 
 }
-
 
 loadSave();
 
 
-/* =========================================================
-   HELPERS
-========================================================= */
+/* HELPERS */
 
 function formatMoney(value){
 
@@ -3258,38 +2849,36 @@ function formatMoney(value){
     "ru-RU"
   ).format(
     Math.round(value)
-  ) + " ₽";
+  )+" ₽";
 
 }
-
 
 function randomItem(arr){
 
   return arr[
     Math.floor(
-      Math.random() *
-      arr.length
+      Math.random()*arr.length
     )
   ];
 
 }
 
-
 function weightedRandom(items){
 
-  let pool = [];
+  let pool=[];
 
   items.forEach(name=>{
 
-    const car =
-      cars[name];
+    const car=cars[name];
 
-    const weight =
-      rarityWeights[
-        car.rarity
-      ] || 1;
+    const weight=
+      rarityWeights[car.rarity]||1;
 
-    for(let i=0;i<weight;i++){
+    for(
+      let i=0;
+      i<weight;
+      i++
+    ){
 
       pool.push(name);
 
@@ -3301,14 +2890,12 @@ function weightedRandom(items){
 
 }
 
-
 function getXPNeed(level){
 
-  return 100 +
-    ((level - 1) * 75);
+  return 100+
+    ((level-1)*75);
 
 }
-
 
 function getLevelReward(level){
 
@@ -3323,14 +2910,9 @@ function getLevelReward(level){
 
   }
 
-  if(level <= 1){
+  if(level<=1)return 0;
 
-    return 0;
-
-  }
-
-  let reward =
-    levelRewards[20];
+  let reward=levelRewards[20];
 
   for(
     let i=21;
@@ -3338,9 +2920,9 @@ function getLevelReward(level){
     i++
   ){
 
-    reward =
+    reward=
       Math.round(
-        reward * 1.25
+        reward*1.25
       );
 
   }
@@ -3350,69 +2932,78 @@ function getLevelReward(level){
 }
 
 
-function addMoney(amount){
+/* UI */
 
-  save.balance += amount;
+function updateUI(){
 
-  updateUI();
+  document.getElementById(
+    "balance"
+  ).textContent=
+    formatMoney(save.balance);
 
-  saveGame();
+  document.getElementById(
+    "levelBadge"
+  ).textContent=
+    save.level;
+
+  document.getElementById(
+    "levelText"
+  ).textContent=
+    "Уровень "+save.level;
+
+  const need=
+    getXPNeed(save.level);
+
+  document.getElementById(
+    "xpText"
+  ).textContent=
+    `${save.xp} / ${need} XP`;
+
+  document.getElementById(
+    "xpBar"
+  ).style.width=
+    Math.min(
+      100,
+      save.xp/need*100
+    )+"%";
+
+  document.getElementById(
+    "statCases"
+  ).textContent=
+    save.casesOpened;
+
+  document.getElementById(
+    "statCars"
+  ).textContent=
+    save.garage.length;
+
+  document.getElementById(
+    "statSold"
+  ).textContent=
+    save.sold;
+
+  renderGarage();
+  renderRewards();
 
 }
 
 
-function spendMoney(amount){
-
-  if(save.balance < amount){
-
-    showToast(
-      "Недостаточно средств"
-    );
-
-    return false;
-
-  }
-
-  save.balance -= amount;
-
-  updateUI();
-
-  saveGame();
-
-  return true;
-
-}
-
-
-/* =========================================================
-   XP
-========================================================= */
+/* XP */
 
 function addXP(amount){
 
-  if(amount <= 0){
+  if(amount<=0)return;
 
-    return;
-
-  }
-
-  save.xp += amount;
-
-  let leveled = false;
+  save.xp+=amount;
 
   while(
-    save.xp >=
-    getXPNeed(save.level)
+    save.xp>=getXPNeed(save.level)
   ){
 
-    save.xp -=
-      getXPNeed(
-        save.level
-      );
+    save.xp-=
+      getXPNeed(save.level);
 
     save.level++;
-
-    leveled = true;
 
     giveLevelReward(
       save.level
@@ -3421,40 +3012,27 @@ function addXP(amount){
   }
 
   updateUI();
-
   saveGame();
 
 }
 
-
 function giveLevelReward(level){
 
-  const reward =
+  const reward=
     getLevelReward(level);
 
   if(
-    reward <= 0
+    reward<=0||
+    save.claimedRewards.includes(level)
   ){
 
     return;
 
   }
 
-  if(
-    save.claimedRewards
-      .includes(level)
-  ){
+  save.claimedRewards.push(level);
 
-    return;
-
-  }
-
-  save.claimedRewards.push(
-    level
-  );
-
-  save.balance +=
-    reward;
+  save.balance+=reward;
 
   showLevelModal(
     level,
@@ -3464,135 +3042,49 @@ function giveLevelReward(level){
 }
 
 
-/* =========================================================
-   UI
-========================================================= */
-
-function updateUI(){
-
-  document.getElementById(
-    "balance"
-  ).textContent =
-    formatMoney(
-      save.balance
-    );
-
-
-  document.getElementById(
-    "levelBadge"
-  ).textContent =
-    save.level;
-
-
-  document.getElementById(
-    "levelText"
-  ).textContent =
-    "Уровень " +
-    save.level;
-
-
-  const need =
-    getXPNeed(
-      save.level
-    );
-
-
-  document.getElementById(
-    "xpText"
-  ).textContent =
-    `${save.xp} / ${need} XP`;
-
-
-  const percent =
-    Math.min(
-      100,
-      (save.xp / need) * 100
-    );
-
-
-  document.getElementById(
-    "xpBar"
-  ).style.width =
-    percent + "%";
-
-
-  document.getElementById(
-    "statCases"
-  ).textContent =
-    save.casesOpened;
-
-
-  document.getElementById(
-    "statCars"
-  ).textContent =
-    save.garage.length;
-
-
-  document.getElementById(
-    "statSold"
-  ).textContent =
-    save.sold;
-
-
-  renderGarage();
-
-  renderRewards();
-
-}
-
-
-/* =========================================================
-   CASE ART HTML
-========================================================= */
+/* CASE ART */
 
 function createCoverCar(type){
 
   return `
 
-    <div class="coverCar ${type}">
+  <div class="coverCar ${type}">
 
-      <div class="coverBody">
+    <div class="coverBody">
 
-        <div class="coverWheel left"></div>
-        <div class="coverWheel right"></div>
-
-      </div>
-
-      <div class="coverRoof"></div>
-
-      <div class="coverGlass"></div>
+      <div class="coverWheel left"></div>
+      <div class="coverWheel right"></div>
 
     </div>
+
+    <div class="coverRoof"></div>
+    <div class="coverGlass"></div>
+
+  </div>
 
   `;
 
 }
 
 
-/* =========================================================
-   CASES RENDER
-========================================================= */
+/* CASES */
 
 function renderCases(){
 
-  const grid =
-    document.getElementById(
-      "caseGrid"
-    );
+  const grid=
+    document.getElementById("caseGrid");
 
-  grid.innerHTML = "";
+  grid.innerHTML="";
 
   cases.forEach(c=>{
 
-    const card =
-      document.createElement(
-        "div"
-      );
+    const card=
+      document.createElement("div");
 
-    card.className =
+    card.className=
       `caseCard ${c.rarity}`;
 
-    card.innerHTML = `
+    card.innerHTML=`
 
       <div class="caseTop">
 
@@ -3614,13 +3106,9 @@ function renderCases(){
 
       </div>
 
-
       <div class="caseArt">
-
         ${createCoverCar(c.art)}
-
       </div>
-
 
       <div class="caseFooter">
 
@@ -3647,31 +3135,24 @@ function renderCases(){
 }
 
 
-/* =========================================================
-   GARAGE
-========================================================= */
+/* GARAGE */
 
 function renderGarage(){
 
-  const list =
+  const list=
     document.getElementById(
       "garageList"
     );
 
-  if(!list){
+  if(!list)return;
 
-    return;
-
-  }
-
-  list.innerHTML = "";
-
+  list.innerHTML="";
 
   if(
-    save.garage.length === 0
+    save.garage.length===0
   ){
 
-    list.innerHTML = `
+    list.innerHTML=`
 
       <div class="empty">
 
@@ -3695,22 +3176,17 @@ function renderGarage(){
 
   }
 
-
   save.garage.forEach(
     (name,index)=>{
 
-      const car =
-        cars[name];
+      const car=cars[name];
 
-      const item =
-        document.createElement(
-          "div"
-        );
+      const item=
+        document.createElement("div");
 
-      item.className =
-        "carCard";
+      item.className="carCard";
 
-      item.innerHTML = `
+      item.innerHTML=`
 
         <div class="carMini">
           ${car.emoji}
@@ -3750,35 +3226,28 @@ function renderGarage(){
 }
 
 
-/* =========================================================
-   MARKET
-========================================================= */
+/* MARKET */
 
 function renderMarket(){
 
-  const grid =
+  const grid=
     document.getElementById(
       "marketGrid"
     );
 
-  grid.innerHTML = "";
-
+  grid.innerHTML="";
 
   marketCars.forEach(
     ([name,price])=>{
 
-      const car =
-        cars[name];
+      const car=cars[name];
 
-      const item =
-        document.createElement(
-          "div"
-        );
+      const item=
+        document.createElement("div");
 
-      item.className =
-        "marketCard";
+      item.className="marketCard";
 
-      item.innerHTML = `
+      item.innerHTML=`
 
         <div class="marketIcon">
           ${car.emoji}
@@ -3814,32 +3283,24 @@ function renderMarket(){
 }
 
 
-/* =========================================================
-   REWARDS
-========================================================= */
+/* REWARDS */
 
 function renderRewards(){
 
-  const list =
+  const list=
     document.getElementById(
       "rewardList"
     );
 
-  if(!list){
+  if(!list)return;
 
-    return;
+  list.innerHTML="";
 
-  }
-
-  list.innerHTML = "";
-
-
-  const maxLevel =
+  const maxLevel=
     Math.max(
       20,
-      save.level + 2
+      save.level+2
     );
-
 
   for(
     let level=2;
@@ -3847,23 +3308,18 @@ function renderRewards(){
     level++
   ){
 
-    const reward =
+    const reward=
       getLevelReward(level);
 
-    const claimed =
-      save.claimedRewards
-        .includes(level);
+    const claimed=
+      save.claimedRewards.includes(level);
 
-    const item =
-      document.createElement(
-        "div"
-      );
+    const item=
+      document.createElement("div");
 
-    item.className =
-      "reward";
+    item.className="reward";
 
-
-    item.innerHTML = `
+    item.innerHTML=`
 
       <div class="rewardLeft">
 
@@ -3878,13 +3334,15 @@ function renderRewards(){
       </div>
 
       <div
-        class="rewardAmount
-        ${claimed ? "rewardClaimed" : ""}">
+        class="
+          rewardAmount
+          ${claimed?"rewardClaimed":""}
+        ">
 
         ${
           claimed
-            ? "✓ Получено"
-            : "+" + formatMoney(reward)
+          ? "✓ Получено"
+          : "+"+formatMoney(reward)
         }
 
       </div>
@@ -3898,9 +3356,7 @@ function renderRewards(){
 }
 
 
-/* =========================================================
-   PAGE SWITCH
-========================================================= */
+/* NAV */
 
 function switchPage(
   page,
@@ -3909,78 +3365,67 @@ function switchPage(
 
   document
     .querySelectorAll(".page")
-    .forEach(el=>{
+    .forEach(el=>
+      el.classList.remove("active")
+    );
 
-      el.classList.remove(
-        "active"
-      );
-
-    });
-
-
-  const target =
+  const target=
     document.getElementById(
-      "page-" + page
+      "page-"+page
     );
 
   if(target){
-
-    target.classList.add(
-      "active"
-    );
-
+    target.classList.add("active");
   }
-
 
   document
     .querySelectorAll(".navButton")
-    .forEach(el=>{
-
-      el.classList.remove(
-        "active"
-      );
-
-    });
-
-
-  if(button){
-
-    button.classList.add(
-      "active"
+    .forEach(el=>
+      el.classList.remove("active")
     );
 
+  if(button){
+    button.classList.add("active");
   }
 
 }
 
 
-/* =========================================================
-   BUY
-========================================================= */
+/* MONEY */
+
+function spendMoney(amount){
+
+  if(save.balance<amount){
+
+    showToast(
+      "Недостаточно средств"
+    );
+
+    return false;
+
+  }
+
+  save.balance-=amount;
+
+  updateUI();
+  saveGame();
+
+  return true;
+
+}
 
 function buyCar(
   name,
   price
 ){
 
-  if(
-    !spendMoney(price)
-  ){
+  if(!spendMoney(price))return;
 
-    return;
-
-  }
-
-
-  save.garage.push(
-    name
-  );
-
+  save.garage.push(name);
 
   addXP(15);
 
   saveGame();
-
   updateUI();
 
   showToast(
@@ -3989,104 +3434,64 @@ function buyCar(
 
 }
 
-
-/* =========================================================
-   SELL GARAGE
-========================================================= */
-
 function sellGarageCar(index){
 
   if(
-    index < 0 ||
-    index >= save.garage.length
-  ){
+    index<0||
+    index>=save.garage.length
+  )return;
 
-    return;
-
-  }
-
-
-  const name =
+  const name=
     save.garage[index];
 
-  const car =
-    cars[name];
+  const car=cars[name];
 
-  if(!car){
-
-    return;
-
-  }
-
-
-  const sellPrice =
+  const price=
     Math.round(
-      car.price * .82
+      car.price*.82
     );
 
+  save.garage.splice(index,1);
 
-  save.garage.splice(
-    index,
-    1
-  );
-
-
-  save.balance +=
-    sellPrice;
-
+  save.balance+=price;
 
   save.sold++;
 
-
   addXP(10);
 
+  saveGame();
   updateUI();
 
-  saveGame();
-
-
   showToast(
-    `${name} продан за ${formatMoney(sellPrice)}`
+    `${name} продан за ${formatMoney(price)}`
   );
 
 }
 
 
-/* =========================================================
-   AUDIO ENGINE
-========================================================= */
+/* AUDIO */
 
-let audioContext = null;
+let audioContext=null;
+let masterGain=null;
+let rouletteTimers=[];
 
-let masterGain = null;
-
-let spinNoise = null;
-
-let rouletteSoundTimers = [];
-
-
-function getAudioContext(){
+function getAudio(){
 
   if(!audioContext){
 
-    const AudioCtx =
-      window.AudioContext ||
+    const AudioCtx=
+      window.AudioContext||
       window.webkitAudioContext;
 
-    if(!AudioCtx){
+    if(!AudioCtx)return null;
 
-      return null;
-
-    }
-
-    audioContext =
+    audioContext=
       new AudioCtx();
 
-    masterGain =
+    masterGain=
       audioContext.createGain();
 
-    masterGain.gain.value =
-      .55;
+    masterGain.gain.value=.55;
 
     masterGain.connect(
       audioContext.destination
@@ -4098,81 +3503,51 @@ function getAudioContext(){
 
 }
 
-
 async function prepareAudio(){
 
-  const ctx =
-    getAudioContext();
+  const ctx=getAudio();
 
-  if(!ctx){
-
-    return;
-
-  }
+  if(!ctx)return;
 
   try{
 
-    if(
-      ctx.state === "suspended"
-    ){
-
+    if(ctx.state==="suspended"){
       await ctx.resume();
-
     }
 
   }catch(e){}
 
 }
 
-
-/* short mechanical click */
-
-function playClick(
-  volume=.12,
-  pitch=850,
-  duration=.035
+function clickSound(
+  volume=.09,
+  pitch=900
 ){
 
-  const ctx =
-    getAudioContext();
+  const ctx=getAudio();
 
-  if(!ctx){
+  if(!ctx)return;
 
-    return;
+  const now=ctx.currentTime;
 
-  }
-
-
-  const now =
-    ctx.currentTime;
-
-
-  const osc =
+  const osc=
     ctx.createOscillator();
 
-  const gain =
+  const gain=
     ctx.createGain();
 
-  const filter =
+  const filter=
     ctx.createBiquadFilter();
 
-
-  osc.type =
-    "square";
-
+  osc.type="square";
 
   osc.frequency.setValueAtTime(
     pitch,
     now
   );
 
-
-  filter.type =
-    "highpass";
-
-  filter.frequency.value =
-    450;
-
+  filter.type="highpass";
+  filter.frequency.value=500;
 
   gain.gain.setValueAtTime(
     volume,
@@ -4181,122 +3556,82 @@ function playClick(
 
   gain.gain.exponentialRampToValueAtTime(
     .001,
-    now + duration
+    now+.035
   );
-
 
   osc.connect(filter);
   filter.connect(gain);
   gain.connect(masterGain);
 
-
   osc.start(now);
-  osc.stop(
-    now + duration
-  );
+  osc.stop(now+.04);
 
 }
 
+function heavySound(){
 
-/* deeper mechanical tick */
+  const ctx=getAudio();
 
-function playHeavyClick(){
+  if(!ctx)return;
 
-  const ctx =
-    getAudioContext();
+  const now=ctx.currentTime;
 
-  if(!ctx){
-
-    return;
-
-  }
-
-
-  const now =
-    ctx.currentTime;
-
-
-  const osc =
+  const osc=
     ctx.createOscillator();
 
-  const gain =
+  const gain=
     ctx.createGain();
 
-
-  osc.type =
-    "triangle";
-
+  osc.type="triangle";
 
   osc.frequency.setValueAtTime(
-    120,
+    145,
     now
   );
 
   osc.frequency.exponentialRampToValueAtTime(
-    55,
-    now + .14
+    58,
+    now+.18
   );
 
-
   gain.gain.setValueAtTime(
-    .35,
+    .34,
     now
   );
 
   gain.gain.exponentialRampToValueAtTime(
     .001,
-    now + .18
+    now+.2
   );
-
 
   osc.connect(gain);
   gain.connect(masterGain);
 
-
   osc.start(now);
-
-  osc.stop(
-    now + .18
-  );
+  osc.stop(now+.2);
 
 }
 
+function noiseSound(){
 
-/* white noise burst */
+  const ctx=getAudio();
 
-function playNoise(
-  duration=.15,
-  volume=.12
-){
+  if(!ctx)return;
 
-  const ctx =
-    getAudioContext();
-
-  if(!ctx){
-
-    return;
-
-  }
-
-
-  const length =
+  const length=
     Math.floor(
-      ctx.sampleRate *
-      duration
+      ctx.sampleRate*.12
     );
 
-
-  const buffer =
+  const buffer=
     ctx.createBuffer(
       1,
       length,
       ctx.sampleRate
     );
 
-
-  const data =
+  const data=
     buffer.getChannelData(0);
-
 
   for(
     let i=0;
@@ -4304,180 +3639,47 @@ function playNoise(
     i++
   ){
 
-    data[i] =
-      (Math.random() * 2) - 1;
+    data[i]=
+      Math.random()*2-1;
 
   }
 
-
-  const source =
+  const source=
     ctx.createBufferSource();
 
-  const filter =
+  const filter=
     ctx.createBiquadFilter();
 
-  const gain =
+  const gain=
     ctx.createGain();
 
+  source.buffer=buffer;
 
-  source.buffer =
-    buffer;
+  filter.type="bandpass";
+  filter.frequency.value=1800;
 
-
-  filter.type =
-    "bandpass";
-
-  filter.frequency.value =
-    1900;
-
-  filter.Q.value =
-    .8;
-
-
-  const now =
-    ctx.currentTime;
-
-
-  gain.gain.setValueAtTime(
-    volume,
-    now
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    .001,
-    now + duration
-  );
-
+  gain.gain.value=.12;
 
   source.connect(filter);
   filter.connect(gain);
   gain.connect(masterGain);
 
-
-  source.start(now);
-
-}
-
-
-/* roulette whirr */
-
-function startWhirr(){
-
-  const ctx =
-    getAudioContext();
-
-  if(!ctx){
-
-    return;
-
-  }
-
-
-  stopWhirr();
-
-
-  const oscillator =
-    ctx.createOscillator();
-
-  const gain =
-    ctx.createGain();
-
-  const filter =
-    ctx.createBiquadFilter();
-
-
-  oscillator.type =
-    "sawtooth";
-
-
-  oscillator.frequency.value =
-    75;
-
-
-  filter.type =
-    "lowpass";
-
-  filter.frequency.value =
-    650;
-
-
-  gain.gain.value =
-    .0001;
-
-
-  oscillator.connect(filter);
-  filter.connect(gain);
-  gain.connect(masterGain);
-
-
-  const now =
-    ctx.currentTime;
-
-
-  gain.gain.exponentialRampToValueAtTime(
-    .045,
-    now + .18
-  );
-
-
-  gain.gain.exponentialRampToValueAtTime(
-    .001,
-    now + 4.0
-  );
-
-
-  oscillator.start(now);
-
-  oscillator.stop(
-    now + 4.1
-  );
-
-
-  spinNoise = {
-    oscillator,
-    gain
-  };
+  source.start();
 
 }
-
-
-function stopWhirr(){
-
-  spinNoise =
-    null;
-
-}
-
-
-/* =========================================================
-   REALISTIC ROULETTE SOUND
-========================================================= */
 
 function startRouletteSound(){
 
   prepareAudio();
 
-  rouletteSoundTimers.forEach(
-    id=>clearTimeout(id)
+  rouletteTimers.forEach(
+    clearTimeout
   );
 
-  rouletteSoundTimers = [];
+  rouletteTimers=[];
 
-
-  startWhirr();
-
-
-  /*
-    Clicks становятся реже.
-    Это имитирует ускоренное вращение,
-    затем замедление барабана.
-  */
-
-  const total =
-    4100;
-
-  const clicks = 48;
-
+  const total=4100;
+  const clicks=52;
 
   for(
     let i=0;
@@ -4485,194 +3687,111 @@ function startRouletteSound(){
     i++
   ){
 
-    const progress =
-      i / clicks;
+    const p=i/clicks;
 
+    const delay=
+      Math.pow(p,1.7)*total;
 
-    /*
-      В начале быстро,
-      в конце медленно.
-    */
+    rouletteTimers.push(
 
-    const delay =
-      Math.pow(
-        progress,
-        1.65
-      ) *
-      total;
-
-
-    const timer =
       setTimeout(()=>{
 
-        const pitch =
-          900 +
-          Math.random() * 300;
-
-        playClick(
-          .075 +
-          progress * .04,
-          pitch,
-          .025
+        clickSound(
+          .065+p*.05,
+          800+Math.random()*350
         );
 
+      },delay)
 
-      },delay);
-
-
-    rouletteSoundTimers.push(
-      timer
     );
 
   }
 
+  rouletteTimers.push(
 
-  const finalTimer =
     setTimeout(()=>{
 
-      playHeavyClick();
+      heavySound();
+      noiseSound();
 
-      playNoise(
-        .11,
-        .12
-      );
+    },4230)
 
-    },4230);
-
-
-  rouletteSoundTimers.push(
-    finalTimer
   );
 
 }
-
 
 function stopRouletteSound(){
 
-  rouletteSoundTimers.forEach(
-    id=>clearTimeout(id)
+  rouletteTimers.forEach(
+    clearTimeout
   );
 
-  rouletteSoundTimers = [];
-
-  stopWhirr();
+  rouletteTimers=[];
 
 }
 
 
-/* =========================================================
-   OPEN CASE
-========================================================= */
+/* ROULETTE */
 
-let currentCase = null;
+let currentCase=null;
+let currentResult=null;
+let rouletteBusy=false;
 
-let currentResult = null;
+async function openCase(caseId){
 
-let rouletteBusy = false;
+  if(rouletteBusy)return;
 
-
-async function openCase(
-  caseId
-){
-
-  if(rouletteBusy){
-
-    return;
-
-  }
-
-
-  const c =
+  const c=
     cases.find(
-      x=>x.id === caseId
+      x=>x.id===caseId
     );
 
+  if(!c)return;
 
-  if(!c){
+  if(!spendMoney(c.price))return;
 
-    return;
+  rouletteBusy=true;
 
-  }
+  currentCase=c;
 
-
-  if(
-    !spendMoney(c.price)
-  ){
-
-    return;
-
-  }
-
-
-  rouletteBusy =
-    true;
-
-  currentCase =
-    c;
-
-  currentResult =
-    null;
-
+  currentResult=null;
 
   save.casesOpened++;
 
   updateUI();
-
   saveGame();
-
 
   await prepareAudio();
 
-
   document.getElementById(
     "rouletteTitle"
-  ).textContent =
-    c.name +
-    " • Открытие";
-
+  ).textContent=
+    c.name+" • Открытие";
 
   document.getElementById(
     "resultBox"
-  ).classList.remove(
-    "show"
-  );
-
+  ).classList.remove("show");
 
   document.getElementById(
     "rouletteModal"
-  ).classList.add(
-    "show"
-  );
-
+  ).classList.add("show");
 
   /*
-    КРИТИЧЕСКИ ВАЖНО:
-    сначала определяем настоящий результат.
+    РЕЗУЛЬТАТ ОПРЕДЕЛЯЕТСЯ
+    ТОЛЬКО ОДИН РАЗ.
   */
 
-  const resultName =
-    weightedRandom(
-      c.items
-    );
+  const resultName=
+    weightedRandom(c.items);
 
-
-  currentResult =
-    resultName;
-
-
-  /*
-    После этого создаём визуальную
-    рулетку именно с этим результатом.
-  */
+  currentResult=resultName;
 
   createRoulette(
     c,
     resultName
   );
 
-
   startRouletteSound();
-
 
   animateRoulette(
     resultName
@@ -4681,26 +3800,23 @@ async function openCase(
 }
 
 
-/* =========================================================
-   CREATE ROULETTE
-========================================================= */
+/* IMPORTANT:
+   RESULT = INDEX 28
+*/
 
 function createRoulette(
   c,
   resultName
 ){
 
-  const track =
+  const track=
     document.getElementById(
       "rouletteTrack"
     );
 
+  track.innerHTML="";
 
-  track.innerHTML = "";
-
-
-  const items = [];
-
+  const items=[];
 
   for(
     let i=0;
@@ -4708,148 +3824,91 @@ function createRoulette(
     i++
   ){
 
-    const randomName =
-      c.items[
-        Math.floor(
-          Math.random() *
-          c.items.length
-        )
-      ];
-
     items.push(
-      randomName
+      randomItem(c.items)
     );
 
   }
 
+  items[28]=resultName;
 
-  /*
-    ИМЕННО ЭТА ПОЗИЦИЯ
-    является настоящим дропом.
-  */
+  items.forEach(name=>{
 
-  items[28] =
-    resultName;
+    const car=cars[name];
 
+    const el=
+      document.createElement("div");
 
-  items.forEach(
-    name=>{
+    el.className="rouletteItem";
 
-      const car =
-        cars[name];
+    el.innerHTML=`
 
+      <div class="emoji">
+        ${car.emoji}
+      </div>
 
-      const el =
-        document.createElement(
-          "div"
-        );
+      <div class="name">
+        ${name}
+      </div>
 
+    `;
 
-      el.className =
-        "rouletteItem";
+    track.appendChild(el);
 
+  });
 
-      el.innerHTML = `
-
-        <div class="emoji">
-          ${car.emoji}
-        </div>
-
-        <div class="name">
-          ${name}
-        </div>
-
-      `;
-
-
-      track.appendChild(
-        el
-      );
-
-    }
-  );
-
-
-  track.style.transition =
-    "none";
-
-
-  track.style.transform =
-    "translateX(0)";
+  track.style.transition="none";
+  track.style.transform="translateX(0)";
 
 }
 
-
-/* =========================================================
-   ANIMATE ROULETTE
-========================================================= */
 
 function animateRoulette(
   resultName
 ){
 
-  const track =
+  const track=
     document.getElementById(
       "rouletteTrack"
     );
 
+  const index=28;
 
-  /*
-    Не меняем индекс.
-    Результат всегда находится
-    на позиции 28.
-  */
+  const itemWidth=120;
 
-  const index =
-    28;
+  const gap=8;
 
+  const step=
+    itemWidth+gap;
 
-  const itemWidth =
-    120;
-
-
-  const gap =
-    8;
-
-
-  const step =
-    itemWidth + gap;
-
-
-  const roulette =
+  const roulette=
     document.getElementById(
       "roulette"
     );
 
+  const center=
+    roulette.clientWidth/2;
 
-  const center =
-    roulette.clientWidth / 2;
-
-
-  const target =
-    -(index * step) +
-    center -
-    itemWidth / 2;
-
+  const target=
+    -(index*step)+
+    center-
+    itemWidth/2;
 
   setTimeout(()=>{
 
-    track.style.transition =
+    track.style.transition=
       "transform 4.2s cubic-bezier(.08,.7,.12,1)";
 
-
-    track.style.transform =
+    track.style.transform=
       `translateX(${target}px)`;
 
-
   },50);
-
 
   setTimeout(()=>{
 
     stopRouletteSound();
 
-    playHeavyClick();
+    heavySound();
 
     showResult(
       resultName
@@ -4860,372 +3919,224 @@ function animateRoulette(
 }
 
 
-/* =========================================================
-   RESULT
-========================================================= */
+/* RESULT */
 
-function showResult(
-  name
-){
+function showResult(name){
 
-  currentResult =
-    name;
+  currentResult=name;
 
-
-  const car =
-    cars[name];
-
+  const car=cars[name];
 
   if(!car){
 
-    rouletteBusy =
-      false;
-
+    rouletteBusy=false;
     return;
 
   }
 
-
   document.getElementById(
     "resultName"
-  ).textContent =
-    name;
-
+  ).textContent=name;
 
   document.getElementById(
     "resultPrice"
-  ).textContent =
-    formatMoney(
-      car.price
-    );
-
+  ).textContent=
+    formatMoney(car.price);
 
   document.getElementById(
     "resultCar"
-  ).innerHTML =
+  ).innerHTML=
     createResultCar(
       name,
       car
     );
 
-
   document.getElementById(
     "resultBox"
-  ).classList.add(
-    "show"
-  );
-
-
-  /*
-    Пока машина не добавлена
-    в гараж.
-  */
+  ).classList.add("show");
 
 }
 
 
-/* =========================================================
-   RESULT CAR
-========================================================= */
+/* NEW 3D RESULT CAR */
 
 function createResultCar(
   name,
   car
 ){
 
-  let main1 =
-    "#d9dde2";
+  let c1="#d9dde4";
+  let c2="#4b535f";
 
-  let main2 =
-    "#4b515b";
-
-
-  if(
-    car.rarity === "common"
-  ){
-
-    main1 =
-      "#c7cbd0";
-
-    main2 =
-      "#525862";
-
+  if(car.rarity==="uncommon"){
+    c1="#63a7ff";
+    c2="#194f9d";
   }
 
-
-  if(
-    car.rarity === "uncommon"
-  ){
-
-    main1 =
-      "#5fa4ff";
-
-    main2 =
-      "#1a4f9c";
-
+  if(car.rarity==="rare"){
+    c1="#64e39d";
+    c2="#147547";
   }
 
-
-  if(
-    car.rarity === "rare"
-  ){
-
-    main1 =
-      "#64dc9b";
-
-    main2 =
-      "#147344";
-
+  if(car.rarity==="epic"){
+    c1="#bd82ff";
+    c2="#5d25ad";
   }
 
-
-  if(
-    car.rarity === "epic"
-  ){
-
-    main1 =
-      "#bc82ff";
-
-    main2 =
-      "#5e27ae";
-
+  if(car.rarity==="legendary"){
+    c1="#ffe38b";
+    c2="#aa720c";
   }
 
-
-  if(
-    car.rarity === "legendary"
-  ){
-
-    main1 =
-      "#ffe18a";
-
-    main2 =
-      "#a86f0b";
-
+  if(car.rarity==="mythic"){
+    c1="#ff6b76";
+    c2="#90131f";
   }
-
-
-  if(
-    car.rarity === "mythic"
-  ){
-
-    main1 =
-      "#ff6c76";
-
-    main2 =
-      "#8f111d";
-
-  }
-
 
   return `
 
-    <div
-      class="carScene"
-      style="
-        --car1:${main1};
-        --car2:${main2};
-      ">
+  <div
+    class="carScene"
+    style="
+      --car1:${c1};
+      --car2:${c2};
+    ">
 
-      <div class="carFloorShadow"></div>
+    <div class="carFloorShadow"></div>
 
-      <div class="realCar">
+    <div class="realCar">
 
-        <div class="carLower">
+      <div class="carLower">
 
-          <div class="wheel left"></div>
-          <div class="wheel right"></div>
-
-        </div>
-
-        <div class="carHood"></div>
-
-        <div class="carRoof"></div>
-
-        <div class="glassFront"></div>
-
-        <div class="glassRear"></div>
-
-        <div class="windowLine"></div>
-
-        <div class="sideMirror left"></div>
-
-        <div class="sideMirror right"></div>
-
-        <div class="headLight"></div>
-
-        <div class="taillight"></div>
-
-        <div class="grille"></div>
-
-        <div class="plate">
-          AI
-        </div>
+        <div class="wheel left"></div>
+        <div class="wheel right"></div>
 
       </div>
 
+      <div class="carHood"></div>
+
+      <div class="carRoof"></div>
+
+      <div class="glassFront"></div>
+
+      <div class="glassRear"></div>
+
+      <div class="windowLine"></div>
+
+      <div class="sideMirror left"></div>
+
+      <div class="sideMirror right"></div>
+
+      <div class="headLight"></div>
+
+      <div class="taillight"></div>
+
+      <div class="grille"></div>
+
+      <div class="plate">
+        AI
+      </div>
+
     </div>
+
+  </div>
 
   `;
 
 }
 
 
-/* =========================================================
-   KEEP RESULT
-========================================================= */
+/* KEEP */
 
 function keepResult(){
 
-  if(
-    !currentResult
-  ){
+  if(!currentResult)return;
 
-    return;
+  const name=currentResult;
 
-  }
-
-
-  const name =
-    currentResult;
-
-
-  save.garage.push(
-    name
-  );
-
+  save.garage.push(name);
 
   addXP(25);
 
   saveGame();
-
   updateUI();
 
-
   closeRoulette();
-
 
   showToast(
     `${name} добавлен в гараж`
   );
 
-
-  currentResult =
-    null;
+  currentResult=null;
 
 }
 
 
-/* =========================================================
-   SELL RESULT IMMEDIATELY
-========================================================= */
+/* SELL */
 
 function sellResultNow(){
 
-  if(
-    !currentResult
-  ){
+  if(!currentResult)return;
 
-    return;
+  const name=currentResult;
 
-  }
+  const car=cars[name];
 
+  if(!car)return;
 
-  const name =
-    currentResult;
-
-
-  const car =
-    cars[name];
-
-
-  if(!car){
-
-    return;
-
-  }
-
-
-  const sellPrice =
+  const price=
     Math.round(
-      car.price * .82
+      car.price*.82
     );
 
-
-  save.balance +=
-    sellPrice;
-
+  save.balance+=price;
 
   save.sold++;
 
-
   addXP(15);
 
-
   saveGame();
-
   updateUI();
-
 
   closeRoulette();
 
-
   showToast(
-    `${name} продан за ${formatMoney(sellPrice)}`
+    `${name} продан за ${formatMoney(price)}`
   );
 
-
-  currentResult =
-    null;
+  currentResult=null;
 
 }
 
 
-/* =========================================================
-   CLOSE ROULETTE
-========================================================= */
+/* CLOSE */
 
 function closeRoulette(){
 
   if(
     rouletteBusy &&
     !document
-      .getElementById(
-        "resultBox"
-      )
+      .getElementById("resultBox")
       .classList
       .contains("show")
   ){
-
-    /*
-      Не разрешаем случайно закрыть
-      рулетку во время вращения.
-    */
 
     return;
 
   }
 
-
   stopRouletteSound();
-
 
   document.getElementById(
     "rouletteModal"
-  ).classList.remove(
-    "show"
-  );
+  ).classList.remove("show");
 
-
-  rouletteBusy =
-    false;
+  rouletteBusy=false;
 
 }
 
 
-/* =========================================================
-   LEVEL MODAL
-========================================================= */
+/* LEVEL MODAL */
 
 function showLevelModal(
   level,
@@ -5234,96 +4145,63 @@ function showLevelModal(
 
   document.getElementById(
     "newLevel"
-  ).textContent =
-    level;
-
+  ).textContent=level;
 
   document.getElementById(
     "levelReward"
-  ).textContent =
-    "+" +
-    formatMoney(
-      reward
-    );
-
+  ).textContent=
+    "+"+formatMoney(reward);
 
   document.getElementById(
     "levelModal"
-  ).classList.add(
-    "show"
-  );
+  ).classList.add("show");
 
-
-  playHeavyClick();
+  heavySound();
 
 }
-
 
 function closeLevelModal(){
 
   document.getElementById(
     "levelModal"
-  ).classList.remove(
-    "show"
-  );
+  ).classList.remove("show");
 
 }
 
 
-/* =========================================================
-   TOAST
-========================================================= */
+/* TOAST */
 
-let toastTimer = null;
+let toastTimer=null;
 
+function showToast(message){
 
-function showToast(
-  message
-){
+  const toast=
+    document.getElementById("toast");
 
-  const toast =
-    document.getElementById(
-      "toast"
-    );
+  toast.textContent=message;
 
+  toast.classList.add("show");
 
-  toast.textContent =
-    message;
+  clearTimeout(toastTimer);
 
-
-  toast.classList.add(
-    "show"
-  );
-
-
-  clearTimeout(
-    toastTimer
-  );
-
-
-  toastTimer =
+  toastTimer=
     setTimeout(()=>{
 
-      toast.classList.remove(
-        "show"
-      );
+      toast.classList.remove("show");
 
     },2600);
 
 }
 
 
-/* =========================================================
-   PROFILE NAME
-========================================================= */
+/* TELEGRAM NAME */
 
 function setupTelegramUser(){
 
-  const element =
+  const element=
     document.getElementById(
       "profileName"
     );
-
 
   if(
     tg &&
@@ -5331,11 +4209,10 @@ function setupTelegramUser(){
     tg.initDataUnsafe.user
   ){
 
-    const user =
+    const user=
       tg.initDataUnsafe.user;
 
-
-    const name =
+    const name=
       [
         user.first_name,
         user.last_name
@@ -5343,12 +4220,8 @@ function setupTelegramUser(){
       .filter(Boolean)
       .join(" ");
 
-
     if(name){
-
-      element.textContent =
-        name;
-
+      element.textContent=name;
     }
 
   }
@@ -5356,67 +4229,41 @@ function setupTelegramUser(){
 }
 
 
-/* =========================================================
-   MODAL BACKDROP
-========================================================= */
+/* BACKDROP */
 
 document
-  .getElementById(
-    "rouletteModal"
-  )
+  .getElementById("rouletteModal")
   .addEventListener(
     "click",
     function(e){
 
-      if(
-        e.target === this
-      ){
-
+      if(e.target===this){
         closeRoulette();
-
       }
 
     }
   );
 
-
 document
-  .getElementById(
-    "levelModal"
-  )
+  .getElementById("levelModal")
   .addEventListener(
     "click",
     function(e){
 
-      if(
-        e.target === this
-      ){
-
+      if(e.target===this){
         closeLevelModal();
-
       }
 
     }
   );
 
 
-/* =========================================================
-   INITIALIZE
-========================================================= */
+/* INIT */
 
 renderCases();
-
 renderMarket();
-
 updateUI();
-
 setupTelegramUser();
-
-
-/*
-  На случай старых сохранений
-  без claimedRewards.
-*/
 
 if(
   !Array.isArray(
@@ -5424,78 +4271,57 @@ if(
   )
 ){
 
-  save.claimedRewards = [];
+  save.claimedRewards=[];
 
   saveGame();
 
 }
 
 
-/* =========================================================
-   PREVENT DOUBLE TAP / IOS ZOOM
-========================================================= */
+/* IOS DOUBLE TAP */
 
-let lastTouchEnd = 0;
-
+let lastTouchEnd=0;
 
 document.addEventListener(
   "touchend",
-  function(event){
+  function(e){
 
-    const now =
-      Date.now();
+    const now=Date.now();
 
     if(
-      now - lastTouchEnd <= 300
+      now-lastTouchEnd<=300
     ){
 
-      event.preventDefault();
+      e.preventDefault();
 
     }
 
-    lastTouchEnd =
-      now;
+    lastTouchEnd=now;
 
   },
-  {
-    passive:false
-  }
+  {passive:false}
 );
 
 
-/* =========================================================
-   TELEGRAM MAIN BUTTON SAFETY
-========================================================= */
+/* TELEGRAM MAIN BUTTON */
 
 if(tg){
 
   try{
-
     tg.MainButton.hide();
-
   }catch(e){}
 
 }
 
 
-/* =========================================================
-   DEBUG
-========================================================= */
+/* DEBUG */
 
-window.AutoImperiya = {
-
+window.AutoImperiya={
   save,
-
   cars,
-
   cases,
-
-  addMoney,
-
   addXP,
-
   updateUI
-
 };
 
 </script>
