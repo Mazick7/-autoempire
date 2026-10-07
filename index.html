@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#08090b">
+<title>Автоимперия</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    min-height:100%;
+    background:#070809;
+    color:#f4f4f5;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
+}
+
+body{
+    overflow-x:hidden;
+}
+
+button{
+    font:inherit;
+    -webkit-appearance:none;
+}
+
+.app{
+    width:100%;
+    max-width:540px;
+    min-height:100vh;
+    margin:auto;
+    padding-bottom:94px;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:30;
+    padding:17px 17px 13px;
+    background:rgba(7,8,9,.88);
+    backdrop-filter:blur(22px);
+    border-bottom:1px solid rgba(255,255,255,.055);
+}
+
+.topline{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:900;
+    letter-spacing:-.7px;
+}
+
+.logo span{
+    color:#d51f31;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:#777d85;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.status-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#39c878;
+    box-shadow:0 0 9px #39c878;
+}
+
+.balance-box{
+    margin-top:13px;
+    padding:14px 15px;
+    border-radius:15px;
+    background:
+        linear-gradient(120deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+    border:1px solid rgba(255,255,255,.08);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.balance-label{
+    color:#70767e;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1.1px;
+    margin-bottom:4px;
+}
+
+.balance{
+    font-size:22px;
+    font-weight:850;
+    letter-spacing:-.5px;
+}
+
+.level-block{
+    text-align:right;
+}
+
+.level-label{
+    color:#70767e;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.level{
+    color:#e7e7e8;
+    font-size:18px;
+    font-weight:850;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+    padding:16px 14px 20px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-heading{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    margin:4px 2px 14px;
+}
+
+.page-heading h1{
+    margin:0;
+    font-size:25px;
+    letter-spacing:-.8px;
+}
+
+.page-heading p{
+    margin:0;
+    color:#686e76;
+    font-size:11px;
+}
+
+/* ================= CASES ================= */
+
+.cases{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
+}
+
+.case{
+    position:relative;
+    min-height:275px;
+    overflow:hidden;
+    border-radius:19px;
+    background:
+        linear-gradient(145deg,#16181b,#0c0d0f);
+    border:1px solid rgba(255,255,255,.075);
+    padding:14px;
+}
+
+.case:after{
+    content:"";
+    position:absolute;
+    width:150px;
+    height:150px;
+    right:-80px;
+    top:-80px;
+    border-radius:50%;
+    background:rgba(255,255,255,.035);
+}
+
+.case.rare{
+    border-color:rgba(59,126,210,.34);
+}
+
+.case.legendary{
+    border-color:rgba(199,157,53,.38);
+}
+
+.case.mythic{
+    border-color:rgba(182,38,68,.46);
+    background:
+        linear-gradient(145deg,#191113,#0c0d0f);
+}
+
+.case-head{
+    position:relative;
+    z-index:2;
+}
+
+.case-title{
+    font-size:15px;
+    font-weight:850;
+}
+
+.case-sub{
+    margin-top:3px;
+    color:#6f747b;
+    font-size:10px;
+}
+
+.case-preview{
+    position:relative;
+    height:130px;
+    margin:5px 0 1px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.case-preview:after{
+    content:"";
+    position:absolute;
+    bottom:10px;
+    width:105px;
+    height:9px;
+    border-radius:50%;
+    background:#000;
+    filter:blur(7px);
+}
+
+.car-svg{
+    width:100%;
+    height:100%;
+    position:relative;
+    z-index:2;
+    filter:drop-shadow(0 13px 9px rgba(0,0,0,.7));
+}
+
+.case-bottom{
+    position:relative;
+    z-index:3;
+}
+
+.case-price{
+    font-size:16px;
+    font-weight:850;
+    margin-bottom:9px;
+}
+
+.case-button{
+    width:100%;
+    height:39px;
+    border:0;
+    border-radius:10px;
+    color:#fff;
+    background:#d51f31;
+    font-size:11px;
+    font-weight:850;
+    letter-spacing:.4px;
+}
+
+.case-button:active{
+    transform:scale(.97);
+}
+
+.rare .case-button{
+    background:#245da0;
+}
+
+.legendary .case-button{
+    background:#a57d25;
+}
+
+.mythic .case-button{
+    background:#8f1d38;
+}
+
+/* ================= CARDS ================= */
+
+.card{
+    background:linear-gradient(145deg,#141619,#0c0d0f);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:17px;
+    padding:13px;
+    margin-bottom:10px;
+}
+
+.car-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.car-image{
+    width:120px;
+    height:76px;
+    flex-shrink:0;
+}
+
+.car-info{
+    flex:1;
+    min-width:0;
+}
+
+.car-name{
+    font-size:14px;
+    font-weight:850;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.car-description{
+    color:#696f77;
+    font-size:10px;
+    margin-top:4px;
+}
+
+.car-price{
+    margin-top:6px;
+    font-size:14px;
+    font-weight:850;
+}
+
+.action-button{
+    margin-top:8px;
+    border:0;
+    border-radius:9px;
+    padding:8px 11px;
+    color:#fff;
+    background:#25282d;
+    font-size:11px;
+    font-weight:800;
+}
+
+.buy-button{
+    background:#d51f31;
+}
+
+/* ================= EMPTY ================= */
+
+.empty{
+    text-align:center;
+    padding:50px 20px;
+    color:#626870;
+    font-size:12px;
+}
+
+.empty strong{
+    display:block;
+    color:#a5a9ae;
+    font-size:16px;
+    margin-bottom:6px;
+}
+
+/* ================= PROFILE ================= */
+
+.profile-card{
+    padding:22px 17px;
+    text-align:center;
+}
+
+.profile-avatar{
+    width:72px;
+    height:72px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(145deg,#24272c,#0f1012);
+    border:1px solid rgba(255,255,255,.1);
+    font-size:26px;
+    font-weight:900;
+}
+
+.profile-name{
+    margin-top:11px;
+    font-size:20px;
+    font-weight:900;
+}
+
+.profile-caption{
+    margin-top:4px;
+    color:#666c74;
+    font-size:11px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    margin-top:12px;
+}
+
+.stat{
+    padding:14px;
+    border-radius:14px;
+    background:#121416;
+    border:1px solid rgba(255,255,255,.06);
+}
+
+.stat-label{
+    color:#686e75;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+}
+
+.stat-value{
+    margin-top:5px;
+    font-size:16px;
+    font-weight:850;
+}
+
+/* ================= BOTTOM NAV ================= */
+
+.bottom-nav{
+    position:fixed;
+    z-index:50;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:540px;
+    height:76px;
+    padding:7px 9px 9px;
+    display:flex;
+    background:rgba(9,10,11,.94);
+    backdrop-filter:blur(22px);
+    border-top:1px solid rgba(255,255,255,.07);
+}
+
+.nav-button{
+    flex:1;
+    border:0;
+    background:none;
+    color:#5e646b;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    font-size:9px;
+    font-weight:750;
+}
+
+.nav-button.active{
+    color:#f3f3f4;
+}
+
+.nav-icon{
+    width:23px;
+    height:23px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:17px;
+    opacity:.85;
+}
+
+.nav-button.active .nav-icon{
+    color:#d51f31;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+    background:rgba(0,0,0,.82);
+    backdrop-filter:blur(9px);
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:510px;
+    border-radius:23px;
+    padding:17px;
+    background:
+        linear-gradient(145deg,#17191c,#0b0c0e);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 30px 100px rgba(0,0,0,.8);
+    overflow:hidden;
+}
+
+.modal-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:13px;
+}
+
+.modal-title{
+    font-size:17px;
+    font-weight:900;
+}
+
+.modal-type{
+    color:#6d737a;
+    font-size:9px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+/* ================= ROULETTE ================= */
+
+.roulette{
+    position:relative;
+    width:100%;
+    height:190px;
+    overflow:hidden;
+    border-radius:17px;
+    background:#08090a;
+    border:1px solid rgba(255,255,255,.07);
+}
+
+.roulette:before,
+.roulette:after{
+    content:"";
+    position:absolute;
+    z-index:4;
+    top:0;
+    width:65px;
+    height:100%;
+    pointer-events:none;
+}
+
+.roulette:before{
+    left:0;
+    background:linear-gradient(90deg,#08090a,transparent);
+}
+
+.roulette:after{
+    right:0;
+    background:linear-gradient(270deg,#08090a,transparent);
+}
+
+.marker{
+    position:absolute;
+    z-index:10;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:2px;
+    height:100%;
+    background:#fff;
+    box-shadow:
+        0 0 8px rgba(255,255,255,.9),
+        0 0 18px rgba(213,31,49,.7);
+}
+
+.marker:before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:0;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-top:9px solid #d51f31;
+}
+
+.marker:after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%) rotate(180deg);
+    width:0;
+    height:0;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-top:9px solid #d51f31;
+}
+
+.roulette-track{
+    position:absolute;
+    left:0;
+    top:0;
+    height:100%;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:0 8px;
+    will-change:transform;
+}
+
+.roulette-item{
+    width:140px;
+    min-width:140px;
+    height:150px;
+    border-radius:14px;
+    background:
+        linear-gradient(145deg,#171a1d,#0e1012);
+    border:1px solid rgba(255,255,255,.07);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+.roulette-car{
+    width:130px;
+    height:85px;
+}
+
+.roulette-name{
+    width:125px;
+    margin-top:3px;
+    text-align:center;
+    font-size:9px;
+    font-weight:800;
+    color:#cfd2d5;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* ================= WIN ================= */
+
+.win{
+    display:none;
+    text-align:center;
+}
+
+.win.show{
+    display:block;
+}
+
+.win-car{
+    width:100%;
+    height:190px;
+}
+
+.win-name{
+    font-size:23px;
+    font-weight:900;
+    letter-spacing:-.5px;
+}
+
+.win-price{
+    margin-top:5px;
+    color:#55d18a;
+    font-size:16px;
+    font-weight:850;
+}
+
+.win-rarity{
+    margin-top:4px;
+    color:#70767e;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.close-button{
+    width:100%;
+    height:44px;
+    margin-top:15px;
+    border:0;
+    border-radius:11px;
+    background:#d51f31;
+    color:#fff;
+    font-weight:850;
+}
+
+.close-button:active{
+    transform:scale(.98);
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+    position:fixed;
+    z-index:200;
+    left:50%;
+    bottom:91px;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    padding:11px 15px;
+    max-width:90%;
+    border-radius:11px;
+    background:#202327;
+    border:1px solid rgba(255,255,255,.1);
+    color:#f4f4f4;
+    font-size:11px;
+    font-weight:750;
+    text-align:center;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes winPop{
+    0%{
+        opacity:0;
+        transform:scale(.75);
+    }
+    65%{
+        transform:scale(1.05);
+    }
+    100%{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.win-pop{
+    animation:winPop .5s ease;
+}
+
+@media(max-width:360px){
+
+    .cases{
+        gap:8px;
+    }
+
+    .case{
+        padding:11px;
+    }
+
+    .case-preview{
+        height:116px;
+    }
+
+    .roulette-item{
+        width:125px;
+        min-width:125px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="topline">
+
+        <div class="logo">
+            АВТО<span>ИМПЕРИЯ</span>
+        </div>
+
+        <div class="status">
+            <span class="status-dot"></span>
+            ONLINE
+        </div>
+
+    </div>
+
+    <div class="balance-box">
+
+        <div>
+            <div class="balance-label">Баланс</div>
+            <div class="balance" id="balance">10 000 ₽</div>
+        </div>
+
+        <div class="level-block">
+            <div class="level-label">Уровень</div>
+            <div class="level" id="level">1</div>
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="content">
+
+<!-- ================= CASES ================= -->
+
+<section id="casesPage" class="page active">
+
+    <div class="page-heading">
+        <div>
+            <h1>Кейсы</h1>
+            <p>Выбери свой уровень риска</p>
+        </div>
+    </div>
+
+    <div class="cases" id="cases"></div>
+
+</section>
+
+
+<!-- ================= GARAGE ================= -->
+
+<section id="garagePage" class="page">
+
+    <div class="page-heading">
+        <div>
+            <h1>Гараж</h1>
+            <p>Твоя коллекция автомобилей</p>
+        </div>
+    </div>
+
+    <div id="garage"></div>
+
+</section>
+
+
+<!-- ================= MARKET ================= -->
+
+<section id="marketPage" class="page">
+
+    <div class="page-heading">
+        <div>
+            <h1>Рынок</h1>
+            <p>Покупка автомобилей</p>
+        </div>
+    </div>
+
+    <div id="market"></div>
+
+</section>
+
+
+<!-- ================= PROFILE ================= -->
+
+<section id="profilePage" class="page">
+
+    <div class="card profile-card">
+
+        <div class="profile-avatar">A</div>
+
+        <div class="profile-name">
+            Автоимперец
+        </div>
+
+        <div class="profile-caption">
+            Коллекционер автомобилей
+        </div>
+
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">Уровень</div>
+            <div class="stat-value" id="profileLevel">1</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Автомобилей</div>
+            <div class="stat-value" id="profileCars">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Потрачено</div>
+            <div class="stat-value" id="profileSpent">0 ₽</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Гараж</div>
+            <div class="stat-value" id="profileGarageValue">0 ₽</div>
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- ================= NAV ================= -->
+
+<nav class="bottom-nav">
+
+    <button class="nav-button active"
+            onclick="showPage('casesPage',this)">
+        <div class="nav-icon">▣</div>
+        Кейсы
+    </button>
+
+    <button class="nav-button"
+            onclick="showPage('garagePage',this)">
+        <div class="nav-icon">◇</div>
+        Гараж
+    </button>
+
+    <button class="nav-button"
+            onclick="showPage('marketPage',this)">
+        <div class="nav-icon">₽</div>
+        Рынок
+    </button>
+
+    <button class="nav-button"
+            onclick="showPage('profilePage',this)">
+        <div class="nav-icon">○</div>
+        Профиль
+    </button>
+
+</nav>
+
+</div>
+
+
+<!-- ================= MODAL ================= -->
+
+<div class="modal" id="caseModal">
+
+    <div class="modal-box">
+
+        <div class="modal-top">
+
+            <div class="modal-title" id="modalTitle">
+                Открытие кейса
+            </div>
+
+            <div class="modal-type" id="modalType">
+                AUTO EMPIRE
+            </div>
+
+        </div>
+
+
+        <div class="roulette" id="roulette">
+
+            <div class="marker"></div>
+
+            <div class="roulette-track"
+                 id="rouletteTrack"></div>
+
+        </div>
+
+
+        <div class="win" id="win">
+
+            <div class="win-car"
+                 id="winCar"></div>
+
+            <div class="win-name"
+                 id="winName"></div>
+
+            <div class="win-price"
+                 id="winPrice"></div>
+
+            <div class="win-rarity"
+                 id="winRarity"></div>
+
+        </div>
+
+
+        <button class="close-button"
+                id="closeModal"
+                onclick="closeModal()"
+                style="display:none">
+            Продолжить
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =====================================================
+   CASE DATA
+===================================================== */
+
+const cases = {
+
+    standard:{
+        name:"Стандарт",
+        type:"БАЗОВЫЙ",
+        price:500,
+        class:"standard",
+
+        cars:[
+            ["VAZ 2114",25,1800],
+            ["VAZ 2109",21,1600],
+            ["VAZ 2199",17,2200],
+            ["PRIORA",13,3500],
+            ["Deo Matiz",10,2800],
+            ["Nexia",7,4200],
+            ["УАЗ",4,5500],
+            ["Haval",3,7500]
+        ]
+    },
+
+
+    rare:{
+        name:"Редкий",
+        type:"RARE",
+        price:5000,
+        class:"rare",
+
+        cars:[
+            ["GRANTA SPORT",22,18000],
+            ["VESTA SPORT",18,24000],
+            ["Ford Focus",15,28000],
+            ["Skoda",13,30000],
+            ["Subaru",11,35000],
+            ["Audi",9,42000],
+            ["Toyota Camry XV70",7,65000],
+            ["Toyota Land Cruiser 200",5,85000]
+        ]
+    },
+
+
+    legendary:{
+        name:"Легендарный",
+        type:"LEGENDARY",
+        price:50000,
+        class:"legendary",
+
+        cars:[
+
+            ["Ford Focus",20,28000],
+
+            ["Audi",17,42000],
+
+            ["Subaru",14,35000],
+
+            ["Toyota Camry XV70",12,65000],
+
+            ["BMW M5 F10",10,120000],
+
+            ["BMW M6",8,135000],
+
+            ["BMW M5 F90",7,170000],
+
+            ["BMW M3 Competition",5,190000],
+
+            ["BMW M4 Competition",3,210000],
+
+            ["BMW M5 CS",2,240000],
+
+            ["Mercedes GT",1.5,280000],
+
+            ["Lamborghini Urus",0.5,380000]
+
+        ]
+    },
+
+
+    mythic:{
+        name:"Мифический",
+        type:"MYTHIC",
+        price:250000,
+        class:"mythic",
+
+        cars:[
+
+            ["Toyota Camry XV70",20,650000],
+
+            ["Toyota Land Cruiser 200",18,800000],
+
+            ["BMW M5 F90",15,170000],
+
+            ["BMW M5 CS",12,900000],
+
+            ["Mercedes GT",10,1100000],
+
+            ["Range Rover",8,300000],
+
+            ["Lamborghini Urus",6,1350000],
+
+            ["McLaren 700",4.5,1700000],
+
+            ["Rolls Royce Phantom",4,2200000],
+
+            ["Bugatti Chiron",2.5,4000000]
+
+        ]
+    }
+
+};
+
+
+/* =====================================================
+   MARKET
+===================================================== */
+
+const marketCars = [
+
+    ["VAZ 2114",2500],
+    ["VESTA SPORT",30000],
+    ["Toyota Camry XV70",80000],
+    ["BMW M5 F10",145000],
+    ["BMW M5 CS",270000],
+    ["Lamborghini Urus",420000],
+    ["Rolls Royce Phantom",1250000]
+
+];
+
+
+/* =====================================================
+   COLORS
+===================================================== */
+
+const colors = [
+    "#101214",
+    "#e4e5e7",
+    "#8c101d",
+    "#174a7a",
+    "#285b48",
+    "#6b6d70"
+];
+
+function randomColor(){
+
+    return colors[
+        Math.floor(Math.random()*colors.length)
+    ];
+
+}
+
+
+/* =====================================================
+   CAR SVG
+===================================================== */
+
+function carSVG(name,color,highlight=false){
+
+    const id =
+        "g"+Math.random().toString(36).slice(2);
+
+    return `
+
+    <svg class="car-svg"
+         viewBox="0 0 500 250"
+         xmlns="http://www.w3.org/2000/svg">
+
+        <defs>
+
+            <linearGradient id="${id}"
+                            x1="0"
+                            y1="0"
+                            x2="1"
+                            y2="0">
+
+                <stop offset="0%"
+                      stop-color="${color}"/>
+
+                <stop offset="48%"
+                      stop-color="${color}"/>
+
+                <stop offset="100%"
+                      stop-color="#070809"/>
+
+            </linearGradient>
+
+            <linearGradient id="${id}glass"
+                            x1="0"
+                            y1="0"
+                            x2="1"
+                            y2="1">
+
+                <stop offset="0%"
+                      stop-color="#26303a"/>
+
+                <stop offset="100%"
+                      stop-color="#050608"/>
+
+            </linearGradient>
+
+        </defs>
+
+
+        <ellipse cx="250"
+                 cy="215"
+                 rx="175"
+                 ry="13"
+                 fill="#000"
+                 opacity=".7"/>
+
+
+        <path
+            d="M72 177
+               L103 132
+               Q125 96 170 91
+               L296 91
+               Q337 95 365 122
+               L407 150
+               Q430 166 431 181
+               L425 195
+               L75 195
+               Q66 185 72 177Z"
+            fill="url(#${id})"
+            stroke="#050607"
+            stroke-width="7"/>
+
+
+        <path
+            d="M139 120
+               Q160 81 202 75
+               L284 75
+               Q327 80 354 120Z"
+            fill="#101317"
+            stroke="#050607"
+            stroke-width="7"/>
+
+
+        <path
+            d="M158 113
+               Q172 92 202 87
+               L236 87
+               L236 114Z"
+            fill="url(#${id}glass)"/>
+
+
+        <path
+            d="M246 87
+               L282 87
+               Q313 92 336 113
+               L246 113Z"
+            fill="url(#${id}glass)"/>
+
+
+        <path
+            d="M96 158
+               Q235 146 403 160"
+            fill="none"
+            stroke="rgba(255,255,255,.16)"
+            stroke-width="4"/>
+
+
+        <path
+            d="M95 147
+               Q106 138 122 139
+               L126 151
+               L101 158Z"
+            fill="#e8edf0"/>
+
+
+        <path
+            d="M380 145
+               Q400 148 415 158
+               L398 164
+               L380 157Z"
+            fill="#e8edf0"/>
+
+
+        <circle cx="143"
+                cy="193"
+                r="32"
+                fill="#050607"
+                stroke="#25282c"
+                stroke-width="7"/>
+
+        <circle cx="143"
+                cy="193"
+                r="13"
+                fill="#70757a"/>
+
+        <circle cx="143"
+                cy="193"
+                r="6"
+                fill="#151719"/>
+
+
+        <circle cx="355"
+                cy="193"
+                r="32"
+                fill="#050607"
+                stroke="#25282c"
+                stroke-width="7"/>
+
+        <circle cx="355"
+                cy="193"
+                r="13"
+                fill="#70757a"/>
+
+        <circle cx="355"
+                cy="193"
+                r="6"
+                fill="#151719"/>
+
+
+        ${highlight ? `
+
+        <path
+            d="M101 141
+               Q235 111 382 139"
+            fill="none"
+            stroke="rgba(255,255,255,.52)"
+            stroke-width="5"
+            stroke-linecap="round"/>
+
+        ` : ""}
+
+    </svg>
+
+    `;
+
+}
+
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+let data =
+    JSON.parse(localStorage.getItem("autoEmpire")) || {
+
+        balance:10000,
+
+        spent:0,
+
+        garage:[]
+
+    };
+
+
+function save(){
+
+    localStorage.setItem(
+        "autoEmpire",
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT
+===================================================== */
+
+function money(value){
+
+    return Math.round(value)
+        .toLocaleString("ru-RU")+" ₽";
+
+}
+
+
+/* =====================================================
+   LEVEL
+===================================================== */
+
+function level(){
+
+    return Math.floor(data.spent/25000)+1;
+
+}
+
+
+/* =====================================================
+   UI
+===================================================== */
+
+function updateUI(){
+
+    document.getElementById("balance")
+        .textContent=money(data.balance);
+
+    document.getElementById("level")
+        .textContent=level();
+
+    document.getElementById("profileLevel")
+        .textContent=level();
+
+    document.getElementById("profileCars")
+        .textContent=data.garage.length;
+
+    document.getElementById("profileSpent")
+        .textContent=money(data.spent);
+
+    const garageValue =
+        data.garage.reduce(
+            (sum,car)=>sum+car.price,
+            0
+        );
+
+    document.getElementById("profileGarageValue")
+        .textContent=money(garageValue);
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+function toast(text){
+
+    const el =
+        document.getElementById("toast");
+
+    el.textContent=text;
+
+    el.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer=setTimeout(()=>{
+
+        el.classList.remove("show");
+
+    },2200);
+
+}
+
+
+/* =====================================================
+   SOUND
+===================================================== */
+
+let audioCtx=null;
+
+function getAudio(){
+
+    if(!audioCtx){
+
+        audioCtx =
+            new (window.AudioContext ||
+                 window.webkitAudioContext)();
+
+    }
+
+    return audioCtx;
+
+}
+
+
+function tickSound(){
+
+    try{
+
+        const ctx=getAudio();
+
+        const osc=ctx.createOscillator();
+
+        const gain=ctx.createGain();
+
+        osc.type="sine";
+
+        osc.frequency.value=
+            620+Math.random()*160;
+
+        gain.gain.value=.025;
+
+        osc.connect(gain);
+
+        gain.connect(ctx.destination);
+
+        osc.start();
+
+        osc.stop(ctx.currentTime+.035);
+
+    }catch(e){}
+
+}
+
+
+function winSound(){
+
+    try{
+
+        const ctx=getAudio();
+
+        [440,550,660,880].forEach(
+            (frequency,index)=>{
+
+                const osc=ctx.createOscillator();
+
+                const gain=ctx.createGain();
+
+                osc.type="sine";
+
+                osc.frequency.value=frequency;
+
+                gain.gain.value=.055;
+
+                osc.connect(gain);
+
+                gain.connect(ctx.destination);
+
+                osc.start(
+                    ctx.currentTime+
+                    index*.09
+                );
+
+                osc.stop(
+                    ctx.currentTime+
+                    index*.09+
+                    .12
+                );
+
+            }
+        );
+
+    }catch(e){}
+
+}
+
+
+/* =====================================================
+   WEIGHTED RANDOM
+===================================================== */
+
+function getRandomCar(caseData){
+
+    const total =
+        caseData.cars.reduce(
+            (sum,car)=>sum+car[1],
+            0
+        );
+
+    let roll=Math.random()*total;
+
+    for(const car of caseData.cars){
+
+        roll-=car[1];
+
+        if(roll<=0){
+
+            return car;
+
+        }
+
+    }
+
+    return caseData.cars[
+        caseData.cars.length-1
+    ];
+
+}
+
+
+/* =====================================================
+   CASE PREVIEW
+===================================================== */
+
+function renderCases(){
+
+    const container=
+        document.getElementById("cases");
+
+    container.innerHTML="";
+
+    Object.entries(cases).forEach(
+        ([key,c])=>{
+
+            const preview=
+                c.cars[
+                    Math.floor(
+                        Math.random()*c.cars.length
+                    )
+                ];
+
+            const card=
+                document.createElement("div");
+
+            card.className=
+                "case "+c.class;
+
+            card.innerHTML=`
+
+                <div class="case-head">
+
+                    <div class="case-title">
+                        ${c.name}
+                    </div>
+
+                    <div class="case-sub">
+                        ${c.type}
+                    </div>
+
+                </div>
+
+
+                <div class="case-preview">
+
+                    ${carSVG(
+                        preview[0],
+                        randomColor(),
+                        true
+                    )}
+
+                </div>
+
+
+                <div class="case-bottom">
+
+                    <div class="case-price">
+                        ${money(c.price)}
+                    </div>
+
+                    <button
+                        class="case-button"
+                        onclick="openCase('${key}')">
+
+                        ОТКРЫТЬ КЕЙС
+
+                    </button>
+
+                </div>
+
+            `;
+
+            container.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   OPEN CASE
+===================================================== */
+
+function openCase(key){
+
+    const c=cases[key];
+
+    if(data.balance<c.price){
+
+        toast("Недостаточно средств");
+
+        return;
+
+    }
+
+
+    try{
+
+        getAudio().resume();
+
+    }catch(e){}
+
+
+    data.balance-=c.price;
+
+    data.spent+=c.price;
+
+    save();
+
+    updateUI();
+
+
+    const modal=
+        document.getElementById("caseModal");
+
+    const roulette=
+        document.getElementById("roulette");
+
+    const track=
+        document.getElementById("rouletteTrack");
+
+    const win=
+        document.getElementById("win");
+
+    const close=
+        document.getElementById("closeModal");
+
+
+    modal.classList.add("show");
+
+    roulette.style.display="block";
+
+    win.classList.remove("show");
+
+    close.style.display="none";
+
+
+    document.getElementById("modalTitle")
+        .textContent=
+        "Открытие · "+c.name;
+
+    document.getElementById("modalType")
+        .textContent=
+        c.type;
+
+
+    track.innerHTML="";
+
+    track.style.transition="none";
+
+    track.style.transform=
+        "translate3d(0,0,0)";
+
+
+    /*
+      Получаем победителя заранее.
+    */
+
+    const winner=
+        getRandomCar(c);
+
+    const winnerColor=
+        randomColor();
+
+
+    /*
+      Создаём длинную ленту.
+      Победитель находится точно
+      в заданной позиции.
+    */
+
+    const winnerIndex=28;
+
+    const items=[];
+
+
+    for(let i=0;i<50;i++){
+
+        let car;
+
+        if(i===winnerIndex){
+
+            car=winner;
+
+        }else{
+
+            car=
+                c.cars[
+                    Math.floor(
+                        Math.random()*
+                        c.cars.length
+                    )
+                ];
+
+        }
+
+        items.push(car);
+
+    }
+
+
+    items.forEach((car,index)=>{
+
+        const item=
+            document.createElement("div");
+
+        item.className=
+            "roulette-item";
+
+        const color=
+            index===winnerIndex
+                ? winnerColor
+                : randomColor();
+
+        item.innerHTML=`
+
+            <div class="roulette-car">
+
+                ${carSVG(
+                    car[0],
+                    color,
+                    index===winnerIndex
+                )}
+
+            </div>
+
+            <div class="roulette-name">
+                ${car[0]}
+            </div>
+
+        `;
+
+        track.appendChild(item);
+
+    });
+
+
+    /*
+      Ждём пока браузер посчитает размеры.
+    */
+
+    requestAnimationFrame(()=>{
+
+        const itemWidth=148;
+
+        const center=
+            roulette.clientWidth/2;
+
+        const target=
+            winnerIndex*itemWidth+
+            8+
+            itemWidth/2;
+
+        const finalPosition=
+            center-target;
+
+
+        /*
+          Очень плавное вращение:
+          быстрое начало,
+          длинная прокрутка,
+          мягкая остановка.
+        */
+
+        track.style.transition=
+            "transform 5.8s cubic-bezier(.08,.72,.10,1)";
+
+        track.style.transform=
+            `translate3d(${finalPosition}px,0,0)`;
+
+
+        /*
+          Звук рулетки.
+        */
+
+        let ticks=0;
+
+        const interval=
+            setInterval(()=>{
+
+                tickSound();
+
+                ticks++;
+
+                if(ticks>=29){
+
+                    clearInterval(interval);
+
+                }
+
+            },190);
+
+
+        /*
+          Победа.
+        */
+
+        setTimeout(()=>{
+
+            winSound();
+
+            roulette.style.display="none";
+
+            win.classList.add("show");
+
+            document.getElementById("winCar")
+                .innerHTML=
+                carSVG(
+                    winner[0],
+                    winnerColor,
+                    true
+                );
+
+            document.getElementById("winName")
+                .textContent=
+                winner[0];
+
+            document.getElementById("winPrice")
+                .textContent=
+                money(winner[2]);
+
+            document.getElementById("winRarity")
+                .textContent=
+                c.name;
+
+
+            close.style.display="block";
+
+            win.classList.add("win-pop");
+
+
+            /*
+              Добавляем машину
+              в гараж.
+            */
+
+            data.garage.push({
+
+                id:
+                    Date.now()+
+                    Math.random(),
+
+                name:winner[0],
+
+                price:winner[2],
+
+                color:winnerColor
+
+            });
+
+
+            save();
+
+            updateUI();
+
+            renderGarage();
+
+
+        },6000);
+
+    });
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL
+===================================================== */
+
+function closeModal(){
+
+    document
+        .getElementById("caseModal")
+        .classList.remove("show");
+
+    document
+        .getElementById("win")
+        .classList.remove("win-pop");
+
+    renderCases();
+
+}
+
+
+/* =====================================================
+   GARAGE
+===================================================== */
+
+function renderGarage(){
+
+    const container=
+        document.getElementById("garage");
+
+    container.innerHTML="";
+
+
+    if(data.garage.length===0){
+
+        container.innerHTML=`
+
+            <div class="card empty">
+
+                <strong>Гараж пуст</strong>
+
+                Открой первый кейс,
+                чтобы получить автомобиль.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    data.garage
+        .slice()
+        .reverse()
+        .forEach(car=>{
+
+            const card=
+                document.createElement("div");
+
+            card.className=
+                "card car-card";
+
+            card.innerHTML=`
+
+                <div class="car-image">
+
+                    ${carSVG(
+                        car.name,
+                        car.color,
+                        true
+                    )}
+
+                </div>
+
+
+                <div class="car-info">
+
+                    <div class="car-name">
+                        ${car.name}
+                    </div>
+
+                    <div class="car-description">
+                        Автомобиль в гараже
+                    </div>
+
+                    <div class="car-price">
+                        ${money(car.price)}
+                    </div>
+
+                    <button
+                        class="action-button"
+                        onclick="sellCar('${car.id}')">
+
+                        ПРОДАТЬ
+
+                    </button>
+
+                </div>
+
+            `;
+
+            container.appendChild(card);
+
+        });
+
+}
+
+
+/* =====================================================
+   SELL
+===================================================== */
+
+function sellCar(id){
+
+    const index=
+        data.garage.findIndex(
+            car=>String(car.id)===String(id)
+        );
+
+
+    if(index<0){
+
+        return;
+
+    }
+
+
+    const car=
+        data.garage[index];
+
+
+    const sellPrice=
+        Math.floor(car.price*.85);
+
+
+    data.balance+=sellPrice;
+
+    data.garage.splice(index,1);
+
+    save();
+
+    updateUI();
+
+    renderGarage();
+
+    toast(
+        `${car.name} продан · ${money(sellPrice)}`
+    );
+
+}
+
+
+/* =====================================================
+   MARKET
+===================================================== */
+
+function renderMarket(){
+
+    const container=
+        document.getElementById("market");
+
+    container.innerHTML="";
+
+
+    marketCars.forEach(car=>{
+
+        const name=car[0];
+
+        const price=car[1];
+
+        const color=randomColor();
+
+
+        const card=
+            document.createElement("div");
+
+        card.className=
+            "card car-card";
+
+
+        card.innerHTML=`
+
+            <div class="car-image">
+
+                ${carSVG(
+                    name,
+                    color,
+                    true
+                )}
+
+            </div>
+
+
+            <div class="car-info">
+
+                <div class="car-name">
+                    ${name}
+                </div>
+
+                <div class="car-description">
+                    Автомобиль на рынке
+                </div>
+
+                <div class="car-price">
+                    ${money(price)}
+                </div>
+
+                <button
+                    class="action-button buy-button"
+                    onclick="buyCar(
+                        '${name}',
+                        ${price},
+                        '${color}'
+                    )">
+
+                    КУПИТЬ
+
+                </button>
+
+            </div>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =====================================================
+   BUY
+===================================================== */
+
+function buyCar(name,price,color){
+
+    if(data.balance<price){
+
+        toast("Недостаточно средств");
+
+        return;
+
+    }
+
+
+    data.balance-=price;
+
+    data.spent+=price;
+
+
+    data.garage.push({
+
+        id:
+            Date.now()+
+            Math.random(),
+
+        name:name,
+
+        price:price,
+
+        color:color
+
+    });
+
+
+    save();
+
+    updateUI();
+
+    renderGarage();
+
+    toast(
+        `${name} добавлен в гараж`
+    );
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showPage(pageId,button){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page=>{
+            page.classList.remove("active");
+        });
+
+
+    document
+        .getElementById(pageId)
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll(".nav-button")
+        .forEach(btn=>{
+            btn.classList.remove("active");
+        });
+
+
+    button.classList.add("active");
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"instant"
+    });
+
+
+    if(pageId==="garagePage"){
+
+        renderGarage();
+
+    }
+
+
+    if(pageId==="marketPage"){
+
+        renderMarket();
+
+    }
+
+
+    updateUI();
+
+}
+
+
+/* =====================================================
+   INITIALIZATION
+===================================================== */
+
+renderCases();
+
+renderGarage();
+
+renderMarket();
+
+updateUI();
+
+
+/* =====================================================
+   TELEGRAM MINI APP
+===================================================== */
+
+if(
+    window.Telegram &&
+    window.Telegram.WebApp
+){
+
+    try{
+
+        Telegram.WebApp.ready();
+
+        Telegram.WebApp.expand();
+
+        Telegram.WebApp.setHeaderColor("#070809");
+
+        Telegram.WebApp.setBackgroundColor("#070809");
+
+    }catch(error){}
+
+}
+
+</script>
+
+</body>
+</html>
