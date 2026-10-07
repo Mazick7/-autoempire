@@ -5,7 +5,7 @@ const crypto = require("crypto");
 const Database = require("better-sqlite3");
 
 const PORT = process.env.PORT || 10000;
-const BOT_TOKEN = process.env.BOT_TOKEN || "";
+const BOT_TOKEN = String(process.env.BOT_TOKEN || "").trim();
 
 const ROOT = __dirname;
 const INDEX_FILE = path.join(ROOT, "index.html");
@@ -198,7 +198,9 @@ function send(res, status, data, type = "application/json; charset=utf-8") {
   res.writeHead(status, {
     "Content-Type": type,
     "Cache-Control": "no-store",
-    "Access-Control-Allow-Origin": "*"
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type,X-Telegram-Init-Data"
   });
 
   res.end(
@@ -238,16 +240,47 @@ function parseJSON(req) {
   });
 }
 
-function parseTelegramInitData(initData) {
-  if (!initData || !BOT_TOKEN) {
-    return null;
+/*
+ * Telegram WebApp initData verification
+ *
+ * Возвращает:
+ * {
+ *   ok: true,
+ *   user: TelegramUser
+ * }
+ *
+ * либо:
+ * {
+ *   ok: false,
+ *   error: "..."
+ * }
+ */
+function verifyTelegramInitData(initData) {
+  if (!BOT_TOKEN) {
+    return {
+      ok: false,
+      error: "BOT_TOKEN не настроен в Render Environment"
+    };
+  }
+
+  if (!initData) {
+    return {
+      ok: false,
+      error: "Telegram initData не получен"
+    };
   }
 
   try {
-    const params = new URLSearchParams(initData);
+    const params = new URLSearchParams(String(initData));
+
     const hash = params.get("hash");
 
-    if (!hash) return null;
+    if (!hash) {
+      return {
+        ok: false,
+        error: "В Telegram initData отсутствует hash"
+      };
+    }
 
     params.delete("hash");
 
@@ -266,35 +299,122 @@ function parseTelegramInitData(initData) {
       .update(dataCheckString)
       .digest("hex");
 
-    const a = Buffer.from(calculatedHash, "hex");
-    const b = Buffer.from(hash, "hex");
+    const receivedHash = String(hash).toLowerCase();
 
-    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
-      return null;
+    if (!/^[a-f0-9]{64}$/.test(receivedHash)) {
+      return {
+        ok: false,
+        error: "Некорректный формат Telegram hash"
+      };
+    }
+
+    const a = Buffer.from(calculatedHash, "hex");
+    const b = Buffer.from(receivedHash, "hex");
+
+    if (
+      a.length !== b.length ||
+      !crypto.timingSafeEqual(a, b)
+    ) {
+      console.error("Telegram initData: invalid signature");
+
+      return {
+        ok: false,
+        error: "Неверная подпись Telegram initData. Проверь BOT_TOKEN."
+      };
     }
 
     const userRaw = params.get("user");
 
-    if (!userRaw) return null;
+    if (!userRaw) {
+      return {
+        ok: false,
+        error: "Telegram user отсутствует в initData"
+      };
+    }
 
-    return JSON.parse(userRaw);
-  } catch (e) {
-    console.error("Telegram initData error:", e.message);
-    return null;
+    let user;
+
+    try {
+      user = JSON.parse(userRaw);
+    } catch {
+      return {
+        ok: false,
+        error: "Не удалось прочитать Telegram user"
+      };
+    }
+
+    if (!user || !user.id) {
+      return {
+        ok: false,
+        error: "Telegram user не содержит ID"
+      };
+    }
+
+    return {
+      ok: true,
+      user
+    };
+
+  } catch (error) {
+    console.error(
+      "Telegram initData error:",
+      error.message
+    );
+
+    return {
+      ok: false,
+      error: "Ошибка проверки Telegram initData"
+    };
   }
 }
 
-function getUserFromRequest(req) {
-  const initData =
-    req.headers["x-telegram-init-data"] ||
-    "";
+/*
+ * Получаем initData сразу из нескольких мест.
+ *
+ * 1. X-Telegram-Init-Data
+ * 2. Authorization: tma ...
+ * 3. JSON body: { initData: "..." }
+ */
+async function getInitData(req) {
+  const headerInitData =
+    req.headers["x-telegram-init-data"];
 
-  return parseTelegramInitData(initData);
+  if (headerInitData) {
+    return String(headerInitData);
+  }
+
+  const authorization =
+    req.headers["authorization"];
+
+  if (
+    authorization &&
+    authorization.toLowerCase().startsWith("tma ")
+  ) {
+    return authorization.slice(4).trim();
+  }
+
+  return "";
+}
+
+async function getUserFromRequest(req, body = null) {
+  let initData = await getInitData(req);
+
+  /*
+   * Важный fallback:
+   * frontend также отправляет initData внутри JSON.
+   */
+  if (!initData && body && body.initData) {
+    initData = String(body.initData);
+  }
+
+  return verifyTelegramInitData(initData);
 }
 
 function getPlayer(telegramId) {
   return db
-    .prepare("SELECT * FROM players WHERE telegram_id = ?")
+    .prepare(
+      "SELECT * FROM players WHERE telegram_id = ?"
+    )
     .get(String(telegramId));
 }
 
@@ -303,11 +423,36 @@ function createPlayer(user) {
 
   let player = getPlayer(telegramId);
 
-  if (player) return player;
+  if (player) {
+    /*
+     * Обновляем имя/username,
+     * если пользователь изменил их в Telegram.
+     */
+    db.prepare(`
+      UPDATE players
+      SET
+        username = ?,
+        first_name = ?,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE telegram_id = ?
+    `).run(
+      user.username || "",
+      user.first_name || "",
+      telegramId
+    );
+
+    return getPlayer(telegramId);
+  }
 
   db.prepare(`
     INSERT INTO players
-      (telegram_id, username, first_name, balance, garage_json)
+      (
+        telegram_id,
+        username,
+        first_name,
+        balance,
+        garage_json
+      )
     VALUES
       (?, ?, ?, ?, ?)
   `).run(
@@ -346,7 +491,9 @@ function playerData(player) {
   let garage = [];
 
   try {
-    garage = JSON.parse(player.garage_json || "[]");
+    garage = JSON.parse(
+      player.garage_json || "[]"
+    );
   } catch {
     garage = [];
   }
@@ -360,9 +507,11 @@ function playerData(player) {
 }
 
 function weightedRandom(items) {
-  const total = items.reduce((sum, item) => {
-    return sum + Number(item[1] || 0);
-  }, 0);
+  const total = items.reduce(
+    (sum, item) =>
+      sum + Number(item[1] || 0),
+    0
+  );
 
   let random = Math.random() * total;
 
@@ -378,10 +527,16 @@ function weightedRandom(items) {
 }
 
 function priceOf(carName) {
-  return Number(CAR_PRICES[carName] || 0);
+  return Number(
+    CAR_PRICES[carName] || 0
+  );
 }
 
-function jsonError(res, message, status = 400) {
+function jsonError(
+  res,
+  message,
+  status = 400
+) {
   return send(res, status, {
     ok: false,
     error: message
@@ -389,52 +544,121 @@ function jsonError(res, message, status = 400) {
 }
 
 async function handleAPI(req, res, pathname) {
-  const user = getUserFromRequest(req);
 
-  if (!user) {
+  /*
+   * /api/auth может получить initData
+   * только из JSON, поэтому сначала читаем body.
+   */
+  let body = null;
+
+  if (
+    pathname === "/api/auth" &&
+    req.method === "POST"
+  ) {
+    try {
+      body = await parseJSON(req);
+    } catch {
+      return jsonError(
+        res,
+        "Некорректный JSON",
+        400
+      );
+    }
+  }
+
+  const verification =
+    await getUserFromRequest(
+      req,
+      body
+    );
+
+  if (!verification.ok) {
+    console.error(
+      "Telegram auth failed:",
+      verification.error
+    );
+
     return jsonError(
       res,
-      "Не удалось проверить Telegram. Откройте приложение через Telegram.",
+      verification.error,
       401
     );
   }
 
+  const user = verification.user;
+
   let player = createPlayer(user);
 
   if (!player) {
-    return jsonError(res, "Игрок не найден", 500);
+    return jsonError(
+      res,
+      "Игрок не найден",
+      500
+    );
   }
 
+  /*
+   * AUTH
+   */
   if (pathname === "/api/auth") {
+    if (req.method !== "POST") {
+      return jsonError(
+        res,
+        "Метод не поддерживается",
+        405
+      );
+    }
+
     return send(res, 200, {
       ok: true,
+
       user: {
         id: user.id,
         username: user.username || "",
-        firstName: user.first_name || ""
+        firstName: user.first_name || "",
+        photoUrl: user.photo_url || ""
       },
+
       data: playerData(player)
     });
   }
 
+  /*
+   * OPEN CASE
+   */
   if (pathname === "/api/cases/open") {
+
     if (req.method !== "POST") {
-      return jsonError(res, "Метод не поддерживается", 405);
+      return jsonError(
+        res,
+        "Метод не поддерживается",
+        405
+      );
     }
 
-    let body;
-
-    try {
-      body = await parseJSON(req);
-    } catch {
-      return jsonError(res, "Некорректный запрос");
+    if (!body) {
+      try {
+        body = await parseJSON(req);
+      } catch {
+        return jsonError(
+          res,
+          "Некорректный запрос"
+        );
+      }
     }
 
-    const caseId = String(body.caseId || "");
-    const currentCase = CASES[caseId];
+    const caseId = String(
+      body.caseId || ""
+    );
+
+    const currentCase =
+      CASES[caseId];
 
     if (!currentCase) {
-      return jsonError(res, "Такого кейса нет");
+      return jsonError(
+        res,
+        "Такого кейса нет"
+      );
     }
 
     if (player.pending_json) {
@@ -444,25 +668,41 @@ async function handleAPI(req, res, pathname) {
       );
     }
 
-    if (Number(player.balance) < currentCase.price) {
-      return jsonError(res, "Недостаточно денег");
+    if (
+      Number(player.balance) <
+      currentCase.price
+    ) {
+      return jsonError(
+        res,
+        "Недостаточно денег"
+      );
     }
 
-    const carName = weightedRandom(currentCase.items);
-    const value = priceOf(carName);
+    const carName =
+      weightedRandom(
+        currentCase.items
+      );
 
-    player.balance -= currentCase.price;
+    const value =
+      priceOf(carName);
+
+    player.balance -=
+      currentCase.price;
 
     const pending = {
       caseId,
       name: carName,
       value,
-      rarity: RARITY[caseId] || currentCase.rarity,
-      casePrice: currentCase.price,
+      rarity:
+        RARITY[caseId] ||
+        currentCase.rarity,
+      casePrice:
+        currentCase.price,
       createdAt: Date.now()
     };
 
-    player.pending_json = JSON.stringify(pending);
+    player.pending_json =
+      JSON.stringify(pending);
 
     savePlayer(player);
 
@@ -473,29 +713,49 @@ async function handleAPI(req, res, pathname) {
     });
   }
 
+  /*
+   * KEEP CASE RESULT
+   */
   if (pathname === "/api/cases/keep") {
+
     if (req.method !== "POST") {
-      return jsonError(res, "Метод не поддерживается", 405);
+      return jsonError(
+        res,
+        "Метод не поддерживается",
+        405
+      );
     }
 
     if (!player.pending_json) {
-      return jsonError(res, "Нет ожидающего выигрыша");
+      return jsonError(
+        res,
+        "Нет ожидающего выигрыша"
+      );
     }
 
     let pending;
 
     try {
-      pending = JSON.parse(player.pending_json);
+      pending = JSON.parse(
+        player.pending_json
+      );
     } catch {
       player.pending_json = null;
       savePlayer(player);
-      return jsonError(res, "Ошибка данных выигрыша", 500);
+
+      return jsonError(
+        res,
+        "Ошибка данных выигрыша",
+        500
+      );
     }
 
     let garage = [];
 
     try {
-      garage = JSON.parse(player.garage_json || "[]");
+      garage = JSON.parse(
+        player.garage_json || "[]"
+      );
     } catch {
       garage = [];
     }
@@ -508,7 +768,9 @@ async function handleAPI(req, res, pathname) {
       obtainedAt: Date.now()
     });
 
-    player.garage_json = JSON.stringify(garage);
+    player.garage_json =
+      JSON.stringify(garage);
+
     player.pending_json = null;
 
     savePlayer(player);
@@ -519,26 +781,48 @@ async function handleAPI(req, res, pathname) {
     });
   }
 
+  /*
+   * SELL CASE RESULT
+   */
   if (pathname === "/api/cases/sell") {
+
     if (req.method !== "POST") {
-      return jsonError(res, "Метод не поддерживается", 405);
+      return jsonError(
+        res,
+        "Метод не поддерживается",
+        405
+      );
     }
 
     if (!player.pending_json) {
-      return jsonError(res, "Нет ожидающего выигрыша");
+      return jsonError(
+        res,
+        "Нет ожидающего выигрыша"
+      );
     }
 
     let pending;
 
     try {
-      pending = JSON.parse(player.pending_json);
+      pending = JSON.parse(
+        player.pending_json
+      );
     } catch {
-      return jsonError(res, "Ошибка данных выигрыша", 500);
+      return jsonError(
+        res,
+        "Ошибка данных выигрыша",
+        500
+      );
     }
 
-    const sellPrice = Math.floor(Number(pending.value) * 0.85);
+    const sellPrice =
+      Math.floor(
+        Number(pending.value) * 0.85
+      );
 
-    player.balance += sellPrice;
+    player.balance +=
+      sellPrice;
+
     player.pending_json = null;
 
     savePlayer(player);
@@ -550,25 +834,39 @@ async function handleAPI(req, res, pathname) {
     });
   }
 
+  /*
+   * SELL GARAGE CAR
+   */
   if (pathname === "/api/garage/sell") {
+
     if (req.method !== "POST") {
-      return jsonError(res, "Метод не поддерживается", 405);
+      return jsonError(
+        res,
+        "Метод не поддерживается",
+        405
+      );
     }
 
-    let body;
-
-    try {
-      body = await parseJSON(req);
-    } catch {
-      return jsonError(res, "Некорректный запрос");
+    if (!body) {
+      try {
+        body = await parseJSON(req);
+      } catch {
+        return jsonError(
+          res,
+          "Некорректный запрос"
+        );
+      }
     }
 
-    const index = Number(body.index);
+    const index =
+      Number(body.index);
 
     let garage;
 
     try {
-      garage = JSON.parse(player.garage_json || "[]");
+      garage = JSON.parse(
+        player.garage_json || "[]"
+      );
     } catch {
       garage = [];
     }
@@ -578,21 +876,29 @@ async function handleAPI(req, res, pathname) {
       index < 0 ||
       index >= garage.length
     ) {
-      return jsonError(res, "Автомобиль не найден");
+      return jsonError(
+        res,
+        "Автомобиль не найден"
+      );
     }
 
-    const car = garage[index];
+    const car =
+      garage[index];
 
     const value =
       Number(car.value) ||
       priceOf(car.name);
 
-    const sellPrice = Math.floor(value * 0.85);
+    const sellPrice =
+      Math.floor(value * 0.85);
 
     garage.splice(index, 1);
 
-    player.balance += sellPrice;
-    player.garage_json = JSON.stringify(garage);
+    player.balance +=
+      sellPrice;
+
+    player.garage_json =
+      JSON.stringify(garage);
 
     savePlayer(player);
 
@@ -603,39 +909,65 @@ async function handleAPI(req, res, pathname) {
     });
   }
 
+  /*
+   * MARKET BUY
+   */
   if (pathname === "/api/market/buy") {
+
     if (req.method !== "POST") {
-      return jsonError(res, "Метод не поддерживается", 405);
+      return jsonError(
+        res,
+        "Метод не поддерживается",
+        405
+      );
     }
 
-    let body;
-
-    try {
-      body = await parseJSON(req);
-    } catch {
-      return jsonError(res, "Некорректный запрос");
+    if (!body) {
+      try {
+        body = await parseJSON(req);
+      } catch {
+        return jsonError(
+          res,
+          "Некорректный запрос"
+        );
+      }
     }
 
-    const carName = String(body.name || "");
-    const marketPrice = MARKET[carName];
+    const carName =
+      String(body.name || "");
+
+    const marketPrice =
+      MARKET[carName];
 
     if (!marketPrice) {
-      return jsonError(res, "Автомобиль отсутствует на рынке");
+      return jsonError(
+        res,
+        "Автомобиль отсутствует на рынке"
+      );
     }
 
-    if (Number(player.balance) < marketPrice) {
-      return jsonError(res, "Недостаточно денег");
+    if (
+      Number(player.balance) <
+      marketPrice
+    ) {
+      return jsonError(
+        res,
+        "Недостаточно денег"
+      );
     }
 
     let garage;
 
     try {
-      garage = JSON.parse(player.garage_json || "[]");
+      garage = JSON.parse(
+        player.garage_json || "[]"
+      );
     } catch {
       garage = [];
     }
 
-    player.balance -= marketPrice;
+    player.balance -=
+      marketPrice;
 
     garage.push({
       id: crypto.randomUUID(),
@@ -645,7 +977,8 @@ async function handleAPI(req, res, pathname) {
       obtainedAt: Date.now()
     });
 
-    player.garage_json = JSON.stringify(garage);
+    player.garage_json =
+      JSON.stringify(garage);
 
     savePlayer(player);
 
@@ -655,78 +988,148 @@ async function handleAPI(req, res, pathname) {
     });
   }
 
-  return jsonError(res, "API endpoint не найден", 404);
+  return jsonError(
+    res,
+    "API endpoint не найден",
+    404
+  );
 }
 
-const server = http.createServer(async (req, res) => {
-  try {
-    const url = new URL(
-      req.url,
-      `http://${req.headers.host || "localhost"}`
-    );
+/*
+ * SERVER
+ */
+const server = http.createServer(
+  async (req, res) => {
 
-    const pathname = url.pathname;
+    try {
 
-    if (req.method === "OPTIONS") {
-      res.writeHead(204, {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type,X-Telegram-Init-Data"
-      });
+      const url = new URL(
+        req.url,
+        `http://${req.headers.host || "localhost"}`
+      );
 
-      return res.end();
-    }
+      const pathname =
+        url.pathname;
 
-    if (pathname === "/health") {
-      return send(res, 200, {
-        ok: true,
-        service: "autoempire",
-        time: new Date().toISOString()
-      });
-    }
+      /*
+       * CORS PREFLIGHT
+       */
+      if (req.method === "OPTIONS") {
 
-    if (pathname.startsWith("/api/")) {
-      return await handleAPI(req, res, pathname);
-    }
+        res.writeHead(204, {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods":
+            "GET,POST,OPTIONS",
+          "Access-Control-Allow-Headers":
+            "Content-Type,X-Telegram-Init-Data,Authorization"
+        });
 
-    if (pathname === "/" || pathname === "/index.html") {
-      if (!fs.existsSync(INDEX_FILE)) {
-        return send(
+        return res.end();
+      }
+
+      /*
+       * HEALTH
+       */
+      if (pathname === "/health") {
+
+        return send(res, 200, {
+          ok: true,
+          service: "autoempire",
+          time: new Date().toISOString(),
+          botTokenConfigured:
+            Boolean(BOT_TOKEN)
+        });
+      }
+
+      /*
+       * API
+       */
+      if (
+        pathname.startsWith("/api/")
+      ) {
+        return await handleAPI(
+          req,
           res,
-          500,
-          "index.html не найден",
-          "text/plain; charset=utf-8"
+          pathname
         );
       }
 
-      const html = fs.readFileSync(INDEX_FILE);
+      /*
+       * INDEX
+       */
+      if (
+        pathname === "/" ||
+        pathname === "/index.html"
+      ) {
 
-      res.writeHead(200, {
-        "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-store"
-      });
+        if (
+          !fs.existsSync(INDEX_FILE)
+        ) {
+          return send(
+            res,
+            500,
+            "index.html не найден",
+            "text/plain; charset=utf-8"
+          );
+        }
 
-      return res.end(html);
+        const html =
+          fs.readFileSync(
+            INDEX_FILE
+          );
+
+        res.writeHead(200, {
+          "Content-Type":
+            "text/html; charset=utf-8",
+          "Cache-Control":
+            "no-store"
+        });
+
+        return res.end(html);
+      }
+
+      return send(
+        res,
+        404,
+        "Not found",
+        "text/plain; charset=utf-8"
+      );
+
+    } catch (error) {
+
+      console.error(
+        "SERVER ERROR:",
+        error
+      );
+
+      return send(
+        res,
+        500,
+        {
+          ok: false,
+          error:
+            "Внутренняя ошибка сервера"
+        }
+      );
     }
+  }
+);
 
-    return send(
-      res,
-      404,
-      "Not found",
-      "text/plain; charset=utf-8"
+server.listen(
+  PORT,
+  "0.0.0.0",
+  () => {
+
+    console.log(
+      `AutoEmpire server started on port ${PORT}`
     );
 
-  } catch (error) {
-    console.error("SERVER ERROR:", error);
-
-    return send(res, 500, {
-      ok: false,
-      error: "Внутренняя ошибка сервера"
-    });
+    console.log(
+      `BOT_TOKEN: ${
+        BOT_TOKEN
+          ? "configured"
+          : "NOT CONFIGURED"
+      }`
+    );
   }
-});
-
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`AutoEmpire server started on port ${PORT}`);
-  console.log(`BOT_TOKEN: ${BOT_TOKEN ? "configured" : "NOT CONFIGURED"}`);
-});
+);
