@@ -8,7 +8,7 @@ const PORT = Number(process.env.PORT || 3000);
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const AUTH_MAX_AGE = 24 * 60 * 60;
 const ROOT = __dirname;
-const PUBLIC = path.join(ROOT, 'public');
+const PUBLIC = ROOT;
 const DB_FILE = path.join(ROOT, 'autoimperiya.db');
 
 if (!BOT_TOKEN) console.warn('WARNING: BOT_TOKEN is not set. Telegram authentication will fail.');
