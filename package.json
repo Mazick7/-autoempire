@@ -1,0 +1,10 @@
+{
+  "name":"autoimperiya-server",
+  "version":"1.0.0",
+  "private":true,
+  "description":"Автоимперия Telegram Mini App backend",
+  "main":"server.js",
+  "scripts":{"start":"node server.js"},
+  "engines":{"node":">=20"},
+  "dependencies":{"better-sqlite3":"^12.4.1"}
+}
