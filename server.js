@@ -1,3 +1,4 @@
+console.log("!!! НОВЫЙ SERVER.JS ЗАПУЩЕН !!!");
 "use strict";
 
 const http = require("http");
