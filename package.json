@@ -5,7 +5,8 @@
   "description": "Автоимперия Telegram Mini App backend",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "npm install --build-from-source"
   },
   "engines": {
     "node": "20.x"
