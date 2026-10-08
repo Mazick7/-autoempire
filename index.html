@@ -2,12 +2,11 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
->
-<meta name="theme-color" content="#08090d">
-<meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#08090c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <title>Автоимперия</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -23,14 +22,14 @@ html,body{
   padding:0;
   width:100%;
   min-height:100%;
-  background:#08090d;
+  background:#08090c;
   color:#fff;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Arial,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  overflow-x:hidden;
 }
 
 body{
-  overflow-x:hidden;
-  padding-bottom:92px;
+  min-height:100vh;
 }
 
 button,
@@ -40,568 +39,578 @@ input{
 
 button{
   border:0;
-  color:#fff;
   cursor:pointer;
 }
 
-button:disabled{
-  opacity:.45;
-  cursor:default;
-}
-
-::-webkit-scrollbar{
-  width:0;
-  height:0;
-}
-
-/* =========================
-   APP
-========================= */
-
-#app{
+.app{
   width:100%;
-  max-width:680px;
-  min-height:100vh;
+  max-width:520px;
   margin:0 auto;
+  min-height:100vh;
+  padding-bottom:90px;
   position:relative;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;
+  background:rgba(8,9,12,.92);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.header-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.logo{
+  font-weight:900;
+  font-size:20px;
+  letter-spacing:-.7px;
+}
+
+.logo span{
+  color:#ffb000;
+}
+
+.balance{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background:#111318;
+  border:1px solid rgba(255,176,0,.2);
+  padding:8px 11px;
+  border-radius:14px;
+  font-size:13px;
+  font-weight:800;
+}
+
+.coin{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#ffb000;
+  color:#111;
+  font-size:11px;
+  font-weight:1000;
 }
 
 .page{
   display:none;
-  padding:16px 15px 24px;
-  animation:pageIn .22s ease;
+  padding:16px;
 }
 
 .page.active{
   display:block;
 }
 
-@keyframes pageIn{
-  from{
-    opacity:0;
-    transform:translateY(5px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-/* =========================
-   TOP
-========================= */
-
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:12px 2px 16px;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.brand-logo{
-  width:42px;
-  height:42px;
-  border-radius:13px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:23px;
-  background:
-    linear-gradient(145deg,#1c1f2b,#0d0f15);
-  border:1px solid rgba(255,255,255,.09);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.06),
-    0 10px 30px rgba(0,0,0,.25);
-}
-
-.brand-title{
-  font-weight:900;
-  font-size:17px;
-  letter-spacing:.3px;
-}
-
-.brand-subtitle{
-  color:#858a98;
-  font-size:11px;
-  margin-top:2px;
-}
-
-.balance-pill{
-  min-width:120px;
-  padding:9px 12px;
-  border-radius:13px;
-  background:#101219;
-  border:1px solid rgba(255,255,255,.07);
-  text-align:right;
-}
-
-.balance-label{
-  font-size:9px;
-  color:#777d8b;
-  text-transform:uppercase;
-  letter-spacing:.7px;
-}
-
-.balance-value{
-  font-weight:900;
-  font-size:15px;
-  margin-top:2px;
-}
-
-/* =========================
-   COMMON
-========================= */
-
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:10px;
-  margin:4px 2px 13px;
-}
-
-.section-title{
-  font-size:23px;
-  font-weight:950;
-  letter-spacing:-.6px;
-}
-
-.section-caption{
-  color:#7e8492;
-  font-size:12px;
-}
-
-.card{
-  background:
-    linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));
-  border:1px solid rgba(255,255,255,.075);
-  border-radius:20px;
-  box-shadow:
-    0 14px 40px rgba(0,0,0,.16),
-    inset 0 1px 0 rgba(255,255,255,.025);
-}
-
-.primary-btn{
-  width:100%;
-  min-height:48px;
-  border-radius:15px;
-  font-weight:900;
-  background:linear-gradient(135deg,#f5f6fa,#bfc5d1);
-  color:#08090d;
-  box-shadow:0 10px 30px rgba(255,255,255,.08);
-}
-
-.primary-btn:active{
-  transform:scale(.985);
-}
-
-.dark-btn{
-  width:100%;
-  min-height:46px;
-  border-radius:14px;
-  background:#171a22;
-  border:1px solid rgba(255,255,255,.07);
-  font-weight:800;
-}
-
-.red-btn{
-  width:100%;
-  min-height:46px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#ff4d58,#a71928);
-  font-weight:900;
-}
-
-.muted{
-  color:#7f8593;
-}
-
-.small{
-  font-size:12px;
-}
-
-.money{
-  font-weight:900;
-}
-
-.empty{
-  padding:35px 20px;
-  text-align:center;
-  color:#737988;
-}
-
-.empty-icon{
-  font-size:40px;
-  margin-bottom:10px;
-}
-
-/* =========================
-   HOME
-========================= */
-
 .hero{
-  padding:22px;
-  border-radius:24px;
-  position:relative;
-  overflow:hidden;
   background:
-    radial-gradient(circle at 100% 0%,rgba(255,255,255,.11),transparent 35%),
-    linear-gradient(145deg,#151820,#0d0f15);
-  border:1px solid rgba(255,255,255,.075);
-  margin-bottom:14px;
+    radial-gradient(circle at 85% 10%,rgba(255,176,0,.22),transparent 35%),
+    linear-gradient(145deg,#17191f,#0d0f13);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:24px;
+  padding:20px;
+  margin-bottom:16px;
+  overflow:hidden;
+  position:relative;
 }
 
 .hero:after{
   content:"";
   position:absolute;
-  width:190px;
-  height:190px;
   right:-70px;
   bottom:-90px;
+  width:190px;
+  height:190px;
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.05);
-  box-shadow:
-    0 0 0 25px rgba(255,255,255,.018),
-    0 0 0 50px rgba(255,255,255,.012);
-}
-
-.hero-kicker{
-  color:#8e95a5;
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:1.2px;
-  font-weight:800;
+  border:30px solid rgba(255,176,0,.04);
 }
 
 .hero-title{
-  font-size:31px;
-  line-height:1;
+  font-size:27px;
+  line-height:1.05;
   font-weight:950;
-  letter-spacing:-1.2px;
-  margin:8px 0;
+  letter-spacing:-1px;
+  margin-bottom:9px;
 }
 
 .hero-text{
-  color:#9ca2af;
+  color:#aeb2bb;
   font-size:13px;
   line-height:1.45;
-  max-width:420px;
 }
 
-.hero-stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-top:18px;
-}
-
-.hero-stat{
-  background:rgba(0,0,0,.18);
-  border:1px solid rgba(255,255,255,.055);
-  border-radius:14px;
-  padding:10px;
-}
-
-.hero-stat-value{
-  font-size:16px;
-  font-weight:900;
-}
-
-.hero-stat-label{
-  font-size:9px;
-  color:#707786;
-  margin-top:3px;
-}
-
-.level-card{
-  padding:16px;
-  margin-bottom:14px;
-}
-
-.level-top{
+.section-title{
   display:flex;
+  align-items:center;
   justify-content:space-between;
-  gap:10px;
+  margin:20px 2px 11px;
 }
 
-.level-name{
+.section-title h2{
+  font-size:17px;
+  margin:0;
   font-weight:900;
 }
 
-.level-number{
-  color:#aeb4c1;
+.section-title span{
+  color:#858995;
   font-size:12px;
 }
 
-.level-bar{
-  height:7px;
-  background:#090b10;
-  border-radius:99px;
-  overflow:hidden;
-  margin-top:11px;
-}
-
-.level-fill{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#fff,#9299a8);
-  border-radius:99px;
-  transition:width .35s ease;
-}
-
-.level-bottom{
-  display:flex;
-  justify-content:space-between;
-  color:#737988;
-  font-size:10px;
-  margin-top:7px;
-}
-
-.quick-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.quick{
-  min-height:112px;
-  padding:16px;
-  border-radius:19px;
-  background:#11141b;
-  border:1px solid rgba(255,255,255,.06);
-  text-align:left;
-}
-
-.quick:active{
-  transform:scale(.985);
-}
-
-.quick-icon{
-  font-size:26px;
-}
-
-.quick-title{
-  font-size:14px;
-  font-weight:900;
-  margin-top:9px;
-}
-
-.quick-text{
-  color:#747b8a;
-  font-size:10px;
-  margin-top:3px;
-}
-
-/* =========================
-   CASES
-========================= */
-
-.cases-grid{
+.cases{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:11px;
 }
 
-.case-card{
+.case{
   position:relative;
   overflow:hidden;
-  min-height:220px;
+  min-height:180px;
   padding:15px;
-  border-radius:20px;
-  background:
-    radial-gradient(circle at 80% 20%,rgba(255,255,255,.09),transparent 35%),
-    linear-gradient(145deg,#151821,#0d0f15);
-  border:1px solid rgba(255,255,255,.075);
+  border-radius:21px;
+  background:linear-gradient(145deg,#17191f,#0d0f13);
+  border:1px solid rgba(255,255,255,.07);
+  transition:.18s;
 }
 
-.case-card:active{
-  transform:scale(.985);
-}
-
-.case-rarity{
-  display:inline-flex;
-  align-items:center;
-  min-height:22px;
-  padding:0 8px;
-  border-radius:99px;
-  background:rgba(255,255,255,.06);
-  color:#9fa5b3;
-  font-size:9px;
-  font-weight:900;
-  text-transform:uppercase;
-}
-
-.case-icon{
-  height:91px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:66px;
-  filter:drop-shadow(0 14px 18px rgba(0,0,0,.35));
-}
-
-.case-name{
-  font-size:16px;
-  font-weight:950;
-}
-
-.case-price{
-  color:#c7ccd5;
-  font-size:12px;
-  font-weight:800;
-  margin:5px 0 12px;
-}
-
-.case-open{
-  width:100%;
-  height:39px;
-  border-radius:12px;
-  background:#f0f1f5;
-  color:#08090d;
-  font-size:11px;
-  font-weight:950;
-}
-
-.case-open:active{
+.case:active{
   transform:scale(.97);
 }
 
-/* =========================
-   GARAGE
-========================= */
+.case-icon{
+  font-size:39px;
+  margin-bottom:10px;
+  filter:drop-shadow(0 8px 20px rgba(255,176,0,.12));
+}
 
-.garage-list{
+.case-name{
+  font-size:15px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.case-price{
+  color:#ffb000;
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.case-button{
+  width:100%;
+  padding:10px;
+  border-radius:12px;
+  background:#ffb000;
+  color:#101010;
+  font-size:12px;
+  font-weight:950;
+}
+
+.case-button:disabled{
+  opacity:.45;
+}
+
+.card{
+  background:#111318;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.stat-grid{
   display:grid;
+  grid-template-columns:1fr 1fr;
   gap:10px;
 }
 
-.garage-item{
+.stat{
+  padding:14px;
+  border-radius:16px;
+  background:#181a20;
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.stat-label{
+  color:#8d919b;
+  font-size:11px;
+  margin-bottom:6px;
+}
+
+.stat-value{
+  font-size:18px;
+  font-weight:950;
+}
+
+.car-list{
   display:flex;
-  align-items:center;
-  gap:12px;
-  padding:13px;
+  flex-direction:column;
+  gap:10px;
+}
+
+.car{
+  background:#111318;
+  border:1px solid rgba(255,255,255,.07);
   border-radius:18px;
-  background:#11141a;
-  border:1px solid rgba(255,255,255,.06);
+  padding:14px;
 }
 
-.car-image{
-  width:66px;
-  height:66px;
-  flex:none;
-  border-radius:15px;
+.car-top{
   display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(circle at 50% 35%,rgba(255,255,255,.08),transparent 55%),
-    #0a0c11;
-  font-size:35px;
-}
-
-.garage-info{
-  min-width:0;
-  flex:1;
+  justify-content:space-between;
+  gap:12px;
 }
 
 .car-name{
   font-size:14px;
   font-weight:900;
+}
+
+.car-price{
+  color:#ffb000;
+  font-size:13px;
+  font-weight:900;
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
-.car-meta{
-  color:#727988;
-  font-size:10px;
-  margin-top:4px;
-}
-
-.car-value{
-  color:#cbd0da;
-  font-size:12px;
-  font-weight:900;
+.car-rarity{
   margin-top:5px;
+  font-size:11px;
+  color:#8e929c;
 }
 
-.sell-mini{
-  min-width:70px;
-  height:38px;
-  padding:0 8px;
-  border-radius:11px;
-  background:#191c24;
-  border:1px solid rgba(255,255,255,.07);
-  font-size:10px;
-  font-weight:900;
-}
-
-/* =========================
-   MARKET
-========================= */
-
-.market-list{
-  display:grid;
-  gap:10px;
-}
-
-.market-item{
-  padding:14px;
-  border-radius:18px;
-  background:#11141a;
-  border:1px solid rgba(255,255,255,.06);
-}
-
-.market-top{
+.car-actions{
   display:flex;
-  align-items:center;
-  gap:11px;
-}
-
-.market-info{
-  min-width:0;
-  flex:1;
-}
-
-.market-name{
-  font-size:14px;
-  font-weight:900;
-}
-
-.market-seller{
-  color:#6f7583;
-  font-size:10px;
-  margin-top:3px;
-}
-
-.market-bottom{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
+  gap:8px;
   margin-top:12px;
 }
 
-.market-price{
-  font-size:14px;
+.btn{
+  flex:1;
+  min-height:40px;
+  border-radius:12px;
+  background:#1a1c22;
+  color:#fff;
+  font-weight:850;
+  font-size:12px;
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.btn.primary{
+  background:#ffb000;
+  color:#111;
+  border-color:#ffb000;
+}
+
+.btn.danger{
+  background:#2a1416;
+  color:#ff7077;
+  border-color:rgba(255,80,90,.16);
+}
+
+.btn:disabled{
+  opacity:.4;
+}
+
+.profile-head{
+  text-align:center;
+  padding:15px 0 20px;
+}
+
+.avatar{
+  width:76px;
+  height:76px;
+  margin:0 auto 11px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(145deg,#ffb000,#ff7a00);
+  color:#111;
+  font-size:29px;
+  font-weight:1000;
+  overflow:hidden;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-name{
+  font-size:20px;
   font-weight:950;
 }
 
-.market-buy{
-  min-width:94px;
-  height:39px;
-  border-radius:11px;
-  background:#f0f1f5;
-  color:#08090d;
+.profile-username{
+  margin-top:4px;
+  color:#858995;
+  font-size:12px;
+}
+
+.level-box{
+  margin-top:15px;
+  padding:15px;
+  border-radius:18px;
+  background:#111318;
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.level-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:12px;
+  font-weight:800;
+}
+
+.progress{
+  height:7px;
+  margin-top:10px;
+  background:#25272d;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progress > div{
+  height:100%;
+  width:0%;
+  background:#ffb000;
+  border-radius:99px;
+  transition:.35s;
+}
+
+.bottom-nav{
+  position:fixed;
+  z-index:60;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:min(520px,100%);
+  padding:8px 10px calc(env(safe-area-inset-bottom) + 8px);
+  background:rgba(8,9,12,.94);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-top:1px solid rgba(255,255,255,.07);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+
+.nav-btn{
+  background:transparent;
+  color:#737782;
+  padding:7px 2px;
   font-size:10px;
+  font-weight:800;
+}
+
+.nav-btn.active{
+  color:#ffb000;
+}
+
+.nav-icon{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+
+.toast{
+  position:fixed;
+  z-index:1000;
+  left:50%;
+  bottom:85px;
+  transform:translate(-50%,20px);
+  width:calc(100% - 32px);
+  max-width:480px;
+  padding:13px 15px;
+  border-radius:15px;
+  background:#1a1c22;
+  border:1px solid rgba(255,255,255,.08);
+  color:#fff;
+  font-size:12px;
+  font-weight:750;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+  box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.toast.error{
+  border-color:rgba(255,70,80,.3);
+}
+
+.loading{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#08090c;
+  transition:.25s;
+}
+
+.loading.hidden{
+  opacity:0;
+  pointer-events:none;
+}
+
+.loader{
+  text-align:center;
+}
+
+.loader-logo{
+  font-size:28px;
+  font-weight:1000;
+  margin-bottom:16px;
+}
+
+.loader-logo span{
+  color:#ffb000;
+}
+
+.spinner{
+  width:34px;
+  height:34px;
+  margin:0 auto 12px;
+  border:3px solid #292b31;
+  border-top-color:#ffb000;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+
+.loader-text{
+  color:#777b85;
+  font-size:12px;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(0,0,0,.65);
+  padding:10px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(520px,100%);
+  max-height:85vh;
+  overflow:auto;
+  background:#111318;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:25px 25px 15px 15px;
+  padding:20px;
+  animation:up .2s ease;
+}
+
+@keyframes up{
+  from{transform:translateY(40px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+
+.modal-title{
+  font-size:20px;
   font-weight:950;
+  margin-bottom:8px;
+}
+
+.modal-text{
+  color:#9a9da6;
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:16px;
+}
+
+.roulette{
+  position:relative;
+  height:150px;
+  overflow:hidden;
+  border-radius:18px;
+  background:#0a0b0e;
+  border:1px solid rgba(255,255,255,.07);
+  margin:15px 0;
+}
+
+.roulette-line{
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:50%;
+  width:2px;
+  background:#ffb000;
+  z-index:5;
+  box-shadow:0 0 15px rgba(255,176,0,.7);
+}
+
+.roulette-track{
+  position:absolute;
+  left:0;
+  top:15px;
+  height:120px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  transform:translateX(0);
+}
+
+.roulette-item{
+  flex:0 0 120px;
+  height:115px;
+  border-radius:15px;
+  background:#17191f;
+  border:1px solid rgba(255,255,255,.06);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:8px;
+}
+
+.roulette-car{
+  font-size:28px;
+}
+
+.roulette-name{
+  margin-top:6px;
+  font-size:10px;
+  font-weight:850;
+}
+
+.empty{
+  text-align:center;
+  padding:30px 15px;
+  color:#777b85;
+  font-size:13px;
 }
 
 .market-tabs{
@@ -612,1228 +621,311 @@ button:disabled{
 }
 
 .market-tab{
-  flex:none;
-  padding:9px 12px;
-  border-radius:11px;
-  background:#11141a;
-  color:#777e8d;
-  border:1px solid rgba(255,255,255,.05);
-  font-size:10px;
-  font-weight:900;
+  flex:0 0 auto;
+  padding:9px 13px;
+  border-radius:12px;
+  background:#111318;
+  color:#858995;
+  border:1px solid rgba(255,255,255,.06);
+  font-size:11px;
+  font-weight:850;
 }
 
 .market-tab.active{
-  background:#e9ebf0;
-  color:#08090d;
+  background:#ffb000;
+  color:#111;
 }
 
-/* =========================
-   PROFILE
-========================= */
-
-.profile-head{
-  padding:19px;
-  margin-bottom:11px;
-}
-
-.profile-user{
-  display:flex;
-  align-items:center;
-  gap:13px;
-}
-
-.avatar{
-  width:60px;
-  height:60px;
-  border-radius:19px;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#171a22;
-  border:1px solid rgba(255,255,255,.08);
-  font-size:27px;
-  font-weight:900;
-}
-
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.profile-name{
-  font-size:19px;
-  font-weight:950;
-}
-
-.profile-username{
-  color:#747b89;
-  font-size:11px;
-  margin-top:3px;
-}
-
-.stats-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-bottom:11px;
-}
-
-.stat-card{
-  padding:15px;
-  border-radius:17px;
-  background:#11141a;
-  border:1px solid rgba(255,255,255,.06);
-}
-
-.stat-number{
-  font-size:19px;
-  font-weight:950;
-}
-
-.stat-label{
-  color:#707786;
-  font-size:10px;
-  margin-top:4px;
-}
-
-.ref-card{
-  padding:17px;
-  margin-bottom:11px;
-}
-
-.ref-title{
-  font-size:16px;
-  font-weight:950;
-}
-
-.ref-text{
-  color:#7a808e;
-  font-size:11px;
-  line-height:1.45;
-  margin:6px 0 13px;
-}
-
-.ref-link{
-  width:100%;
-  min-height:44px;
-  padding:10px;
-  border-radius:12px;
-  background:#0a0c11;
-  border:1px solid rgba(255,255,255,.06);
-  color:#aeb4c0;
-  font-size:10px;
-  word-break:break-all;
-}
-
-.ref-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:8px;
-}
-
-/* =========================
-   DAILY
-========================= */
-
-.daily-card{
-  padding:17px;
-  margin-bottom:11px;
-}
-
-.daily-status{
+.daily{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:10px;
+  gap:12px;
+}
+
+.daily-info{
+  flex:1;
 }
 
 .daily-title{
-  font-size:16px;
-  font-weight:950;
-}
-
-.daily-badge{
-  padding:6px 9px;
-  border-radius:9px;
-  background:#191c23;
-  color:#858b99;
-  font-size:9px;
   font-weight:900;
+  font-size:14px;
 }
 
-/* =========================
-   BOTTOM NAV
-========================= */
-
-.bottom-nav{
-  position:fixed;
-  z-index:30;
-  left:50%;
-  bottom:10px;
-  transform:translateX(-50%);
-  width:min(650px,calc(100% - 20px));
-  height:68px;
-  padding:7px;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:4px;
-  border-radius:21px;
-  background:rgba(15,17,23,.93);
-  backdrop-filter:blur(22px);
-  -webkit-backdrop-filter:blur(22px);
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:0 16px 45px rgba(0,0,0,.45);
-}
-
-.nav-btn{
-  background:transparent;
-  color:#676e7d;
-  border-radius:15px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-}
-
-.nav-btn.active{
-  background:#1a1d25;
-  color:#fff;
-}
-
-.nav-icon{
-  font-size:19px;
-  line-height:1;
-}
-
-.nav-label{
-  font-size:8px;
-  font-weight:900;
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal{
-  position:fixed;
-  z-index:100;
-  inset:0;
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  background:rgba(0,0,0,.68);
-  backdrop-filter:blur(9px);
-  -webkit-backdrop-filter:blur(9px);
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:min(680px,100%);
-  max-height:91vh;
-  overflow:auto;
-  padding:18px 15px calc(20px + env(safe-area-inset-bottom));
-  border-radius:26px 26px 0 0;
-  background:
-    linear-gradient(180deg,#151820,#0b0d12);
-  border:1px solid rgba(255,255,255,.08);
-  border-bottom:0;
-  animation:modalIn .22s ease;
-}
-
-@keyframes modalIn{
-  from{
-    transform:translateY(100%);
-  }
-  to{
-    transform:translateY(0);
-  }
-}
-
-.modal-close{
-  width:38px;
-  height:38px;
-  border-radius:12px;
-  background:#191c24;
-  color:#8e95a4;
-  float:right;
-  font-size:18px;
-}
-
-.modal-title{
-  clear:both;
-  padding-top:10px;
-  text-align:center;
-  font-size:23px;
-  font-weight:950;
-}
-
-.modal-subtitle{
-  text-align:center;
-  color:#777e8d;
+.daily-text{
+  color:#858995;
   font-size:11px;
-  margin-top:5px;
-}
-
-.case-preview{
-  margin:18px auto;
-  width:190px;
-  height:190px;
-  border-radius:31px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(circle at 50% 35%,rgba(255,255,255,.1),transparent 50%),
-    #0a0c11;
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:
-    0 25px 70px rgba(0,0,0,.45),
-    inset 0 1px 0 rgba(255,255,255,.04);
-}
-
-.case-preview span{
-  font-size:112px;
-  filter:drop-shadow(0 15px 20px rgba(0,0,0,.4));
-}
-
-.modal-price{
-  text-align:center;
-  color:#bfc4cf;
-  font-size:12px;
-  margin-bottom:16px;
-}
-
-.modal-actions{
-  display:grid;
-  gap:8px;
-}
-
-.roulette-wrap{
-  display:none;
-  margin:20px 0;
-}
-
-.roulette-wrap.active{
-  display:block;
-}
-
-.roulette-window{
-  overflow:hidden;
-  width:100%;
-  height:125px;
-  border-radius:20px;
-  background:#080a0f;
-  border:1px solid rgba(255,255,255,.08);
-  position:relative;
-}
-
-.roulette-window:before,
-.roulette-window:after{
-  content:"";
-  position:absolute;
-  z-index:4;
-  top:0;
-  width:70px;
-  height:100%;
-  pointer-events:none;
-}
-
-.roulette-window:before{
-  left:0;
-  background:linear-gradient(90deg,#080a0f,transparent);
-}
-
-.roulette-window:after{
-  right:0;
-  background:linear-gradient(-90deg,#080a0f,transparent);
-}
-
-.roulette-marker{
-  position:absolute;
-  z-index:5;
-  left:50%;
-  top:0;
-  width:2px;
-  height:100%;
-  transform:translateX(-50%);
-  background:#fff;
-  box-shadow:0 0 14px rgba(255,255,255,.75);
-}
-
-.roulette-track{
-  height:100%;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:0 8px;
-  will-change:transform;
-}
-
-.roulette-card{
-  flex:none;
-  width:101px;
-  height:99px;
-  border-radius:15px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  background:#141720;
-  border:1px solid rgba(255,255,255,.06);
-}
-
-.roulette-car{
-  font-size:37px;
-}
-
-.roulette-name{
-  max-width:90px;
   margin-top:4px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  color:#c5cad3;
-  font-size:8px;
-  font-weight:800;
 }
 
-.result{
-  display:none;
-  text-align:center;
-}
-
-.result.active{
-  display:block;
-}
-
-.result-car{
-  width:150px;
-  height:150px;
-  margin:16px auto;
-  border-radius:30px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#0a0c11;
-  border:1px solid rgba(255,255,255,.08);
-  font-size:86px;
-  box-shadow:0 20px 60px rgba(0,0,0,.4);
-}
-
-.result-rarity{
-  display:inline-block;
-  padding:7px 11px;
-  border-radius:10px;
-  background:#191c24;
-  color:#aeb4c0;
-  font-size:10px;
-  font-weight:900;
-  text-transform:uppercase;
-}
-
-.result-name{
-  margin-top:9px;
-  font-size:24px;
-  font-weight:950;
-}
-
-.result-value{
-  color:#aab0bc;
-  font-size:12px;
-  margin-top:5px;
-}
-
-/* =========================
-   TOAST
-========================= */
-
-#toast{
-  position:fixed;
-  z-index:300;
-  left:50%;
-  top:calc(16px + env(safe-area-inset-top));
-  transform:translate(-50%,-20px);
-  width:min(390px,calc(100% - 30px));
-  padding:13px 15px;
-  border-radius:14px;
-  background:#1b1e27;
-  border:1px solid rgba(255,255,255,.09);
-  box-shadow:0 15px 45px rgba(0,0,0,.4);
-  color:#fff;
-  font-size:12px;
-  font-weight:800;
-  text-align:center;
-  opacity:0;
-  pointer-events:none;
-  transition:.22s ease;
-}
-
-#toast.show{
-  opacity:1;
-  transform:translate(-50%,0);
-}
-
-/* =========================
-   LOADING
-========================= */
-
-#loading{
-  position:fixed;
-  z-index:500;
-  inset:0;
-  background:#08090d;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.loading-inner{
-  text-align:center;
-}
-
-.loading-logo{
-  font-size:55px;
-  animation:pulse 1.2s infinite;
-}
-
-.loading-title{
-  margin-top:13px;
-  font-weight:950;
-  font-size:21px;
-}
-
-.loading-text{
-  color:#727987;
+.referral{
+  word-break:break-all;
+  padding:12px;
+  border-radius:12px;
+  background:#181a20;
+  color:#ffb000;
   font-size:11px;
-  margin-top:5px;
-}
-
-@keyframes pulse{
-  0%,100%{
-    transform:scale(1);
-    opacity:.7;
-  }
-  50%{
-    transform:scale(1.08);
-    opacity:1;
-  }
-}
-
-/* =========================
-   ERROR
-========================= */
-
-#error-screen{
-  position:fixed;
-  z-index:600;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:25px;
-  background:#08090d;
-}
-
-.error-box{
-  width:min(430px,100%);
-  padding:25px;
-  text-align:center;
-  border-radius:24px;
-  background:#11141a;
-  border:1px solid rgba(255,255,255,.08);
-}
-
-.error-icon{
-  font-size:44px;
-}
-
-.error-title{
-  font-size:20px;
-  font-weight:950;
   margin-top:10px;
 }
 
-.error-text{
-  color:#7c8290;
-  font-size:12px;
-  line-height:1.5;
-  margin:8px 0 17px;
-  word-break:break-word;
+.warning{
+  padding:12px;
+  border-radius:13px;
+  background:#2a2010;
+  border:1px solid rgba(255,176,0,.15);
+  color:#d8b56d;
+  font-size:11px;
+  line-height:1.45;
 }
 
-/* =========================
-   DESKTOP
-========================= */
-
-@media(min-width:700px){
-  body{
-    background:
-      radial-gradient(circle at 50% -10%,#171a24,#08090d 50%);
-  }
-
-  .page{
-    padding-left:0;
-    padding-right:0;
-  }
-
-  .bottom-nav{
-    bottom:18px;
-  }
-}
-
-@media(max-width:390px){
-  .cases-grid{
-    grid-template-columns:1fr;
-  }
-
-  .case-card{
-    min-height:205px;
-  }
-
-  .case-icon{
-    height:80px;
-  }
+.success{
+  padding:12px;
+  border-radius:13px;
+  background:#102419;
+  border:1px solid rgba(50,220,120,.14);
+  color:#8ce0ad;
+  font-size:11px;
+  line-height:1.45;
 }
 </style>
 </head>
 
 <body>
 
-<div id="loading">
-  <div class="loading-inner">
-    <div class="loading-logo">🚘</div>
-    <div class="loading-title">Автоимперия</div>
-    <div class="loading-text">Подключение к серверу...</div>
+<div class="loading" id="loading">
+  <div class="loader">
+    <div class="loader-logo">АВТО<span>ИМПЕРИЯ</span></div>
+    <div class="spinner"></div>
+    <div class="loader-text" id="loadingText">Подключение к игре...</div>
   </div>
 </div>
 
-<div id="error-screen">
-  <div class="error-box">
-    <div class="error-icon">⚠️</div>
-    <div class="error-title">Не удалось загрузить игру</div>
-    <div class="error-text" id="error-text">
-      Проверьте запуск приложения через Telegram.
+<div class="app">
+
+  <header class="header">
+    <div class="header-row">
+      <div class="logo">АВТО<span>ИМПЕРИЯ</span></div>
+
+      <div class="balance">
+        <div class="coin">₽</div>
+        <span id="headerBalance">0</span>
+      </div>
     </div>
-    <button class="primary-btn" onclick="location.reload()">
-      ПОВТОРИТЬ
-    </button>
-  </div>
-</div>
+  </header>
 
-<div id="toast"></div>
-
-<div id="app">
-
-  <!-- ================= HOME ================= -->
-
+  <!-- ГЛАВНАЯ -->
   <section class="page active" id="page-home">
 
-    <div class="topbar">
-      <div class="brand">
-        <div class="brand-logo">🚘</div>
-
-        <div>
-          <div class="brand-title">АВТОИМПЕРИЯ</div>
-          <div class="brand-subtitle">Твоя автомобильная империя</div>
-        </div>
-      </div>
-
-      <div class="balance-pill">
-        <div class="balance-label">Баланс</div>
-        <div class="balance-value" id="topBalance">—</div>
-      </div>
-    </div>
-
     <div class="hero">
-
-      <div class="hero-kicker">Добро пожаловать</div>
-
-      <div class="hero-title">
-        <span id="homeGreeting">Империя</span>
-      </div>
-
+      <div class="hero-title">Открывай.<br>Собирай. Богатей.</div>
       <div class="hero-text">
-        Открывай кейсы, собирай автомобили, повышай уровень и развивай свою коллекцию.
-      </div>
-
-      <div class="hero-stats">
-
-        <div class="hero-stat">
-          <div class="hero-stat-value" id="homeLevel">—</div>
-          <div class="hero-stat-label">Уровень</div>
-        </div>
-
-        <div class="hero-stat">
-          <div class="hero-stat-value" id="homeGarage">0</div>
-          <div class="hero-stat-label">Машин</div>
-        </div>
-
-        <div class="hero-stat">
-          <div class="hero-stat-value" id="homeOpened">0</div>
-          <div class="hero-stat-label">Кейсов</div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="card level-card">
-
-      <div class="level-top">
-        <div>
-          <div class="level-name">
-            Уровень <span id="levelNumber">1</span>
-          </div>
-          <div class="level-number" id="levelSpentText">
-            0 ₽ потрачено
-          </div>
-        </div>
-
-        <div class="level-number" id="levelProgressText">
-          0%
-        </div>
-      </div>
-
-      <div class="level-bar">
-        <div class="level-fill" id="levelFill"></div>
-      </div>
-
-      <div class="level-bottom">
-        <span id="levelCurrent">0 ₽</span>
-        <span id="levelNext">2,5 млн ₽</span>
-      </div>
-
-    </div>
-
-    <div class="section-head">
-      <div>
-        <div class="section-title">Быстрый доступ</div>
-        <div class="section-caption">Главные разделы империи</div>
+        Открывай автомобильные кейсы, получай редкие машины,
+        собирай гараж и развивай свою автоимперию.
       </div>
     </div>
 
-    <div class="quick-grid">
+    <div class="section-title">
+      <h2>Кейсы</h2>
+      <span id="caseCount">5 кейсов</span>
+    </div>
 
-      <button class="quick" onclick="showPage('cases')">
-        <div class="quick-icon">🎁</div>
-        <div class="quick-title">Кейсы</div>
-        <div class="quick-text">Испытай удачу</div>
-      </button>
+    <div class="cases" id="cases"></div>
 
-      <button class="quick" onclick="showPage('garage')">
-        <div class="quick-icon">🚗</div>
-        <div class="quick-title">Гараж</div>
-        <div class="quick-text">Твоя коллекция</div>
-      </button>
+    <div class="section-title">
+      <h2>Быстрая статистика</h2>
+    </div>
 
-      <button class="quick" onclick="showPage('market')">
-        <div class="quick-icon">🏪</div>
-        <div class="quick-title">Рынок</div>
-        <div class="quick-text">Покупай и продавай</div>
-      </button>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="stat-label">Уровень</div>
+        <div class="stat-value" id="homeLevel">1</div>
+      </div>
 
-      <button class="quick" onclick="showPage('profile')">
-        <div class="quick-icon">👤</div>
-        <div class="quick-title">Профиль</div>
-        <div class="quick-text">Статистика и рефералы</div>
-      </button>
+      <div class="stat">
+        <div class="stat-label">Открыто кейсов</div>
+        <div class="stat-value" id="homeOpened">0</div>
+      </div>
 
+      <div class="stat">
+        <div class="stat-label">Машин в гараже</div>
+        <div class="stat-value" id="homeGarage">0</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Потрачено</div>
+        <div class="stat-value" id="homeSpent">0 ₽</div>
+      </div>
     </div>
 
   </section>
 
-  <!-- ================= CASES ================= -->
-
-  <section class="page" id="page-cases">
-
-    <div class="topbar">
-      <div class="brand">
-        <div class="brand-logo">🎁</div>
-        <div>
-          <div class="brand-title">КЕЙСЫ</div>
-          <div class="brand-subtitle">Открывай и получай машины</div>
-        </div>
-      </div>
-
-      <div class="balance-pill">
-        <div class="balance-label">Баланс</div>
-        <div class="balance-value" id="casesBalance">—</div>
-      </div>
-    </div>
-
-    <div class="section-head">
-      <div>
-        <div class="section-title">Коллекция кейсов</div>
-        <div class="section-caption">Результат определяется сервером</div>
-      </div>
-    </div>
-
-    <div class="cases-grid" id="casesGrid"></div>
-
-  </section>
-
-  <!-- ================= GARAGE ================= -->
-
+  <!-- ГАРАЖ -->
   <section class="page" id="page-garage">
 
-    <div class="topbar">
-      <div class="brand">
-        <div class="brand-logo">🚗</div>
-        <div>
-          <div class="brand-title">ГАРАЖ</div>
-          <div class="brand-subtitle">Твоя коллекция автомобилей</div>
-        </div>
-      </div>
-
-      <div class="balance-pill">
-        <div class="balance-label">Баланс</div>
-        <div class="balance-value" id="garageBalance">—</div>
-      </div>
+    <div class="section-title">
+      <h2>Мой гараж</h2>
+      <span id="garageCount">0 машин</span>
     </div>
 
-    <div class="section-head">
-      <div>
-        <div class="section-title">Мои автомобили</div>
-        <div class="section-caption" id="garageCount">0 автомобилей</div>
-      </div>
-    </div>
-
-    <div class="garage-list" id="garageList"></div>
+    <div id="garageList" class="car-list"></div>
 
   </section>
 
-  <!-- ================= MARKET ================= -->
-
+  <!-- РЫНОК -->
   <section class="page" id="page-market">
 
-    <div class="topbar">
-      <div class="brand">
-        <div class="brand-logo">🏪</div>
-        <div>
-          <div class="brand-title">РЫНОК</div>
-          <div class="brand-subtitle">Покупай и выставляй машины</div>
-        </div>
-      </div>
-
-      <div class="balance-pill">
-        <div class="balance-label">Баланс</div>
-        <div class="balance-value" id="marketBalance">—</div>
-      </div>
+    <div class="section-title">
+      <h2>Авторынок</h2>
+      <span>Покупка машин</span>
     </div>
 
-    <div class="market-tabs">
-
-      <button
-        class="market-tab active"
-        id="tabFixed"
-        onclick="switchMarket('fixed')"
-      >
-        МАГАЗИН
-      </button>
-
-      <button
-        class="market-tab"
-        id="tabPlayer"
-        onclick="switchMarket('player')"
-      >
-        ИГРОКИ
-      </button>
-
-      <button
-        class="market-tab"
-        id="tabMy"
-        onclick="switchMarket('my')"
-      >
-        МОИ ЛОТЫ
-      </button>
-
+    <div class="market-tabs" id="marketTabs">
+      <button class="market-tab active" data-rarity="all">Все</button>
+      <button class="market-tab" data-rarity="common">Обычные</button>
+      <button class="market-tab" data-rarity="rare">Редкие</button>
+      <button class="market-tab" data-rarity="epic">Эпические</button>
+      <button class="market-tab" data-rarity="legendary">Легендарные</button>
+      <button class="market-tab" data-rarity="mythic">Мифические</button>
     </div>
 
-    <div id="marketFixed"></div>
-    <div id="marketPlayer" style="display:none"></div>
-    <div id="marketMy" style="display:none"></div>
+    <div id="marketList" class="car-list"></div>
 
   </section>
 
-  <!-- ================= PROFILE ================= -->
-
+  <!-- ПРОФИЛЬ -->
   <section class="page" id="page-profile">
 
-    <div class="topbar">
-      <div class="brand">
-        <div class="brand-logo">👤</div>
-        <div>
-          <div class="brand-title">ПРОФИЛЬ</div>
-          <div class="brand-subtitle">Твоя статистика</div>
-        </div>
+    <div class="profile-head">
+      <div class="avatar" id="avatar">A</div>
+      <div class="profile-name" id="profileName">Игрок</div>
+      <div class="profile-username" id="profileUsername"></div>
+    </div>
+
+    <div class="level-box">
+      <div class="level-row">
+        <span>Уровень <b id="profileLevel">1</b></span>
+        <span id="levelProgressText">0 ₽</span>
       </div>
 
-      <div class="balance-pill">
-        <div class="balance-label">Баланс</div>
-        <div class="balance-value" id="profileBalance">—</div>
+      <div class="progress">
+        <div id="levelProgress"></div>
       </div>
     </div>
 
-    <div class="card profile-head">
-
-      <div class="profile-user">
-
-        <div class="avatar" id="profileAvatar">
-          🚘
-        </div>
-
-        <div>
-          <div class="profile-name" id="profileName">
-            Игрок
-          </div>
-
-          <div class="profile-username" id="profileUsername">
-            @username
-          </div>
-        </div>
-
-      </div>
-
+    <div class="section-title">
+      <h2>Статистика</h2>
     </div>
 
-    <div class="stats-grid">
+    <div class="stat-grid">
 
-      <div class="stat-card">
-        <div class="stat-number" id="profileLevel">1</div>
-        <div class="stat-label">Уровень</div>
+      <div class="stat">
+        <div class="stat-label">Баланс</div>
+        <div class="stat-value" id="profileBalance">0 ₽</div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-number" id="profileSpent">0 ₽</div>
+      <div class="stat">
         <div class="stat-label">Потрачено</div>
+        <div class="stat-value" id="profileSpent">0 ₽</div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-number" id="profileOpened">0</div>
-        <div class="stat-label">Открыто кейсов</div>
+      <div class="stat">
+        <div class="stat-label">Открыто</div>
+        <div class="stat-value" id="profileOpened">0</div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-number" id="profileSold">0</div>
-        <div class="stat-label">Продано машин</div>
-      </div>
-
-    </div>
-
-    <div class="card level-card">
-
-      <div class="level-top">
-        <div>
-          <div class="level-name">
-            Прогресс уровня
-          </div>
-
-          <div class="level-number">
-            До следующего уровня
-          </div>
-        </div>
-
-        <div
-          class="level-number"
-          id="profileLevelPercent"
-        >
-          0%
-        </div>
-      </div>
-
-      <div class="level-bar">
-        <div
-          class="level-fill"
-          id="profileLevelFill"
-        ></div>
-      </div>
-
-      <div class="level-bottom">
-        <span id="profileLevelFrom">0 ₽</span>
-        <span id="profileLevelTo">2,5 млн ₽</span>
+      <div class="stat">
+        <div class="stat-label">Продано</div>
+        <div class="stat-value" id="profileSold">0</div>
       </div>
 
     </div>
 
-    <div class="card daily-card">
-
-      <div class="daily-status">
-
-        <div>
-          <div class="daily-title">
-            🎁 Ежедневная награда
-          </div>
-
-          <div
-            class="muted small"
-            id="dailyText"
-            style="margin-top:5px"
-          >
-            Проверяем статус...
-          </div>
-        </div>
-
-        <div
-          class="daily-badge"
-          id="dailyBadge"
-        >
-          —
-        </div>
-
-      </div>
-
+    <div class="section-title">
+      <h2>Ежедневная награда</h2>
     </div>
 
-    <div class="card ref-card">
+    <div class="card">
+      <div class="daily">
+        <div class="daily-info">
+          <div class="daily-title">🎁 Ежедневный бонус</div>
+          <div class="daily-text">Заходи каждый день и забирай награду.</div>
+        </div>
 
-      <div class="ref-title">
-        👥 Реферальная система
+        <button class="btn primary" id="dailyBtn" onclick="claimDaily()">
+          Забрать
+        </button>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <h2>Реферальная система</h2>
+    </div>
+
+    <div class="card">
+      <div class="modal-text" style="margin-bottom:0">
+        Приглашай друзей и получай бонусы за их активность.
       </div>
 
-      <div class="ref-text">
-        Приглашай друзей и получай бонусы за новых игроков.
-      </div>
-
-      <div
-        class="ref-link"
-        id="refLink"
-      >
+      <div class="referral" id="referralCode">
         Загрузка...
       </div>
 
-      <div class="ref-actions">
-
-        <button
-          class="dark-btn"
-          onclick="copyReferral()"
-        >
-          КОПИРОВАТЬ
-        </button>
-
-        <button
-          class="primary-btn"
-          style="min-height:44px"
-          onclick="shareReferral()"
-        >
-          ПРИГЛАСИТЬ
-        </button>
-
-      </div>
-
-      <div
-        class="muted small"
-        style="margin-top:12px;text-align:center"
-        id="refStats"
-      >
-        Приглашено: 0
-      </div>
-
+      <button class="btn primary" style="margin-top:10px" onclick="copyReferral()">
+        Скопировать код
+      </button>
     </div>
 
   </section>
 
 </div>
 
-<!-- ================= NAV ================= -->
-
 <nav class="bottom-nav">
 
-  <button
-    class="nav-btn active"
-    data-page="home"
-    onclick="showPage('home')"
-  >
-    <div class="nav-icon">⌂</div>
-    <div class="nav-label">ГЛАВНАЯ</div>
+  <button class="nav-btn active" data-page="home">
+    <span class="nav-icon">🏠</span>
+    Главная
   </button>
 
-  <button
-    class="nav-btn"
-    data-page="cases"
-    onclick="showPage('cases')"
-  >
-    <div class="nav-icon">🎁</div>
-    <div class="nav-label">КЕЙСЫ</div>
+  <button class="nav-btn" data-page="garage">
+    <span class="nav-icon">🚘</span>
+    Гараж
   </button>
 
-  <button
-    class="nav-btn"
-    data-page="garage"
-    onclick="showPage('garage')"
-  >
-    <div class="nav-icon">🚗</div>
-    <div class="nav-label">ГАРАЖ</div>
+  <button class="nav-btn" data-page="market">
+    <span class="nav-icon">🏪</span>
+    Рынок
   </button>
 
-  <button
-    class="nav-btn"
-    data-page="market"
-    onclick="showPage('market')"
-  >
-    <div class="nav-icon">🏪</div>
-    <div class="nav-label">РЫНОК</div>
-  </button>
-
-  <button
-    class="nav-btn"
-    data-page="profile"
-    onclick="showPage('profile')"
-  >
-    <div class="nav-icon">👤</div>
-    <div class="nav-label">ПРОФИЛЬ</div>
+  <button class="nav-btn" data-page="profile">
+    <span class="nav-icon">👤</span>
+    Профиль
   </button>
 
 </nav>
 
-<!-- ================= CASE MODAL ================= -->
+<div class="toast" id="toast"></div>
 
-<div
-  class="modal"
-  id="caseModal"
-  onclick="modalBackgroundClick(event)"
->
+<!-- РУЛЕТКА -->
+<div class="modal" id="rouletteModal">
 
   <div class="modal-box">
 
-    <button
-      class="modal-close"
-      id="modalClose"
-      onclick="closeCaseModal()"
-    >
-      ×
+    <div class="modal-title">Открытие кейса</div>
+
+    <div class="modal-text">
+      Удача уже определена. Сейчас узнаем, какой автомобиль тебе выпал.
+    </div>
+
+    <div class="roulette">
+      <div class="roulette-line"></div>
+      <div class="roulette-track" id="rouletteTrack"></div>
+    </div>
+
+    <div id="rouletteResult" class="success" style="display:none"></div>
+
+    <button class="btn primary" id="rouletteClose" style="margin-top:12px;display:none" onclick="closeRoulette()">
+      Забрать автомобиль
     </button>
-
-    <div
-      class="modal-title"
-      id="modalCaseName"
-    >
-      Кейс
-    </div>
-
-    <div
-      class="modal-subtitle"
-      id="modalCaseSubtitle"
-    >
-      Получи случайный автомобиль
-    </div>
-
-    <div
-      class="case-preview"
-      id="casePreview"
-    >
-      <span id="casePreviewIcon">🎁</span>
-    </div>
-
-    <div
-      class="modal-price"
-      id="modalCasePrice"
-    >
-      —
-    </div>
-
-    <div
-      class="roulette-wrap"
-      id="rouletteWrap"
-    >
-
-      <div class="roulette-window">
-
-        <div class="roulette-marker"></div>
-
-        <div
-          class="roulette-track"
-          id="rouletteTrack"
-        ></div>
-
-      </div>
-
-    </div>
-
-    <div
-      class="result"
-      id="caseResult"
-    >
-
-      <div
-        class="result-car"
-        id="resultCar"
-      >
-        🚗
-      </div>
-
-      <div
-        class="result-rarity"
-        id="resultRarity"
-      >
-        COMMON
-      </div>
-
-      <div
-        class="result-name"
-        id="resultName"
-      >
-        —
-      </div>
-
-      <div
-        class="result-value"
-        id="resultValue"
-      >
-        —
-      </div>
-
-    </div>
-
-    <div
-      class="modal-actions"
-      id="previewActions"
-    >
-
-      <button
-        class="primary-btn"
-        id="confirmOpenBtn"
-        onclick="startCaseOpening()"
-      >
-        ОТКРЫТЬ КЕЙС
-      </button>
-
-      <button
-        class="dark-btn"
-        onclick="closeCaseModal()"
-      >
-        ОТМЕНА
-      </button>
-
-    </div>
-
-    <div
-      class="modal-actions"
-      id="resultActions"
-      style="display:none"
-    >
-
-      <button
-        class="primary-btn"
-        onclick="keepResult()"
-      >
-        ОСТАВИТЬ В ГАРАЖЕ
-      </button>
-
-      <button
-        class="dark-btn"
-        onclick="sellResult()"
-      >
-        ПРОДАТЬ ЗА 85%
-      </button>
-
-    </div>
 
   </div>
 
@@ -1842,2715 +934,1509 @@ button:disabled{
 <script>
 "use strict";
 
-/* ============================================================
-   TELEGRAM
-============================================================ */
+/* =========================================================
+   CONFIG
+========================================================= */
 
-const tg = window.Telegram?.WebApp || null;
+const API_BASE = "https://autoempire-gspr.onrender.com";
 
-if (tg) {
-  try {
-    tg.ready();
-    tg.expand();
+const tg = window.Telegram && window.Telegram.WebApp
+  ? window.Telegram.WebApp
+  : null;
 
-    if (tg.setHeaderColor) {
-      tg.setHeaderColor("#08090d");
-    }
+const STORAGE_KEY = "autoEmpire2";
 
-    if (tg.setBackgroundColor) {
-      tg.setBackgroundColor("#08090d");
-    }
-  } catch (e) {
-    console.warn("Telegram WebApp:", e);
-  }
-}
+let serverUser = null;
+let config = null;
+let currentPage = "home";
+let marketRarity = "all";
+let opening = false;
 
-/* ============================================================
-   STATE
-   ВАЖНО:
-   Здесь нет localStorage.
-   Авторитетное состояние приходит с сервера.
-============================================================ */
-
-let serverReady = false;
-
-let config = {
-  casePrices: {},
-  dailyRewards: [],
-  levelStep: 2500000,
-  sellPercent: 85,
-  fixedMarket: []
-};
-
-let player = {
-  balance: 0,
+let localData = {
+  balance: 5000000,
   spent: 0,
   opened: 0,
   sold: 0,
-  level: 1,
-  levelProgress: 0,
   garage: [],
-  username: "",
-  firstName: "",
-  photoUrl: "",
-  referralCount: 0,
-  referredBy: null,
-  daily: null
+  history: []
 };
 
-let currentPage = "home";
+/* =========================================================
+   TELEGRAM INIT
+========================================================= */
 
-let currentCase = null;
-let currentResult = null;
-let rouletteRunning = false;
+function initTelegram(){
 
-let playerMarketCache = [];
-let myListingsCache = [];
+  if(!tg){
+    setLoadingText("Telegram WebApp SDK не найден");
+    return;
+  }
 
-let referralInfo = null;
+  try{
+    tg.ready();
+    tg.expand();
 
-/* ============================================================
+    if(tg.setHeaderColor){
+      tg.setHeaderColor("#08090c");
+    }
+
+    if(tg.setBackgroundColor){
+      tg.setBackgroundColor("#08090c");
+    }
+
+    if(tg.disableVerticalSwipes){
+      tg.disableVerticalSwipes();
+    }
+
+  }catch(e){
+    console.warn("Telegram init:",e);
+  }
+}
+
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+function loadLocal(){
+
+  try{
+
+    const raw = localStorage.getItem(STORAGE_KEY);
+
+    if(raw){
+      const parsed = JSON.parse(raw);
+
+      localData = {
+        ...localData,
+        ...parsed,
+        garage:Array.isArray(parsed.garage) ? parsed.garage : [],
+        history:Array.isArray(parsed.history) ? parsed.history : []
+      };
+    }
+
+  }catch(e){
+    console.warn("Local data error:",e);
+  }
+}
+
+function saveLocal(){
+
+  try{
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(localData)
+    );
+  }catch(e){}
+}
+
+/* =========================================================
    HELPERS
-============================================================ */
+========================================================= */
 
-function $(id) {
-  return document.getElementById(id);
+function setLoadingText(text){
+  const el = document.getElementById("loadingText");
+  if(el) el.textContent = text;
 }
 
-function safeNumber(value, fallback = 0) {
-  const n = Number(value);
-  return Number.isFinite(n) ? n : fallback;
+function hideLoading(){
+
+  const el = document.getElementById("loading");
+
+  if(el){
+    el.classList.add("hidden");
+
+    setTimeout(()=>{
+      el.style.display = "none";
+    },300);
+  }
 }
 
-function formatMoney(value) {
-  value = safeNumber(value);
+function formatMoney(value){
 
-  if (Math.abs(value) >= 1000000000) {
-    return (value / 1000000000)
-      .toFixed(value % 1000000000 === 0 ? 0 : 1)
-      .replace(".", ",") + " млрд ₽";
+  const n = Number(value) || 0;
+
+  if(n >= 1000000000){
+    return (n / 1000000000).toFixed(n % 1000000000 ? 1 : 0) + " млрд ₽";
   }
 
-  if (Math.abs(value) >= 1000000) {
-    return (value / 1000000)
-      .toFixed(value % 1000000 === 0 ? 0 : 1)
-      .replace(".", ",") + " млн ₽";
+  if(n >= 1000000){
+    return (n / 1000000).toFixed(n % 1000000 ? 1 : 0) + " млн ₽";
   }
 
-  if (Math.abs(value) >= 1000) {
-    return (value / 1000)
-      .toFixed(value % 1000 === 0 ? 0 : 1)
-      .replace(".", ",") + " тыс. ₽";
+  if(n >= 1000){
+    return (n / 1000).toFixed(n % 1000 ? 1 : 0) + " тыс. ₽";
   }
 
-  return Math.round(value)
-    .toLocaleString("ru-RU") + " ₽";
+  return n.toLocaleString("ru-RU") + " ₽";
 }
 
-function formatFullMoney(value) {
-  return Math.round(
-    safeNumber(value)
-  ).toLocaleString("ru-RU") + " ₽";
-}
+function escapeHtml(value){
 
-function escapeHTML(value) {
   return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
-function toast(message, duration = 2800) {
-  const el = $("toast");
+function toast(message,error=false){
 
-  if (!el) return;
+  const el = document.getElementById("toast");
+
+  if(!el) return;
 
   el.textContent = message;
+  el.classList.toggle("error",!!error);
   el.classList.add("show");
 
   clearTimeout(window.__toastTimer);
 
-  window.__toastTimer = setTimeout(() => {
+  window.__toastTimer = setTimeout(()=>{
     el.classList.remove("show");
-  }, duration);
+  },2800);
 }
 
-function getTelegramInitData() {
-  return tg?.initData || "";
+function vibration(){
+
+  try{
+    if(tg && tg.HapticFeedback){
+      tg.HapticFeedback.impactOccurred("light");
+    }else if(navigator.vibrate){
+      navigator.vibrate(15);
+    }
+  }catch(e){}
 }
 
-/* ============================================================
+/* =========================================================
    API
-============================================================ */
+========================================================= */
 
-async function api(path, options = {}) {
+async function api(path, options = {}){
+
+  const url = API_BASE + path;
 
   const headers = {
-    "Content-Type": "application/json",
+    "Accept":"application/json",
     ...(options.headers || {})
   };
 
-  const initData = getTelegramInitData();
+  /*
+    ВАЖНО:
 
-  if (initData) {
+    Telegram initData передаём одновременно:
+    1. в body
+    2. в X-Telegram-Init-Data
+
+    Это позволяет работать с текущим server.js.
+  */
+
+  const initData = tg && tg.initData
+    ? tg.initData
+    : "";
+
+  if(initData){
     headers["X-Telegram-Init-Data"] = initData;
   }
 
-  const response = await fetch(path, {
-    ...options,
-    headers,
-    cache: "no-store"
+  let body = options.body;
+
+  if(
+    body &&
+    typeof body === "object" &&
+    !(body instanceof FormData)
+  ){
+    headers["Content-Type"] = "application/json";
+    body = JSON.stringify(body);
+  }
+
+  let response;
+
+  try{
+
+    response = await fetch(url,{
+      method:options.method || "GET",
+      headers,
+      body,
+      credentials:"omit",
+      cache:"no-store"
+    });
+
+  }catch(error){
+
+    throw new Error(
+      "Не удалось подключиться к серверу. " +
+      "Проверь соединение с интернетом."
+    );
+  }
+
+  const raw = await response.text();
+
+  let data = null;
+
+  try{
+    data = raw ? JSON.parse(raw) : null;
+  }catch(e){
+    data = null;
+  }
+
+  if(!response.ok){
+
+    const serverError =
+      data && (
+        data.error ||
+        data.message ||
+        data.details
+      );
+
+    throw new Error(
+      `HTTP ${response.status} ${response.statusText || ""}` +
+      (serverError ? ` — ${serverError}` : "") +
+      ` [${path}]`
+    );
+  }
+
+  return data;
+}
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+async function authenticate(){
+
+  if(!tg){
+
+    throw new Error(
+      "Игра должна быть открыта через Telegram."
+    );
+  }
+
+  const initData = tg.initData || "";
+
+  if(!initData){
+
+    throw new Error(
+      "Telegram не передал данные авторизации. " +
+      "Закрой Mini App и открой его заново через кнопку бота."
+    );
+  }
+
+  setLoadingText("Авторизация Telegram...");
+
+  /*
+    Главное изменение:
+    запрос делается непосредственно здесь,
+    одним обычным POST-запросом.
+  */
+
+  const result = await api("/api/auth",{
+    method:"POST",
+    body:{
+      initData:initData
+    }
   });
 
-  const text = await response.text();
+  if(!result || result.ok !== true){
 
-  let json = {};
-
-  try {
-    json = text ? JSON.parse(text) : {};
-  } catch {
     throw new Error(
-      `Сервер вернул некорректный ответ (${response.status})`
+      result && result.error
+        ? result.error
+        : "Сервер не подтвердил авторизацию."
     );
   }
 
-  if (!response.ok) {
-    throw new Error(
-      json.error ||
-      `Ошибка сервера: ${response.status}`
-    );
-  }
+  serverUser = result.user || null;
 
-  return json;
-}
+  if(serverUser){
 
-/* ============================================================
-   AUTH
-============================================================ */
+    localData = {
+      ...localData,
 
-async function auth() {
-
-  if (!tg) {
-    throw new Error(
-      "Приложение нужно открыть через Telegram."
-    );
-  }
-
-  const initData = getTelegramInitData();
-
-  if (!initData) {
-    throw new Error(
-      "Telegram не передал initData. Открой приложение именно через Telegram."
-    );
-  }
-
-  const response = await api(
-    "/api/auth",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        initData
-      })
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      response.error ||
-      "Авторизация не выполнена"
-    );
-  }
-
-  applyPlayerData(response.data);
-
-  serverReady = true;
-
-  return response;
-}
-
-/* ============================================================
-   CONFIG
-============================================================ */
-
-async function loadConfig() {
-
-  try {
-
-    const response =
-      await api("/api/config");
-
-    if (response.config) {
-      config = {
-        ...config,
-        ...response.config
-      };
-    } else {
-      config = {
-        ...config,
-        ...response
-      };
-    }
-
-  } catch (error) {
-
-    console.warn(
-      "Config:",
-      error.message
-    );
-
-    /*
-     * Небольшие fallback-значения нужны только
-     * для отображения интерфейса.
-     * Деньги/результат всё равно решает сервер.
-     */
-
-    config.casePrices = {
-      starter: 300000,
-      street: 900000,
-      premium: 5000000,
-      elite: 15000000,
-      imperial: 100000000
+      balance:Number(serverUser.balance ?? localData.balance),
+      spent:Number(serverUser.spent ?? localData.spent),
+      opened:Number(serverUser.opened ?? localData.opened),
+      sold:Number(serverUser.sold ?? localData.sold)
     };
 
-    config.levelStep = 2500000;
-    config.sellPercent = 85;
-  }
-}
-
-/* ============================================================
-   PLAYER DATA
-============================================================ */
-
-function applyPlayerData(data) {
-
-  if (!data) return;
-
-  player = {
-    ...player,
-    ...data
-  };
-
-  if (!Array.isArray(player.garage)) {
-    player.garage = [];
+    saveLocal();
   }
 
-  player.balance =
-    safeNumber(player.balance);
-
-  player.spent =
-    safeNumber(player.spent);
-
-  player.opened =
-    safeNumber(player.opened);
-
-  player.sold =
-    safeNumber(player.sold);
-
-  player.level =
-    Math.max(1, safeNumber(player.level, 1));
-
-  player.levelProgress =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        safeNumber(player.levelProgress)
-      )
-    );
+  return result;
 }
 
-/* ============================================================
-   REFRESH PLAYER
-============================================================ */
+/* =========================================================
+   CONFIG
+========================================================= */
 
-async function refreshPlayer() {
+async function loadConfig(){
 
-  const response =
-    await api("/api/me");
+  setLoadingText("Загрузка конфигурации...");
 
-  if (response.data) {
-    applyPlayerData(
-      response.data
+  const result = await api("/api/config");
+
+  if(!result || result.ok === false){
+    throw new Error(
+      result?.error || "Не удалось загрузить конфигурацию."
     );
   }
 
-  renderAll();
+  config = result;
+
+  return result;
 }
 
-/* ============================================================
-   NAVIGATION
-============================================================ */
+/* =========================================================
+   USER
+========================================================= */
 
-function showPage(page) {
+async function loadUser(){
 
-  const allowed = [
-    "home",
-    "cases",
-    "garage",
-    "market",
-    "profile"
+  try{
+
+    const result = await api("/api/user");
+
+    if(result && result.user){
+
+      serverUser = result.user;
+
+      localData = {
+        ...localData,
+        balance:Number(result.user.balance ?? localData.balance),
+        spent:Number(result.user.spent ?? localData.spent),
+        opened:Number(result.user.opened ?? localData.opened),
+        sold:Number(result.user.sold ?? localData.sold)
+      };
+
+      saveLocal();
+    }
+
+  }catch(e){
+
+    /*
+      Не ломаем игру, если /api/user
+      недоступен — авторизация уже прошла.
+    */
+
+    console.warn("loadUser:",e.message);
+  }
+}
+
+/* =========================================================
+   LEVEL
+========================================================= */
+
+function getLevel(spent){
+
+  const n = Number(spent) || 0;
+
+  if(n < 1000000) return 1;
+  if(n < 5000000) return 2;
+  if(n < 10000000) return 3;
+  if(n < 25000000) return 4;
+  if(n < 50000000) return 5;
+  if(n < 100000000) return 6;
+  if(n < 250000000) return 7;
+  if(n < 500000000) return 8;
+  if(n < 1000000000) return 9;
+
+  return 10;
+}
+
+function getLevelBounds(level){
+
+  const bounds = [
+    [0,1000000],
+    [1000000,5000000],
+    [5000000,10000000],
+    [10000000,25000000],
+    [25000000,50000000],
+    [50000000,100000000],
+    [100000000,250000000],
+    [250000000,500000000],
+    [500000000,1000000000],
+    [1000000000,Infinity]
   ];
 
-  if (!allowed.includes(page)) {
-    page = "home";
+  return bounds[Math.max(1,Math.min(10,level))-1];
+}
+
+/* =========================================================
+   RENDER BALANCE
+========================================================= */
+
+function renderBalance(){
+
+  const balance = Number(localData.balance) || 0;
+
+  document.getElementById("headerBalance").textContent =
+    formatMoney(balance);
+
+  document.getElementById("profileBalance").textContent =
+    formatMoney(balance);
+
+  document.getElementById("profileSpent").textContent =
+    formatMoney(localData.spent);
+
+  document.getElementById("profileOpened").textContent =
+    localData.opened || 0;
+
+  document.getElementById("profileSold").textContent =
+    localData.sold || 0;
+
+  const level = getLevel(localData.spent);
+
+  document.getElementById("homeLevel").textContent =
+    level;
+
+  document.getElementById("homeOpened").textContent =
+    localData.opened || 0;
+
+  document.getElementById("homeGarage").textContent =
+    Array.isArray(localData.garage)
+      ? localData.garage.length
+      : 0;
+
+  document.getElementById("homeSpent").textContent =
+    formatMoney(localData.spent);
+
+  document.getElementById("profileLevel").textContent =
+    level;
+
+  const bounds = getLevelBounds(level);
+
+  const current = Number(localData.spent) || 0;
+
+  let progress = 100;
+
+  if(isFinite(bounds[1])){
+    progress =
+      ((current - bounds[0]) /
+      (bounds[1] - bounds[0])) * 100;
   }
+
+  progress = Math.max(0,Math.min(100,progress));
+
+  document.getElementById("levelProgress").style.width =
+    progress + "%";
+
+  document.getElementById("levelProgressText").textContent =
+    isFinite(bounds[1])
+      ? `${formatMoney(current)} / ${formatMoney(bounds[1])}`
+      : `${formatMoney(current)} / MAX`;
+}
+
+/* =========================================================
+   CASES
+========================================================= */
+
+function renderCases(){
+
+  const container = document.getElementById("cases");
+
+  if(!container) return;
+
+  const cases =
+    config && Array.isArray(config.cases)
+      ? config.cases
+      : [];
+
+  document.getElementById("caseCount").textContent =
+    `${cases.length} кейсов`;
+
+  if(!cases.length){
+
+    container.innerHTML =
+      `<div class="empty" style="grid-column:1/-1">
+        Кейсы не загрузились.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML = cases.map(c=>{
+
+    const id =
+      c.id ??
+      c.key ??
+      c.name;
+
+    const name =
+      c.name ??
+      c.title ??
+      "Кейс";
+
+    const price =
+      Number(c.price ?? c.cost ?? 0);
+
+    return `
+      <div class="case">
+
+        <div class="case-icon">📦</div>
+
+        <div class="case-name">
+          ${escapeHtml(name)}
+        </div>
+
+        <div class="case-price">
+          ${formatMoney(price)}
+        </div>
+
+        <button
+          class="case-button"
+          data-case-id="${escapeHtml(id)}"
+          data-case-price="${price}"
+          onclick="openCase('${String(id).replace(/'/g,"\\'")}')"
+        >
+          Открыть
+        </button>
+
+      </div>
+    `;
+
+  }).join("");
+}
+
+/* =========================================================
+   OPEN CASE
+========================================================= */
+
+async function openCase(caseId){
+
+  if(opening){
+    toast("Кейс уже открывается.",true);
+    return;
+  }
+
+  opening = true;
+
+  vibration();
+
+  try{
+
+    const result = await api("/api/cases/open",{
+      method:"POST",
+      body:{
+        caseId
+      }
+    });
+
+    if(!result || result.ok === false){
+
+      throw new Error(
+        result?.error ||
+        "Сервер не смог открыть кейс."
+      );
+    }
+
+    /*
+      Сервер может возвращать:
+      car / item / prize / result.
+    */
+
+    const car =
+      result.car ||
+      result.item ||
+      result.prize ||
+      result.result;
+
+    if(!car){
+
+      throw new Error(
+        "Сервер открыл кейс, но не вернул автомобиль."
+      );
+    }
+
+    if(result.user){
+
+      serverUser = result.user;
+
+      localData.balance =
+        Number(result.user.balance ?? localData.balance);
+
+      localData.spent =
+        Number(result.user.spent ?? localData.spent);
+
+      localData.opened =
+        Number(result.user.opened ?? localData.opened);
+
+      localData.sold =
+        Number(result.user.sold ?? localData.sold);
+    }else{
+
+      /*
+        Резервный вариант.
+      */
+
+      const caseInfo =
+        (config?.cases || []).find(c =>
+          String(c.id ?? c.key ?? c.name) === String(caseId)
+        );
+
+      const price =
+        Number(caseInfo?.price ?? caseInfo?.cost ?? 0);
+
+      localData.balance -= price;
+      localData.spent += price;
+      localData.opened += 1;
+    }
+
+    saveLocal();
+    renderBalance();
+
+    await playRoulette(car);
+
+  }catch(error){
+
+    console.error("OPEN CASE ERROR:",error);
+
+    toast(
+      error.message ||
+      "Не удалось открыть кейс.",
+      true
+    );
+
+  }finally{
+
+    opening = false;
+  }
+}
+
+/* =========================================================
+   ROULETTE
+========================================================= */
+
+function getCarName(car){
+
+  return car.name ||
+    car.title ||
+    car.car ||
+    "Автомобиль";
+}
+
+function getCarPrice(car){
+
+  return Number(
+    car.price ??
+    car.value ??
+    car.sellPrice ??
+    0
+  );
+}
+
+function getCarEmoji(){
+
+  return "🚘";
+}
+
+async function playRoulette(car){
+
+  const modal =
+    document.getElementById("rouletteModal");
+
+  const track =
+    document.getElementById("rouletteTrack");
+
+  const resultBox =
+    document.getElementById("rouletteResult");
+
+  const close =
+    document.getElementById("rouletteClose");
+
+  modal.classList.add("show");
+
+  resultBox.style.display = "none";
+  close.style.display = "none";
+
+  track.style.transition = "none";
+  track.style.transform = "translateX(0)";
+
+  const items = [];
+
+  const winnerIndex = 28;
+
+  for(let i=0;i<36;i++){
+
+    const isWinner = i === winnerIndex;
+
+    items.push({
+      name:isWinner
+        ? getCarName(car)
+        : "Автомобиль",
+      emoji:getCarEmoji()
+    });
+  }
+
+  track.innerHTML = items.map(item=>`
+    <div class="roulette-item">
+      <div class="roulette-car">${item.emoji}</div>
+      <div class="roulette-name">
+        ${escapeHtml(item.name)}
+      </div>
+    </div>
+  `).join("");
+
+  await new Promise(resolve=>setTimeout(resolve,50));
+
+  const itemWidth = 128;
+
+  const target =
+    -(winnerIndex * itemWidth) +
+    (window.innerWidth / 2) -
+    60;
+
+  track.style.transition =
+    "transform 4.2s cubic-bezier(.08,.75,.08,1)";
+
+  track.style.transform =
+    `translateX(${target}px)`;
+
+  await new Promise(resolve=>setTimeout(resolve,4400));
+
+  resultBox.innerHTML =
+    `<b>🎉 ${escapeHtml(getCarName(car))}</b><br>
+     Стоимость: ${formatMoney(getCarPrice(car))}`;
+
+  resultBox.style.display = "block";
+  close.style.display = "block";
+
+  vibration();
+
+  /*
+    Автомобиль добавляем локально только если
+    сервер не вернул уже обновлённый гараж.
+  */
+
+  const alreadyExists =
+    localData.garage.some(item =>
+      JSON.stringify(item) === JSON.stringify(car)
+    );
+
+  if(!alreadyExists){
+    localData.garage.push(car);
+  }
+
+  saveLocal();
+  renderBalance();
+}
+
+function closeRoulette(){
+
+  document
+    .getElementById("rouletteModal")
+    .classList.remove("show");
+
+  renderGarage();
+}
+
+/* =========================================================
+   GARAGE
+========================================================= */
+
+async function loadGarage(){
+
+  try{
+
+    const result = await api("/api/garage");
+
+    const cars =
+      Array.isArray(result)
+        ? result
+        : result?.garage;
+
+    if(Array.isArray(cars)){
+
+      localData.garage = cars;
+      saveLocal();
+    }
+
+  }catch(e){
+
+    console.warn("Garage:",e.message);
+  }
+}
+
+function renderGarage(){
+
+  const container =
+    document.getElementById("garageList");
+
+  const garage =
+    Array.isArray(localData.garage)
+      ? localData.garage
+      : [];
+
+  document.getElementById("garageCount").textContent =
+    `${garage.length} машин`;
+
+  if(!garage.length){
+
+    container.innerHTML = `
+      <div class="empty">
+        🚘<br><br>
+        Гараж пока пуст.<br>
+        Открой первый кейс!
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML =
+    garage.map((car,index)=>{
+
+      const name = getCarName(car);
+      const price = getCarPrice(car);
+
+      return `
+        <div class="car">
+
+          <div class="car-top">
+
+            <div>
+              <div class="car-name">
+                ${escapeHtml(name)}
+              </div>
+
+              <div class="car-rarity">
+                ${escapeHtml(
+                  car.rarity ||
+                  car.quality ||
+                  "Автомобиль"
+                )}
+              </div>
+            </div>
+
+            <div class="car-price">
+              ${formatMoney(price)}
+            </div>
+
+          </div>
+
+          <div class="car-actions">
+
+            <button
+              class="btn danger"
+              onclick="sellGarageCar(${index})"
+            >
+              Продать
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+}
+
+/* =========================================================
+   SELL GARAGE
+========================================================= */
+
+async function sellGarageCar(index){
+
+  if(!confirm("Продать этот автомобиль?")){
+    return;
+  }
+
+  try{
+
+    const result = await api("/api/garage/sell",{
+      method:"POST",
+      body:{
+        index
+      }
+    });
+
+    if(result?.user){
+
+      localData.balance =
+        Number(result.user.balance ?? localData.balance);
+
+      localData.spent =
+        Number(result.user.spent ?? localData.spent);
+
+      localData.opened =
+        Number(result.user.opened ?? localData.opened);
+
+      localData.sold =
+        Number(result.user.sold ?? localData.sold);
+
+    }else{
+
+      const car = localData.garage[index];
+
+      if(car){
+        localData.balance += getCarPrice(car);
+        localData.sold++;
+      }
+
+    }
+
+    localData.garage.splice(index,1);
+
+    saveLocal();
+
+    renderBalance();
+    renderGarage();
+
+    toast("Автомобиль продан.");
+
+    vibration();
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message ||
+      "Не удалось продать автомобиль.",
+      true
+    );
+  }
+}
+
+/* =========================================================
+   MARKET
+========================================================= */
+
+function getAllCars(){
+
+  if(!config){
+    return [];
+  }
+
+  if(Array.isArray(config.cars)){
+    return config.cars;
+  }
+
+  return [];
+}
+
+function renderMarket(){
+
+  const container =
+    document.getElementById("marketList");
+
+  let cars = getAllCars();
+
+  if(marketRarity !== "all"){
+
+    cars = cars.filter(car =>
+      String(
+        car.rarity ||
+        car.quality ||
+        ""
+      ).toLowerCase() === marketRarity
+    );
+  }
+
+  if(!cars.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        Машин в этой категории нет.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML =
+    cars.map((car,index)=>{
+
+      const name = getCarName(car);
+      const price = getCarPrice(car);
+
+      return `
+        <div class="car">
+
+          <div class="car-top">
+
+            <div>
+              <div class="car-name">
+                ${escapeHtml(name)}
+              </div>
+
+              <div class="car-rarity">
+                ${escapeHtml(
+                  car.rarity ||
+                  car.quality ||
+                  "Автомобиль"
+                )}
+              </div>
+            </div>
+
+            <div class="car-price">
+              ${formatMoney(price)}
+            </div>
+
+          </div>
+
+          <div class="car-actions">
+
+            <button
+              class="btn primary"
+              onclick="buyMarketCar(${index})"
+            >
+              Купить
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+}
+
+async function buyMarketCar(index){
+
+  let cars = getAllCars();
+
+  if(marketRarity !== "all"){
+    cars = cars.filter(car =>
+      String(
+        car.rarity ||
+        car.quality ||
+        ""
+      ).toLowerCase() === marketRarity
+    );
+  }
+
+  const car = cars[index];
+
+  if(!car){
+    toast("Автомобиль не найден.",true);
+    return;
+  }
+
+  try{
+
+    const result = await api("/api/market/buy",{
+      method:"POST",
+      body:{
+        name:getCarName(car)
+      }
+    });
+
+    if(result?.user){
+
+      localData.balance =
+        Number(result.user.balance ?? localData.balance);
+
+      localData.spent =
+        Number(result.user.spent ?? localData.spent);
+
+      localData.opened =
+        Number(result.user.opened ?? localData.opened);
+
+    }else{
+
+      const price = getCarPrice(car);
+
+      if(localData.balance < price){
+        throw new Error("Недостаточно денег.");
+      }
+
+      localData.balance -= price;
+    }
+
+    localData.garage.push(
+      result?.car ||
+      result?.item ||
+      car
+    );
+
+    saveLocal();
+
+    renderBalance();
+    renderGarage();
+
+    toast(`Куплен: ${getCarName(car)}`);
+
+    vibration();
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message ||
+      "Не удалось купить автомобиль.",
+      true
+    );
+  }
+}
+
+/* =========================================================
+   DAILY
+========================================================= */
+
+async function claimDaily(){
+
+  const btn =
+    document.getElementById("dailyBtn");
+
+  btn.disabled = true;
+
+  try{
+
+    const result =
+      await api("/api/daily",{
+        method:"POST",
+        body:{}
+      });
+
+    if(result?.user){
+
+      localData.balance =
+        Number(result.user.balance ?? localData.balance);
+
+      localData.spent =
+        Number(result.user.spent ?? localData.spent);
+
+      localData.opened =
+        Number(result.user.opened ?? localData.opened);
+
+      localData.sold =
+        Number(result.user.sold ?? localData.sold);
+
+      saveLocal();
+      renderBalance();
+    }
+
+    toast(
+      result?.message ||
+      `🎁 Ежедневная награда получена!`
+    );
+
+  }catch(error){
+
+    toast(
+      error.message ||
+      "Награда пока недоступна.",
+      true
+    );
+
+  }finally{
+
+    btn.disabled = false;
+  }
+}
+
+/* =========================================================
+   REFERRAL
+========================================================= */
+
+async function loadReferral(){
+
+  const el =
+    document.getElementById("referralCode");
+
+  try{
+
+    const result =
+      await api("/api/referral");
+
+    const code =
+      result?.code ||
+      result?.referralCode ||
+      result?.referral_code;
+
+    el.textContent =
+      code ||
+      "Реферальный код пока недоступен.";
+
+  }catch(e){
+
+    if(serverUser){
+
+      el.textContent =
+        serverUser.referral_code ||
+        serverUser.referralCode ||
+        "Код недоступен.";
+
+    }else{
+
+      el.textContent =
+        "Код недоступен.";
+    }
+  }
+}
+
+async function copyReferral(){
+
+  const text =
+    document.getElementById("referralCode")
+      .textContent;
+
+  try{
+
+    await navigator.clipboard.writeText(text);
+
+    toast("Реферальный код скопирован.");
+
+  }catch(e){
+
+    toast("Не удалось скопировать код.",true);
+  }
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function renderProfile(){
+
+  const name =
+    serverUser?.first_name ||
+    serverUser?.name ||
+    "Игрок";
+
+  const username =
+    serverUser?.username
+      ? "@" + serverUser.username
+      : "";
+
+  document.getElementById("profileName")
+    .textContent = name;
+
+  document.getElementById("profileUsername")
+    .textContent = username;
+
+  const avatar =
+    document.getElementById("avatar");
+
+  if(serverUser?.photo_url){
+
+    avatar.innerHTML =
+      `<img src="${escapeHtml(serverUser.photo_url)}" alt="">`;
+
+  }else{
+
+    avatar.textContent =
+      String(name).charAt(0).toUpperCase();
+  }
+
+  const ref =
+    serverUser?.referral_code ||
+    serverUser?.referralCode;
+
+  if(ref){
+    document.getElementById("referralCode")
+      .textContent = ref;
+  }
+
+  renderBalance();
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function switchPage(page){
 
   currentPage = page;
 
   document
     .querySelectorAll(".page")
-    .forEach(el => {
-      el.classList.remove("active");
+    .forEach(el=>{
+      el.classList.toggle(
+        "active",
+        el.id === "page-" + page
+      );
     });
-
-  const pageEl =
-    $("page-" + page);
-
-  if (pageEl) {
-    pageEl.classList.add("active");
-  }
 
   document
     .querySelectorAll(".nav-btn")
-    .forEach(btn => {
+    .forEach(btn=>{
       btn.classList.toggle(
         "active",
         btn.dataset.page === page
       );
     });
 
-  if (page === "garage") {
+  if(page === "garage"){
     renderGarage();
   }
 
-  if (page === "market") {
-    loadMarket();
+  if(page === "market"){
+    renderMarket();
   }
 
-  if (page === "profile") {
-    loadReferral();
+  if(page === "profile"){
     renderProfile();
+    loadReferral();
   }
 
   window.scrollTo({
-    top: 0,
-    behavior: "smooth"
+    top:0,
+    behavior:"smooth"
   });
 }
 
-/* ============================================================
-   CASES
-============================================================ */
+document
+  .querySelectorAll(".nav-btn")
+  .forEach(btn=>{
 
-const CASE_META = {
-  starter: {
-    name: "Стартовый",
-    icon: "📦",
-    rarity: "common",
-    description: "Начальный уровень"
-  },
+    btn.addEventListener("click",()=>{
 
-  street: {
-    name: "Уличный",
-    icon: "🏁",
-    rarity: "rare",
-    description: "Городские автомобили"
-  },
+      switchPage(btn.dataset.page);
 
-  premium: {
-    name: "Премиум",
-    icon: "💎",
-    rarity: "epic",
-    description: "Дорогие автомобили"
-  },
+    });
 
-  elite: {
-    name: "Элитный",
-    icon: "👑",
-    rarity: "legendary",
-    description: "Автомобили высокого класса"
-  },
-
-  imperial: {
-    name: "Императорский",
-    icon: "🏆",
-    rarity: "mythic",
-    description: "Максимальный уровень"
-  }
-};
-
-const CASE_ORDER = [
-  "starter",
-  "street",
-  "premium",
-  "elite",
-  "imperial"
-];
-
-function getCasePrice(id) {
-
-  const prices =
-    config.casePrices || {};
-
-  /*
-   * Поддерживаем несколько вариантов,
-   * которые может вернуть server.js.
-   */
-
-  if (
-    typeof prices[id] === "object" &&
-    prices[id] !== null
-  ) {
-    return safeNumber(
-      prices[id].price
-    );
-  }
-
-  return safeNumber(
-    prices[id]
-  );
-}
-
-function renderCases() {
-
-  const grid =
-    $("casesGrid");
-
-  if (!grid) return;
-
-  grid.innerHTML = "";
-
-  CASE_ORDER.forEach(id => {
-
-    const meta =
-      CASE_META[id];
-
-    const price =
-      getCasePrice(id);
-
-    const card =
-      document.createElement("div");
-
-    card.className = "case-card";
-
-    card.innerHTML = `
-      <div class="case-rarity">
-        ${escapeHTML(meta.rarity)}
-      </div>
-
-      <div class="case-icon">
-        ${meta.icon}
-      </div>
-
-      <div class="case-name">
-        ${escapeHTML(meta.name)}
-      </div>
-
-      <div class="case-price">
-        ${price ? formatMoney(price) : "Загрузка..."}
-      </div>
-
-      <button
-        class="case-open"
-        onclick="openCase('${id}')"
-      >
-        ОТКРЫТЬ
-      </button>
-    `;
-
-    grid.appendChild(card);
-  });
-}
-
-/* ============================================================
-   CASE OPEN
-============================================================ */
-
-function openCase(caseId) {
-
-  if (!serverReady) {
-    toast(
-      "Сервер ещё не готов. Подожди немного."
-    );
-    return;
-  }
-
-  const meta =
-    CASE_META[caseId];
-
-  if (!meta) {
-    toast("Кейс не найден");
-    return;
-  }
-
-  const price =
-    getCasePrice(caseId);
-
-  currentCase = {
-    id: caseId,
-    ...meta,
-    price
-  };
-
-  currentResult = null;
-  rouletteRunning = false;
-
-  $("modalCaseName").textContent =
-    meta.name;
-
-  $("modalCaseSubtitle").textContent =
-    meta.description;
-
-  $("casePreviewIcon").textContent =
-    meta.icon;
-
-  $("modalCasePrice").textContent =
-    price
-      ? `Стоимость: ${formatFullMoney(price)}`
-      : "Стоимость загружается...";
-
-  $("casePreview").style.display =
-    "flex";
-
-  $("rouletteWrap")
-    .classList.remove("active");
-
-  $("caseResult")
-    .classList.remove("active");
-
-  $("previewActions").style.display =
-    "grid";
-
-  $("resultActions").style.display =
-    "none";
-
-  $("confirmOpenBtn").disabled =
-    false;
-
-  $("modalClose").style.display =
-    "block";
-
-  $("caseModal")
-    .classList.add("show");
-}
-
-/* ============================================================
-   CASE START
-============================================================ */
-
-async function startCaseOpening() {
-
-  if (rouletteRunning) {
-    return;
-  }
-
-  if (!currentCase) {
-    return;
-  }
-
-  if (
-    player.balance <
-    currentCase.price
-  ) {
-    toast("Недостаточно денег");
-    return;
-  }
-
-  rouletteRunning = true;
-
-  $("confirmOpenBtn").disabled =
-    true;
-
-  $("modalClose").style.display =
-    "none";
-
-  $("previewActions").style.display =
-    "none";
-
-  $("casePreview").style.display =
-    "none";
-
-  $("rouletteWrap")
-    .classList.add("active");
-
-  buildRoulette();
-
-  try {
-
-    /*
-     * ВАЖНО:
-     * Здесь сервер сам выбирает машину.
-     * Фронтенд результат не определяет.
-     */
-
-    const response =
-      await api(
-        "/api/cases/open",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            caseType: currentCase.id,
-            type: currentCase.id,
-            case: currentCase.id
-          })
-        }
-      );
-
-    if (
-      response.data
-    ) {
-      applyPlayerData(
-        response.data
-      );
-    }
-
-    if (!response.result) {
-      throw new Error(
-        "Сервер не вернул результат кейса"
-      );
-    }
-
-    currentResult =
-      response.result;
-
-    await animateRoulette(
-      currentResult.name
-    );
-
-    showCaseResult(
-      currentResult
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Case open:",
-      error
-    );
-
-    rouletteRunning = false;
-
-    $("rouletteWrap")
-      .classList.remove("active");
-
-    $("previewActions").style.display =
-      "grid";
-
-    $("casePreview").style.display =
-      "flex";
-
-    $("modalClose").style.display =
-      "block";
-
-    $("confirmOpenBtn").disabled =
-      false;
-
-    toast(
-      error.message ||
-      "Не удалось открыть кейс"
-    );
-
-  }
-}
-
-/* ============================================================
-   ROULETTE
-============================================================ */
-
-function buildRoulette() {
-
-  const track =
-    $("rouletteTrack");
-
-  track.innerHTML = "";
-
-  const fakeCars = [
-    "🚗",
-    "🚙",
-    "🏎️",
-    "🚕",
-    "🚘",
-    "🚓",
-    "🚐",
-    "🛻",
-    "🚙",
-    "🏎️"
-  ];
-
-  for (let i = 0; i < 36; i++) {
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "roulette-card";
-
-    card.innerHTML = `
-      <div class="roulette-car">
-        ${fakeCars[i % fakeCars.length]}
-      </div>
-      <div class="roulette-name">
-        Автомобиль
-      </div>
-    `;
-
-    track.appendChild(card);
-  }
-
-  track.style.transition =
-    "none";
-
-  track.style.transform =
-    "translateX(0)";
-}
-
-function rouletteTick(progress) {
-
-  try {
-
-    if (!window.AudioContext &&
-        !window.webkitAudioContext) {
-      return;
-    }
-
-    const AudioCtx =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    if (!window.__audio) {
-      window.__audio =
-        new AudioCtx();
-    }
-
-    const ctx =
-      window.__audio;
-
-    if (ctx.state === "suspended") {
-      ctx.resume().catch(() => {});
-    }
-
-    const osc =
-      ctx.createOscillator();
-
-    const gain =
-      ctx.createGain();
-
-    osc.type = "triangle";
-
-    osc.frequency.value =
-      180 + progress * 130;
-
-    gain.gain.setValueAtTime(
-      .0001,
-      ctx.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .035,
-      ctx.currentTime + .006
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .0001,
-      ctx.currentTime + .045
-    );
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-    osc.stop(
-      ctx.currentTime + .05
-    );
-
-  } catch {}
-}
-
-function rouletteWinSound() {
-
-  try {
-
-    if (!window.AudioContext &&
-        !window.webkitAudioContext) {
-      return;
-    }
-
-    const AudioCtx =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    if (!window.__audio) {
-      window.__audio =
-        new AudioCtx();
-    }
-
-    const ctx =
-      window.__audio;
-
-    const notes = [
-      392,
-      494,
-      587,
-      784
-    ];
-
-    notes.forEach(
-      (frequency, index) => {
-
-        const osc =
-          ctx.createOscillator();
-
-        const gain =
-          ctx.createGain();
-
-        osc.type =
-          index === 3
-            ? "sine"
-            : "triangle";
-
-        osc.frequency.value =
-          frequency;
-
-        const start =
-          ctx.currentTime +
-          index * .09;
-
-        gain.gain.setValueAtTime(
-          .0001,
-          start
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-          .06,
-          start + .025
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-          .0001,
-          start + .18
-        );
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(start);
-        osc.stop(start + .2);
-      }
-    );
-
-  } catch {}
-}
-
-async function animateRoulette(targetName) {
-
-  const track =
-    $("rouletteTrack");
-
-  const cards =
-    [...track.children];
-
-  const targetIndex =
-    28;
-
-  /*
-   * Показываем реальный выигрыш
-   * в финальной карточке.
-   */
-
-  const target =
-    cards[targetIndex];
-
-  if (target) {
-    target.innerHTML = `
-      <div class="roulette-car">
-        ${getCarIcon(targetName)}
-      </div>
-
-      <div class="roulette-name">
-        ${escapeHTML(targetName)}
-      </div>
-    `;
-  }
-
-  /*
-   * Убираем центрированную карточку
-   * в середину окна.
-   */
-
-  const cardWidth = 101;
-  const gap = 8;
-  const step = cardWidth + gap;
-
-  const viewport =
-    $("rouletteTrack")
-      .parentElement
-      .clientWidth;
-
-  const center =
-    viewport / 2;
-
-  const targetCenter =
-    targetIndex * step +
-    cardWidth / 2 +
-    8;
-
-  const finalX =
-    center - targetCenter;
-
-  track.style.transition =
-    "transform 4.6s cubic-bezier(.08,.72,.16,1)";
-
-  requestAnimationFrame(() => {
-    track.style.transform =
-      `translateX(${finalX}px)`;
   });
 
-  const duration =
-    4600;
+/* =========================================================
+   MARKET FILTER
+========================================================= */
 
-  const start =
-    performance.now();
+document
+  .getElementById("marketTabs")
+  .addEventListener("click",event=>{
 
-  let lastTick =
-    -1;
+    const btn =
+      event.target.closest(".market-tab");
 
-  await new Promise(resolve => {
+    if(!btn) return;
 
-    function frame(now) {
+    marketRarity =
+      btn.dataset.rarity || "all";
 
-      const elapsed =
-        now - start;
+    document
+      .querySelectorAll(".market-tab")
+      .forEach(x=>{
+        x.classList.remove("active");
+      });
 
-      const progress =
-        Math.min(
-          1,
-          elapsed / duration
-        );
+    btn.classList.add("active");
 
-      const tickPosition =
-        Math.floor(
-          progress * 30
-        );
-
-      if (
-        tickPosition !== lastTick
-      ) {
-        lastTick =
-          tickPosition;
-
-        rouletteTick(
-          progress
-        );
-      }
-
-      if (
-        progress >= 1
-      ) {
-        resolve();
-        return;
-      }
-
-      requestAnimationFrame(frame);
-    }
-
-    requestAnimationFrame(frame);
+    renderMarket();
   });
 
-  await new Promise(
-    resolve =>
-      setTimeout(resolve, 250)
-  );
+/* =========================================================
+   START
+========================================================= */
 
-  rouletteWinSound();
-}
+async function startApp(){
 
-/* ============================================================
-   CASE RESULT
-============================================================ */
-
-function showCaseResult(result) {
-
-  rouletteRunning = false;
-
-  $("rouletteWrap")
-    .classList.remove("active");
-
-  $("caseResult")
-    .classList.add("active");
-
-  $("resultCar").textContent =
-    getCarIcon(result.name);
-
-  $("resultRarity").textContent =
-    String(
-      result.rarity || "common"
-    ).toUpperCase();
-
-  $("resultName").textContent =
-    result.name || "Автомобиль";
-
-  $("resultValue").textContent =
-    `Стоимость: ${formatFullMoney(result.value)}`;
-
-  $("resultActions").style.display =
-    "grid";
-
-  $("modalClose").style.display =
-    "none";
-
-  renderAll();
-}
-
-/* ============================================================
-   KEEP RESULT
-============================================================ */
-
-async function keepResult() {
-
-  if (!currentResult) {
-    return;
-  }
-
-  try {
-
-    const response =
-      await api(
-        "/api/cases/keep",
-        {
-          method: "POST",
-          body: JSON.stringify({})
-        }
-      );
-
-    if (response.data) {
-      applyPlayerData(
-        response.data
-      );
-    }
-
-    toast(
-      `${currentResult.name} добавлен в гараж`
-    );
-
-    currentResult = null;
-    currentCase = null;
-
-    closeCaseModal(true);
-
-    renderAll();
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Не удалось забрать автомобиль"
-    );
-  }
-}
-
-/* ============================================================
-   SELL RESULT
-============================================================ */
-
-async function sellResult() {
-
-  if (!currentResult) {
-    return;
-  }
-
-  try {
-
-    const response =
-      await api(
-        "/api/cases/sell",
-        {
-          method: "POST",
-          body: JSON.stringify({})
-        }
-      );
-
-    if (response.data) {
-      applyPlayerData(
-        response.data
-      );
-    }
-
-    toast(
-      `Продано за ${formatMoney(
-        response.soldFor ||
-        Math.floor(
-          safeNumber(currentResult.value) *
-          safeNumber(config.sellPercent,85) /
-          100
-        )
-      )}`
-    );
-
-    currentResult = null;
-    currentCase = null;
-
-    closeCaseModal(true);
-
-    renderAll();
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Не удалось продать автомобиль"
-    );
-  }
-}
-
-/* ============================================================
-   MODAL CLOSE
-============================================================ */
-
-function modalBackgroundClick(event) {
-
-  if (
-    event.target ===
-    $("caseModal")
-  ) {
-    closeCaseModal();
-  }
-}
-
-function closeCaseModal(force = false) {
-
-  if (rouletteRunning) {
-    return;
-  }
-
-  /*
-   * Если результат уже получен,
-   * нельзя закрывать окно и оставлять
-   * pending на сервере.
-   */
-
-  if (
-    currentResult &&
-    !force
-  ) {
-    toast(
-      "Сначала оставь автомобиль или продай его."
-    );
-    return;
-  }
-
-  $("caseModal")
-    .classList.remove("show");
-
-  currentCase = null;
-
-  if (force) {
-    currentResult = null;
-  }
-}
-
-/* ============================================================
-   GARAGE
-============================================================ */
-
-function renderGarage() {
-
-  const list =
-    $("garageList");
-
-  if (!list) return;
-
-  const garage =
-    Array.isArray(player.garage)
-      ? player.garage
-      : [];
-
-  $("garageCount").textContent =
-    `${garage.length} ${
-      garage.length === 1
-        ? "автомобиль"
-        : "автомобилей"
-    }`;
-
-  list.innerHTML = "";
-
-  if (!garage.length) {
-
-    list.innerHTML = `
-      <div class="card empty">
-        <div class="empty-icon">🚘</div>
-        <div>
-          В гараже пока нет автомобилей
-        </div>
-        <div class="small muted" style="margin-top:5px">
-          Открой первый кейс и начни коллекцию.
-        </div>
-      </div>
-    `;
-
-    return;
-  }
-
-  garage.forEach(
-    (car, index) => {
-
-      const item =
-        document.createElement("div");
-
-      item.className =
-        "garage-item";
-
-      const value =
-        safeNumber(
-          car.value
-        );
-
-      const sellPercent =
-        safeNumber(
-          config.sellPercent,
-          85
-        );
-
-      const sellPrice =
-        Math.floor(
-          value *
-          sellPercent /
-          100
-        );
-
-      item.innerHTML = `
-        <div class="car-image">
-          ${getCarIcon(car.name)}
-        </div>
-
-        <div class="garage-info">
-
-          <div class="car-name">
-            ${escapeHTML(car.name || "Автомобиль")}
-          </div>
-
-          <div class="car-meta">
-            ${escapeHTML(
-              String(
-                car.rarity ||
-                "market"
-              ).toUpperCase()
-            )}
-          </div>
-
-          <div class="car-value">
-            ${formatMoney(value)}
-          </div>
-
-        </div>
-
-        <button
-          class="sell-mini"
-          onclick="sellGarageCar(${index})"
-        >
-          ${formatMoney(sellPrice)}
-        </button>
-      `;
-
-      list.appendChild(item);
-    }
-  );
-}
-
-async function sellGarageCar(index) {
-
-  const car =
-    player.garage[index];
-
-  if (!car) {
-    return;
-  }
-
-  const sellPercent =
-    safeNumber(
-      config.sellPercent,
-      85
-    );
-
-  const price =
-    Math.floor(
-      safeNumber(car.value) *
-      sellPercent /
-      100
-    );
-
-  const confirmed =
-    window.confirm(
-      `Продать ${car.name} за ${formatFullMoney(price)}?`
-    );
-
-  if (!confirmed) {
-    return;
-  }
-
-  try {
-
-    const response =
-      await api(
-        "/api/garage/sell",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            carId:
-              car.id,
-            index
-          })
-        }
-      );
-
-    if (response.data) {
-      applyPlayerData(
-        response.data
-      );
-    }
-
-    toast(
-      `Автомобиль продан за ${formatMoney(
-        response.soldFor || price
-      )}`
-    );
-
-    renderAll();
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Не удалось продать автомобиль"
-    );
-  }
-}
-
-/* ============================================================
-   FIXED MARKET
-============================================================ */
-
-function normalizeFixedMarket() {
-
-  const raw =
-    config.fixedMarket;
-
-  if (Array.isArray(raw)) {
-    return raw;
-  }
-
-  if (
-    raw &&
-    typeof raw === "object"
-  ) {
-
-    /*
-     * Поддержка:
-     * {
-     *   "BMW E60": 2200000,
-     *   ...
-     * }
-     */
-
-    return Object.entries(raw)
-      .map(
-        ([name, value]) => ({
-          name,
-          price:
-            typeof value === "object"
-              ? safeNumber(value.price)
-              : safeNumber(value)
-        })
-      );
-  }
-
-  return [];
-}
-
-function renderFixedMarket() {
-
-  const container =
-    $("marketFixed");
-
-  if (!container) return;
-
-  const market =
-    normalizeFixedMarket();
-
-  if (!market.length) {
-
-    container.innerHTML = `
-      <div class="card empty">
-        <div class="empty-icon">🏪</div>
-        <div>Магазин пока пуст</div>
-      </div>
-    `;
-
-    return;
-  }
-
-  container.innerHTML = `
-    <div class="market-list">
-      ${market.map(
-        (car, index) => {
-
-          const name =
-            car.name ||
-            car.carName ||
-            car.title ||
-            "Автомобиль";
-
-          const price =
-            safeNumber(
-              car.price ??
-              car.value ??
-              car.carValue
-            );
-
-          return `
-            <div class="market-item">
-
-              <div class="market-top">
-
-                <div class="car-image">
-                  ${getCarIcon(name)}
-                </div>
-
-                <div class="market-info">
-
-                  <div class="market-name">
-                    ${escapeHTML(name)}
-                  </div>
-
-                  <div class="market-seller">
-                    Автоимперия
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div class="market-bottom">
-
-                <div class="market-price">
-                  ${formatMoney(price)}
-                </div>
-
-                <button
-                  class="market-buy"
-                  onclick="buyFixedCar(${index})"
-                >
-                  КУПИТЬ
-                </button>
-
-              </div>
-
-            </div>
-          `;
-        }
-      ).join("")}
-    </div>
-  `;
-}
-
-async function buyFixedCar(index) {
-
-  const market =
-    normalizeFixedMarket();
-
-  const car =
-    market[index];
-
-  if (!car) return;
-
-  const name =
-    car.name ||
-    car.carName ||
-    car.title;
-
-  const price =
-    safeNumber(
-      car.price ??
-      car.value ??
-      car.carValue
-    );
-
-  if (
-    player.balance <
-    price
-  ) {
-    toast("Недостаточно денег");
-    return;
-  }
-
-  try {
-
-    const response =
-      await api(
-        "/api/market/buy",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            name,
-            carName: name
-          })
-        }
-      );
-
-    if (response.data) {
-      applyPlayerData(
-        response.data
-      );
-    }
-
-    toast(
-      `${name} куплен`
-    );
-
-    renderAll();
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Не удалось купить автомобиль"
-    );
-  }
-}
-
-/* ============================================================
-   PLAYER MARKET
-============================================================ */
-
-function switchMarket(tab) {
-
-  const tabs = [
-    "fixed",
-    "player",
-    "my"
-  ];
-
-  tabs.forEach(name => {
-
-    const button =
-      $("tab" +
-        name.charAt(0).toUpperCase() +
-        name.slice(1)
-      );
-
-    const block =
-      $("market" +
-        name.charAt(0).toUpperCase() +
-        name.slice(1)
-      );
-
-    if (button) {
-      button.classList.toggle(
-        "active",
-        name === tab
-      );
-    }
-
-    if (block) {
-      block.style.display =
-        name === tab
-          ? "block"
-          : "none";
-    }
-  });
-
-  if (tab === "player") {
-    loadPlayerMarket();
-  }
-
-  if (tab === "my") {
-    loadMyListings();
-  }
-}
-
-async function loadMarket() {
-
-  renderFixedMarket();
-
-  /*
-   * Магазин уже берётся из /api/config.
-   * Игрок-маркет загружается отдельно.
-   */
-}
-
-/* ============================================================
-   PLAYER MARKET LIST
-============================================================ */
-
-async function loadPlayerMarket() {
-
-  const container =
-    $("marketPlayer");
-
-  container.innerHTML = `
-    <div class="card empty">
-      Загрузка объявлений...
-    </div>
-  `;
-
-  try {
-
-    const response =
-      await api(
-        "/api/player-market"
-      );
-
-    playerMarketCache =
-      Array.isArray(response.list)
-        ? response.list
-        : Array.isArray(response.data)
-          ? response.data
-          : [];
-
-    renderPlayerMarket();
-
-  } catch (error) {
-
-    container.innerHTML = `
-      <div class="card empty">
-        <div class="empty-icon">⚠️</div>
-        <div>
-          ${escapeHTML(error.message)}
-        </div>
-      </div>
-    `;
-  }
-}
-
-function renderPlayerMarket() {
-
-  const container =
-    $("marketPlayer");
-
-  if (!container) return;
-
-  if (!playerMarketCache.length) {
-
-    container.innerHTML = `
-      <div class="card empty">
-        <div class="empty-icon">🏪</div>
-        <div>Пока нет объявлений игроков</div>
-      </div>
-    `;
-
-    return;
-  }
-
-  container.innerHTML = `
-    <div class="market-list">
-      ${playerMarketCache.map(
-        listing => {
-
-          const name =
-            listing.carName ||
-            "Автомобиль";
-
-          const price =
-            safeNumber(
-              listing.price
-            );
-
-          const seller =
-            listing.sellerUsername
-              ? "@" +
-                listing.sellerUsername
-              : listing.sellerFirstName ||
-                "Игрок";
-
-          return `
-            <div class="market-item">
-
-              <div class="market-top">
-
-                <div class="car-image">
-                  ${getCarIcon(name)}
-                </div>
-
-                <div class="market-info">
-
-                  <div class="market-name">
-                    ${escapeHTML(name)}
-                  </div>
-
-                  <div class="market-seller">
-                    Продавец:
-                    ${escapeHTML(seller)}
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div class="market-bottom">
-
-                <div class="market-price">
-                  ${formatMoney(price)}
-                </div>
-
-                <button
-                  class="market-buy"
-                  onclick="buyPlayerListing('${escapeJS(listing.id)}')"
-                >
-                  КУПИТЬ
-                </button>
-
-              </div>
-
-            </div>
-          `;
-        }
-      ).join("")}
-    </div>
-  `;
-}
-
-function escapeJS(value) {
-
-  return String(value ?? "")
-    .replaceAll("\\", "\\\\")
-    .replaceAll("'", "\\'")
-    .replaceAll("\n", "\\n")
-    .replaceAll("\r", "\\r");
-}
-
-async function buyPlayerListing(
-  listingId
-) {
-
-  try {
-
-    const response =
-      await api(
-        "/api/player-market/buy",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            listingId
-          })
-        }
-      );
-
-    if (response.data) {
-      applyPlayerData(
-        response.data
-      );
-    }
-
-    toast(
-      "Автомобиль куплен"
-    );
-
-    await loadPlayerMarket();
-
-    renderAll();
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Не удалось купить лот"
-    );
-  }
-}
-
-/* ============================================================
-   MY LISTINGS
-============================================================ */
-
-async function loadMyListings() {
-
-  const container =
-    $("marketMy");
-
-  container.innerHTML = `
-    <div class="card empty">
-      Загрузка...
-    </div>
-  `;
-
-  try {
-
-    const response =
-      await api(
-        "/api/player-market/my"
-      );
-
-    myListingsCache =
-      Array.isArray(response.list)
-        ? response.list
-        : Array.isArray(response.data)
-          ? response.data
-          : [];
-
-    renderMyListings();
-
-  } catch (error) {
-
-    container.innerHTML = `
-      <div class="card empty">
-        <div class="empty-icon">⚠️</div>
-        <div>
-          ${escapeHTML(error.message)}
-        </div>
-      </div>
-    `;
-  }
-}
-
-function renderMyListings() {
-
-  const container =
-    $("marketMy");
-
-  if (!container) return;
-
-  let html = `
-    <div class="card" style="padding:16px;margin-bottom:10px">
-      <div style="font-size:14px;font-weight:900">
-        Выставить автомобиль
-      </div>
-
-      <div
-        class="muted small"
-        style="margin-top:4px"
-      >
-        Выбери машину из гаража ниже.
-      </div>
-
-      <div
-        style="
-          display:grid;
-          gap:7px;
-          margin-top:12px;
-        "
-      >
-  `;
-
-  const garage =
-    Array.isArray(player.garage)
-      ? player.garage
-      : [];
-
-  const alreadyListed =
-    new Set(
-      myListingsCache.map(
-        x => String(x.carId)
-      )
-    );
-
-  garage.forEach(
-    (car, index) => {
-
-      if (
-        alreadyListed.has(
-          String(car.id)
-        )
-      ) {
-        return;
-      }
-
-      html += `
-        <button
-          class="dark-btn"
-          style="
-            display:flex;
-            align-items:center;
-            gap:9px;
-            text-align:left;
-            padding:9px;
-            min-height:54px;
-          "
-          onclick="createListing(${index})"
-        >
-          <span style="font-size:24px">
-            ${getCarIcon(car.name)}
-          </span>
-
-          <span style="min-width:0;flex:1">
-            <span
-              style="
-                display:block;
-                font-weight:900;
-                font-size:11px;
-                white-space:nowrap;
-                overflow:hidden;
-                text-overflow:ellipsis;
-              "
-            >
-              ${escapeHTML(car.name)}
-            </span>
-
-            <span
-              style="
-                display:block;
-                color:#707786;
-                font-size:9px;
-                margin-top:2px;
-              "
-            >
-              ${formatMoney(car.value)}
-            </span>
-          </span>
-
-          <span
-            style="
-              color:#aeb4c0;
-              font-size:9px;
-              font-weight:900;
-            "
-          >
-            ПРОДАТЬ
-          </span>
-        </button>
-      `;
-    }
-  );
-
-  html += `
-      </div>
-    </div>
-  `;
-
-  if (!myListingsCache.length) {
-
-    html += `
-      <div class="card empty">
-        <div class="empty-icon">📭</div>
-        <div>У тебя нет активных объявлений</div>
-      </div>
-    `;
-
-  } else {
-
-    html += `
-      <div class="market-list">
-        ${myListingsCache.map(
-          listing => {
-
-            const name =
-              listing.carName ||
-              "Автомобиль";
-
-            const price =
-              safeNumber(
-                listing.price
-              );
-
-            return `
-              <div class="market-item">
-
-                <div class="market-top">
-
-                  <div class="car-image">
-                    ${getCarIcon(name)}
-                  </div>
-
-                  <div class="market-info">
-
-                    <div class="market-name">
-                      ${escapeHTML(name)}
-                    </div>
-
-                    <div class="market-seller">
-                      Твоё объявление
-                    </div>
-
-                  </div>
-
-                </div>
-
-                <div class="market-bottom">
-
-                  <div class="market-price">
-                    ${formatMoney(price)}
-                  </div>
-
-                  <button
-                    class="market-buy"
-                    onclick="cancelListing('${escapeJS(listing.id)}')"
-                  >
-                    СНЯТЬ
-                  </button>
-
-                </div>
-
-              </div>
-            `;
-          }
-        ).join("")}
-      </div>
-    `;
-  }
-
-  container.innerHTML =
-    html;
-}
-
-async function createListing(
-  garageIndex
-) {
-
-  const car =
-    player.garage[garageIndex];
-
-  if (!car) return;
-
-  const suggested =
-    Math.max(
-      1,
-      safeNumber(car.value)
-    );
-
-  const input =
-    window.prompt(
-      `Цена за ${car.name}:`,
-      String(suggested)
-    );
-
-  if (input === null) {
-    return;
-  }
-
-  const price =
-    Math.floor(
-      Number(
-        String(input)
-          .replaceAll(" ", "")
-          .replaceAll(",", "")
-      )
-    );
-
-  if (
-    !Number.isFinite(price) ||
-    price <= 0
-  ) {
-    toast("Укажи корректную цену");
-    return;
-  }
-
-  try {
-
-    const response =
-      await api(
-        "/api/player-market/list",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            carId: car.id,
-            price
-          })
-        }
-      );
-
-    if (response.data) {
-      applyPlayerData(
-        response.data
-      );
-    }
-
-    toast(
-      "Автомобиль выставлен на рынок"
-    );
-
-    await loadMyListings();
-
-    renderAll();
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Не удалось выставить автомобиль"
-    );
-  }
-}
-
-async function cancelListing(
-  listingId
-) {
-
-  try {
-
-    const response =
-      await api(
-        "/api/player-market/cancel",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            listingId
-          })
-        }
-      );
-
-    if (response.data) {
-      applyPlayerData(
-        response.data
-      );
-    }
-
-    toast(
-      "Объявление снято"
-    );
-
-    await loadMyListings();
-
-    renderAll();
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Не удалось снять объявление"
-    );
-  }
-}
-
-/* ============================================================
-   REFERRALS
-============================================================ */
-
-async function loadReferral() {
-
-  try {
-
-    const response =
-      await api(
-        "/api/referral"
-      );
-
-    referralInfo =
-      response;
-
-    const link =
-      response.link ||
-      "";
-
-    $("refLink").textContent =
-      link ||
-      "Реферальная ссылка пока недоступна";
-
-    $("refStats").textContent =
-      `Приглашено: ${
-        safeNumber(
-          response.count ??
-          player.referralCount
-        )
-      }`;
-
-  } catch (error) {
-
-    console.warn(
-      "Referral:",
-      error.message
-    );
-
-    $("refLink").textContent =
-      "Не удалось загрузить ссылку";
-
-    $("refStats").textContent =
-      `Приглашено: ${
-        safeNumber(
-          player.referralCount
-        )
-      }`;
-  }
-}
-
-async function copyReferral() {
-
-  const link =
-    referralInfo?.link ||
-    $("refLink").textContent;
-
-  if (
-    !link ||
-    link.includes("загруз")
-  ) {
-    toast(
-      "Реферальная ссылка ещё не загрузилась"
-    );
-    return;
-  }
-
-  try {
-
-    await navigator.clipboard.writeText(
-      link
-    );
-
-    toast(
-      "Ссылка скопирована"
-    );
-
-  } catch {
-
-    toast(
-      "Не удалось скопировать ссылку"
-    );
-  }
-}
-
-function shareReferral() {
-
-  const link =
-    referralInfo?.link ||
-    "";
-
-  if (!link) {
-    toast(
-      "Реферальная ссылка ещё не загрузилась"
-    );
-    return;
-  }
-
-  const text =
-    "Заходи в Автоимперию и собирай автомобили 🚘";
-
-  const shareUrl =
-    `https://t.me/share/url?url=${
-      encodeURIComponent(link)
-    }&text=${
-      encodeURIComponent(text)
-    }`;
-
-  if (tg?.openTelegramLink) {
-
-    tg.openTelegramLink(
-      shareUrl
-    );
-
-  } else {
-
-    window.open(
-      shareUrl,
-      "_blank"
-    );
-  }
-}
-
-/* ============================================================
-   DAILY
-============================================================ */
-
-function renderDaily() {
-
-  const daily =
-    player.daily;
-
-  const badge =
-    $("dailyBadge");
-
-  const text =
-    $("dailyText");
-
-  if (!daily) {
-
-    badge.textContent =
-      "—";
-
-    text.textContent =
-      "Информация о ежедневной награде пока недоступна.";
-
-    return;
-  }
-
-  /*
-   * Новый server.js уже возвращает daily
-   * в player data.
-   *
-   * Здесь намеренно не придумывается
-   * endpoint получения награды, если сервер
-   * его контрактом не предоставлен.
-   */
-
-  const claimed =
-    Boolean(
-      daily.claimed ??
-      daily.received ??
-      daily.isClaimed
-    );
-
-  if (claimed) {
-
-    badge.textContent =
-      "ПОЛУЧЕНО";
-
-    text.textContent =
-      "Сегодняшняя награда уже получена.";
-
-  } else {
-
-    badge.textContent =
-      "ДОСТУПНО";
-
-    text.textContent =
-      "Ежедневная награда доступна по правилам сервера.";
-  }
-}
-
-/* ============================================================
-   PROFILE
-============================================================ */
-
-function renderProfile() {
-
-  $("profileName").textContent =
-    player.firstName ||
-    player.username ||
-    "Игрок";
-
-  $("profileUsername").textContent =
-    player.username
-      ? "@" + player.username
-      : "Telegram игрок";
-
-  const avatar =
-    $("profileAvatar");
-
-  if (
-    player.photoUrl
-  ) {
-
-    avatar.innerHTML = `
-      <img
-        src="${escapeHTML(player.photoUrl)}"
-        alt=""
-      >
-    `;
-
-  } else {
-
-    avatar.textContent =
-      "🚘";
-  }
-
-  $("profileLevel").textContent =
-    String(player.level || 1);
-
-  $("profileSpent").textContent =
-    formatMoney(player.spent);
-
-  $("profileOpened").textContent =
-    String(player.opened || 0);
-
-  $("profileSold").textContent =
-    String(player.sold || 0);
-
-  const progress =
-    safeNumber(
-      player.levelProgress
-    );
-
-  $("profileLevelPercent").textContent =
-    Math.round(progress) + "%";
-
-  $("profileLevelFill").style.width =
-    Math.max(
-      0,
-      Math.min(100, progress)
-    ) + "%";
-
-  const step =
-    safeNumber(
-      config.levelStep,
-      2500000
-    );
-
-  const level =
-    Math.max(
-      1,
-      safeNumber(
-        player.level,
-        1
-      )
-    );
-
-  const spent =
-    safeNumber(
-      player.spent
-    );
-
-  const from =
-    (level - 1) * step;
-
-  const to =
-    level * step;
-
-  $("profileLevelFrom").textContent =
-    formatMoney(from);
-
-  $("profileLevelTo").textContent =
-    formatMoney(to);
-
-  renderDaily();
-}
-
-/* ============================================================
-   HOME
-============================================================ */
-
-function renderHome() {
-
-  const firstName =
-    player.firstName ||
-    player.username ||
-    "Империя";
-
-  $("homeGreeting").textContent =
-    firstName;
-
-  $("homeLevel").textContent =
-    String(player.level || 1);
-
-  $("homeGarage").textContent =
-    String(
-      Array.isArray(player.garage)
-        ? player.garage.length
-        : 0
-    );
-
-  $("homeOpened").textContent =
-    String(player.opened || 0);
-
-  const progress =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        safeNumber(
-          player.levelProgress
-        )
-      )
-    );
-
-  $("levelNumber").textContent =
-    String(player.level || 1);
-
-  $("levelFill").style.width =
-    progress + "%";
-
-  $("levelProgressText").textContent =
-    Math.round(progress) + "%";
-
-  $("levelSpentText").textContent =
-    `${formatMoney(player.spent)} потрачено`;
-
-  const step =
-    safeNumber(
-      config.levelStep,
-      2500000
-    );
-
-  const level =
-    Math.max(
-      1,
-      safeNumber(player.level,1)
-    );
-
-  $("levelCurrent").textContent =
-    formatMoney(
-      (level - 1) * step
-    );
-
-  $("levelNext").textContent =
-    formatMoney(
-      level * step
-    );
-}
-
-/* ============================================================
-   BALANCE
-============================================================ */
-
-function renderBalance() {
-
-  const value =
-    formatMoney(
-      player.balance
-    );
-
-  [
-    "topBalance",
-    "casesBalance",
-    "garageBalance",
-    "marketBalance",
-    "profileBalance"
-  ].forEach(id => {
-
-    const el =
-      $(id);
-
-    if (el) {
-      el.textContent =
-        value;
-    }
-  });
-}
-
-/* ============================================================
-   RENDER ALL
-============================================================ */
-
-function renderAll() {
+  loadLocal();
+  initTelegram();
 
   renderBalance();
-  renderHome();
-  renderProfile();
-  renderCases();
   renderGarage();
 
-  if (
-    currentPage === "market"
-  ) {
-    renderFixedMarket();
-  }
-}
+  /*
+    Нельзя запускать игру без Telegram initData.
+    Это важно для настоящей авторизации.
+  */
 
-/* ============================================================
-   CAR ICON
-============================================================ */
+  if(!tg || !tg.initData){
 
-function getCarIcon(name) {
+    setLoadingText(
+      "Откройте Автоимперию через Telegram"
+    );
 
-  const n =
-    String(name || "")
-      .toLowerCase();
+    setTimeout(()=>{
 
-  if (
-    n.includes("lamborghini") ||
-    n.includes("ferrari") ||
-    n.includes("mclaren") ||
-    n.includes("porsche") ||
-    n.includes("bugatti")
-  ) {
-    return "🏎️";
+      hideLoading();
+
+      toast(
+        "Открой игру через Telegram-бота.",
+        true
+      );
+
+    },600);
+
+    return;
   }
 
-  if (
-    n.includes("bmw") ||
-    n.includes("mercedes") ||
-    n.includes("audi") ||
-    n.includes("nissan")
-  ) {
-    return "🚘";
-  }
+  try{
 
-  if (
-    n.includes("уаз") ||
-    n.includes("haval")
-  ) {
-    return "🚙";
-  }
+    setLoadingText("Авторизация Telegram...");
 
-  if (
-    n.includes("camry") ||
-    n.includes("corolla") ||
-    n.includes("solaris") ||
-    n.includes("rio") ||
-    n.includes("focus") ||
-    n.includes("octavia") ||
-    n.includes("passat") ||
-    n.includes("logаn") ||
-    n.includes("logan")
-  ) {
-    return "🚗";
-  }
+    await authenticate();
 
-  return "🚗";
-}
-
-/* ============================================================
-   INITIALIZATION
-============================================================ */
-
-async function boot() {
-
-  try {
-
-    /*
-     * Сначала авторизация Telegram.
-     */
-
-    await auth();
-
-    /*
-     * Затем конфигурация сервера.
-     */
+    setLoadingText("Загрузка игры...");
 
     await loadConfig();
 
-    /*
-     * После конфигурации ещё раз рисуем
-     * интерфейс с актуальными ценами.
-     */
+    await loadUser();
 
-    renderAll();
-
-    $("loading").style.display =
-      "none";
-
-  } catch (error) {
-
-    console.error(
-      "BOOT ERROR:",
-      error
-    );
-
-    $("loading").style.display =
-      "none";
-
-    $("error-screen").style.display =
-      "flex";
-
-    $("error-text").textContent =
-      error.message ||
-      "Не удалось подключиться к серверу.";
-  }
-}
-
-/* ============================================================
-   TELEGRAM BACK BUTTON
-============================================================ */
-
-if (tg?.BackButton) {
-
-  tg.BackButton.onClick(
-    () => {
-
-      if (
-        $("caseModal")
-          .classList.contains("show")
-      ) {
-
-        closeCaseModal();
-
-        return;
-      }
-
-      showPage("home");
-    }
-  );
-}
-
-/* ============================================================
-   START
-============================================================ */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+    await loadGarage();
 
     renderCases();
+    renderMarket();
+    renderGarage();
+    renderProfile();
+    renderBalance();
 
-    boot();
+    setLoadingText("Готово");
+
+    await new Promise(resolve =>
+      setTimeout(resolve,250)
+    );
+
+    hideLoading();
+
+  }catch(error){
+
+    console.error("START ERROR:",error);
+
+    setLoadingText("Ошибка загрузки");
+
+    /*
+      ВАЖНО:
+      теперь пользователь увидит настоящий endpoint
+      и HTTP-код, а не просто "некорректный ответ 405".
+    */
+
+    setTimeout(()=>{
+
+      hideLoading();
+
+      toast(
+        error.message ||
+        "Не удалось загрузить игру.",
+        true
+      );
+
+    },500);
+  }
+}
+
+/* =========================================================
+   GLOBAL ERROR HANDLERS
+========================================================= */
+
+window.addEventListener("error",event=>{
+
+  console.error(
+    "GLOBAL ERROR:",
+    event.error || event.message
+  );
+
+});
+
+window.addEventListener(
+  "unhandledrejection",
+  event=>{
+
+    console.error(
+      "UNHANDLED PROMISE:",
+      event.reason
+    );
+
   }
 );
+
+/* =========================================================
+   RUN
+========================================================= */
+
+startApp();
+
 </script>
 
 </body>
