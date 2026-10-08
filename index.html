@@ -2,26 +2,13 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#0b0c0f">
 <title>Автоимперия</title>
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-:root{
-  --bg:#0b0c0f;
-  --panel:#131519;
-  --panel2:#181a1f;
-  --panel3:#202329;
-  --line:rgba(255,255,255,.08);
-  --text:#f1f2f4;
-  --muted:#9297a1;
-  --accent:#e7e9ec;
-  --green:#45d39b;
-  --red:#ff5368;
-  --blue:#69a8ff;
-}
-
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
@@ -30,503 +17,415 @@
 html,body{
   margin:0;
   padding:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",Arial,sans-serif;
+  background:#0b0c0f;
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
 body{
+  min-height:100vh;
   overflow-x:hidden;
-  padding-bottom:90px;
 }
 
 button{
-  border:0;
   font:inherit;
-  color:inherit;
-  cursor:pointer;
-  -webkit-appearance:none;
 }
 
 .app{
   width:100%;
   max-width:620px;
-  margin:auto;
   min-height:100vh;
-  padding:
-    calc(12px + env(safe-area-inset-top))
-    14px
-    calc(95px + env(safe-area-inset-bottom));
+  margin:0 auto;
+  padding-bottom:90px;
 }
 
-/* HEADER */
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  padding:16px 16px 14px;
+  background:rgba(11,12,15,.92);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
 
-.header{
+.header-row{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  margin-bottom:18px;
+  align-items:center;
+  gap:12px;
 }
 
 .brand{
   display:flex;
-  align-items:center;
-  gap:10px;
+  flex-direction:column;
 }
 
-.brandMark{
-  width:36px;
-  height:36px;
-  border-radius:10px;
-  background:#191b20;
-  border:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
+.brand-main{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:1.2px;
 }
 
-.brandName{
-  font-weight:800;
-  font-size:15px;
-  letter-spacing:.2px;
-}
-
-.brandSub{
-  color:var(--muted);
-  font-size:9px;
+.brand-sub{
   margin-top:2px;
+  color:#777b86;
+  font-size:9px;
+  letter-spacing:3px;
+  font-weight:700;
+}
+
+.balance-box{
+  padding:8px 12px;
+  border-radius:12px;
+  background:#15171d;
+  border:1px solid rgba(255,255,255,.07);
+  text-align:right;
+}
+
+.balance-label{
+  color:#707580;
+  font-size:9px;
+  text-transform:uppercase;
   letter-spacing:1px;
 }
 
 .balance{
-  text-align:right;
-}
-
-.balanceLabel{
-  color:var(--muted);
-  font-size:9px;
-}
-
-.balanceValue{
-  font-weight:800;
-  font-size:16px;
   margin-top:2px;
+  font-size:15px;
+  font-weight:900;
 }
 
-/* HERO */
+main{
+  padding:16px;
+}
 
 .hero{
   position:relative;
   overflow:hidden;
-  border-radius:20px;
   min-height:190px;
-  padding:20px;
-  background:#15171b;
-  border:1px solid var(--line);
+  padding:24px;
   margin-bottom:18px;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 90% 20%,rgba(255,255,255,.10),transparent 30%),
+    linear-gradient(145deg,#191c23,#101217);
+  border:1px solid rgba(255,255,255,.07);
 }
 
-.heroTop{
+.hero:after{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  right:-90px;
+  bottom:-100px;
+  border-radius:50%;
+  background:rgba(255,255,255,.04);
+}
+
+.hero-title{
   position:relative;
   z-index:2;
+  font-size:30px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-1.5px;
 }
 
-.heroEyebrow{
-  color:var(--muted);
-  font-size:9px;
-  text-transform:uppercase;
-  letter-spacing:1.3px;
+.hero-text{
+  position:relative;
+  z-index:2;
+  margin-top:10px;
+  max-width:250px;
+  color:#8d929d;
+  font-size:13px;
+  line-height:1.45;
 }
 
-.heroTitle{
-  font-size:25px;
-  font-weight:850;
-  letter-spacing:-.8px;
-  margin-top:5px;
-}
-
-.heroText{
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.5;
-  margin-top:7px;
-  max-width:260px;
-}
-
-.heroCar{
+.hero-car{
   position:absolute;
-  right:-8px;
-  bottom:-8px;
-  width:235px;
-  height:135px;
   z-index:1;
-  transform:perspective(600px) rotateY(-7deg);
+  right:-5px;
+  bottom:20px;
+  width:180px;
+  height:70px;
 }
 
-.heroBottom{
+.car-body{
   position:absolute;
-  left:20px;
-  bottom:18px;
-  z-index:4;
+  left:8px;
+  bottom:14px;
+  width:165px;
+  height:42px;
+  border-radius:25px 45px 15px 15px;
+  background:linear-gradient(145deg,#30343c,#111318);
+  box-shadow:0 15px 30px rgba(0,0,0,.55);
 }
 
-.levelBadge{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  background:#202329;
-  border:1px solid var(--line);
-  padding:7px 10px;
-  border-radius:9px;
-  font-size:10px;
-  font-weight:700;
-}
-
-.levelDot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#aeb3ba;
-}
-
-/* CAR */
-
-.carBody{
+.car-roof{
   position:absolute;
-  left:10%;
-  bottom:25px;
-  width:80%;
-  height:42%;
-  border-radius:42% 28% 14% 13%;
-  background:linear-gradient(145deg,#60656d,#181b20 58%,#090a0c);
-  box-shadow:
-    inset -10px -8px 18px rgba(0,0,0,.7),
-    inset 8px 7px 15px rgba(255,255,255,.08),
-    0 18px 25px rgba(0,0,0,.5);
+  left:48px;
+  bottom:46px;
+  width:76px;
+  height:35px;
+  border-radius:35px 35px 5px 5px;
+  background:#252931;
+  transform:skewX(-18deg);
 }
 
-.carRoof{
+.car-window{
   position:absolute;
-  left:29%;
-  bottom:52%;
-  width:43%;
-  height:32%;
-  background:linear-gradient(145deg,#555b63,#121519);
-  clip-path:polygon(20% 100%,37% 5%,74% 0,100% 100%);
-}
-
-.carWindow{
-  position:absolute;
-  left:37%;
-  bottom:57%;
-  width:28%;
-  height:20%;
-  background:linear-gradient(145deg,#2b3036,#050608);
-  clip-path:polygon(18% 100%,31% 8%,70% 5%,93% 100%);
-}
-
-.carLight{
-  position:absolute;
-  right:12%;
-  bottom:39%;
-  width:14%;
-  height:8%;
-  border-radius:20px;
-  background:#dce5ff;
+  left:58px;
+  bottom:49px;
+  width:61px;
+  height:24px;
+  border-radius:18px 18px 3px 3px;
+  background:linear-gradient(135deg,#242a33,#08090b);
+  transform:skewX(-18deg);
 }
 
 .wheel{
   position:absolute;
-  bottom:9%;
-  width:23%;
-  aspect-ratio:1;
+  bottom:0;
+  width:32px;
+  height:32px;
   border-radius:50%;
-  background:#050607;
-  border:7px solid #20242a;
-  box-shadow:inset 0 0 0 4px #090a0c;
+  background:#090a0c;
+  border:6px solid #24272d;
+  box-shadow:inset 0 0 0 4px #0e1014;
 }
 
-.wheel.left{
-  left:17%;
-}
+.wheel.one{left:30px}
+.wheel.two{right:24px}
 
-.wheel.right{
-  right:17%;
-}
-
-/* SECTIONS */
-
-.section{
-  margin-top:22px;
-}
-
-.sectionHead{
+.section-title{
   display:flex;
-  align-items:end;
   justify-content:space-between;
-  margin-bottom:11px;
+  align-items:center;
+  margin:22px 2px 12px;
 }
 
-.sectionTitle{
+.section-title h2{
+  margin:0;
   font-size:18px;
-  font-weight:850;
-  letter-spacing:-.4px;
+  font-weight:900;
 }
 
-.sectionSub{
-  color:var(--muted);
-  font-size:10px;
+.section-title span{
+  color:#696e79;
+  font-size:11px;
 }
-
-/* CASES */
 
 .cases{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
+  gap:12px;
 }
 
 .case{
   position:relative;
   overflow:hidden;
-  min-height:202px;
-  padding:14px;
-  border-radius:17px;
-  background:#15171b;
-  border:1px solid var(--line);
+  min-height:170px;
+  padding:15px;
+  border-radius:20px;
+  background:linear-gradient(145deg,#17191f,#101216);
+  border:1px solid rgba(255,255,255,.06);
+  cursor:pointer;
+  transition:.15s;
 }
 
-.caseTop{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.rarity{
-  font-size:9px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  font-weight:800;
-}
-
-.rarity.common{
-  color:#aeb3bb;
-}
-
-.rarity.rare{
-  color:#69a8ff;
-}
-
-.rarity.epic{
-  color:#b88cff;
-}
-
-.rarity.legendary{
-  color:#f0ad5c;
-}
-
-.rarity.mythic{
-  color:#ff6275;
-}
-
-.caseName{
-  font-size:16px;
-  font-weight:850;
-  margin-top:5px;
-}
-
-.casePrice{
-  font-size:12px;
-  color:#c8ccd2;
-  margin-top:2px;
-}
-
-.caseVisual{
-  height:78px;
-  position:relative;
-  margin-top:4px;
-}
-
-.miniCar{
-  position:absolute;
-  left:50%;
-  top:48%;
-  transform:translate(-50%,-50%) scale(.72);
-  width:210px;
-  height:120px;
-}
-
-.caseBottom{
-  position:absolute;
-  left:14px;
-  right:14px;
-  bottom:12px;
-}
-
-.caseChance{
-  display:flex;
-  justify-content:space-between;
-  color:var(--muted);
-  font-size:8px;
-  margin-bottom:7px;
-}
-
-.openBtn{
-  width:100%;
-  height:37px;
-  border-radius:10px;
-  background:#e9eaec;
-  color:#090a0c;
-  font-weight:850;
-  font-size:10px;
-}
-
-.openBtn:active,
-.sellBtn:active,
-.keepBtn:active,
-.instantSellBtn:active,
-.startOpenBtn:active,
-.marketBuy:active{
+.case:active{
   transform:scale(.97);
 }
 
-/* GARAGE */
+.case-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+.case-rarity{
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  color:#868b96;
+}
+
+.case-icon{
+  font-size:28px;
+}
+
+.case-name{
+  margin-top:35px;
+  font-size:17px;
+  font-weight:900;
+}
+
+.case-desc{
+  margin-top:5px;
+  color:#707580;
+  font-size:10px;
+}
+
+.case-price{
+  margin-top:13px;
+  font-size:13px;
+  font-weight:900;
+}
+
+.case-glow{
+  position:absolute;
+  right:-35px;
+  bottom:-45px;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background:rgba(255,255,255,.045);
+}
+
+.garage-list,
+.market-list{
+  display:flex;
+  flex-direction:column;
   gap:10px;
 }
 
-.carCard,
-.marketCard,
-.profile{
-  background:#15171b;
-  border:1px solid var(--line);
-  border-radius:17px;
-}
-
-.carCard{
-  padding:11px;
-  overflow:hidden;
-}
-
-.carImage{
-  height:110px;
-  position:relative;
-  margin:-4px -5px 0;
-}
-
-.carInfo{
-  margin-top:3px;
-}
-
-.carName{
-  font-size:13px;
-  font-weight:800;
-}
-
-.carValue{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:3px;
-}
-
-.rarityTag{
-  display:inline-block;
-  margin-top:6px;
-  padding:4px 7px;
-  border-radius:6px;
-  background:#202329;
-  font-size:8px;
-  color:#aeb3bb;
-}
-
-.sellBtn{
-  width:100%;
-  height:34px;
-  margin-top:9px;
-  border-radius:9px;
-  background:#24272d;
-  font-size:10px;
-  font-weight:800;
-}
-
-.empty{
-  padding:35px 20px;
-  text-align:center;
-  color:var(--muted);
-  background:#131519;
-  border:1px solid var(--line);
-  border-radius:17px;
-  font-size:12px;
-}
-
-/* MARKET */
-
-.marketCard{
+.car-card{
   display:flex;
   align-items:center;
   gap:12px;
-  padding:12px;
-  margin-bottom:9px;
+  padding:13px;
+  border-radius:17px;
+  background:#14161b;
+  border:1px solid rgba(255,255,255,.055);
 }
 
-.marketImage{
-  width:95px;
-  height:62px;
+.car-mini{
+  width:75px;
+  height:52px;
+  flex:0 0 75px;
   position:relative;
-  flex:none;
-  transform:scale(.56);
+  border-radius:13px;
+  background:linear-gradient(145deg,#20242b,#0d0f12);
 }
 
-.marketInfo{
+.car-mini .body{
+  position:absolute;
+  left:8px;
+  bottom:13px;
+  width:58px;
+  height:20px;
+  border-radius:12px 17px 6px 6px;
+  background:#30343c;
+}
+
+.car-mini .roof{
+  position:absolute;
+  left:24px;
+  bottom:30px;
+  width:29px;
+  height:15px;
+  border-radius:12px 12px 2px 2px;
+  background:#292d34;
+}
+
+.car-mini .w{
+  position:absolute;
+  bottom:7px;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#090a0c;
+  border:2px solid #2b2f36;
+}
+
+.car-mini .w1{left:17px}
+.car-mini .w2{right:12px}
+
+.car-info{
   flex:1;
+  min-width:0;
 }
 
-.marketName{
-  font-size:13px;
-  font-weight:800;
-}
-
-.marketPrice{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:4px;
-}
-
-.marketBuy{
-  background:#e9eaec;
-  color:#08090b;
-  padding:9px 11px;
-  border-radius:9px;
-  font-size:10px;
+.car-name{
+  font-size:14px;
   font-weight:850;
 }
 
-/* PROFILE */
-
-.profile{
-  padding:17px;
+.car-rarity{
+  margin-top:4px;
+  color:#7b808a;
+  font-size:10px;
 }
 
-.profileTop{
+.car-value{
+  margin-top:6px;
+  font-size:13px;
+  font-weight:900;
+}
+
+.action-btn{
+  border:0;
+  padding:9px 12px;
+  border-radius:11px;
+  background:#252930;
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.action-btn:active{
+  transform:scale(.95);
+}
+
+.market-price{
+  text-align:right;
+}
+
+.market-price strong{
+  display:block;
+  font-size:13px;
+}
+
+.market-price button{
+  margin-top:7px;
+}
+
+.empty{
+  padding:35px 15px;
+  text-align:center;
+  color:#696e79;
+  font-size:13px;
+  border:1px dashed rgba(255,255,255,.08);
+  border-radius:18px;
+}
+
+.profile-card{
+  padding:20px;
+  border-radius:22px;
+  background:linear-gradient(145deg,#17191f,#101216);
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.profile-head{
   display:flex;
   align-items:center;
-  gap:13px;
+  gap:14px;
 }
 
 .avatar{
-  width:50px;
-  height:50px;
-  border-radius:14px;
-  background:#202329;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  overflow:hidden;
+  background:#22252c;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:22px;
-  overflow:hidden;
+  font-size:20px;
+  font-weight:900;
 }
 
 .avatar img{
@@ -535,474 +434,375 @@ button{
   object-fit:cover;
 }
 
-.profileName{
-  font-weight:850;
-  font-size:16px;
+.profile-name{
+  font-size:18px;
+  font-weight:900;
 }
 
-.profileLevel{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:3px;
+.profile-level{
+  margin-top:4px;
+  color:#7b808a;
+  font-size:11px;
 }
 
 .progress{
+  height:6px;
   margin-top:16px;
-}
-
-.progressLine{
-  display:flex;
-  justify-content:space-between;
-  font-size:9px;
-  color:var(--muted);
-  margin-bottom:6px;
-}
-
-.progressBar{
-  height:5px;
-  border-radius:20px;
-  background:#25282e;
+  border-radius:99px;
   overflow:hidden;
+  background:#24272d;
 }
 
-.progressFill{
+.progress-bar{
   height:100%;
-  background:#d7d9dc;
-  border-radius:20px;
+  border-radius:99px;
+  background:#fff;
 }
 
 .stats{
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:7px;
-  margin-top:14px;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:16px;
 }
 
 .stat{
-  padding:11px 6px;
-  text-align:center;
-  background:#101216;
-  border-radius:10px;
-  border:1px solid var(--line);
+  padding:13px;
+  border-radius:14px;
+  background:#121419;
 }
 
-.statValue{
-  font-size:14px;
-  font-weight:850;
+.stat-label{
+  color:#686d77;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.7px;
 }
 
-.statLabel{
-  font-size:8px;
-  color:var(--muted);
-  margin-top:4px;
+.stat-value{
+  margin-top:5px;
+  font-size:15px;
+  font-weight:900;
 }
 
-/* NAV */
+.history{
+  margin-top:15px;
+}
 
-.nav{
+.history-item{
+  display:flex;
+  justify-content:space-between;
+  padding:11px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  font-size:11px;
+}
+
+.history-item:last-child{
+  border-bottom:0;
+}
+
+.history-name{
+  font-weight:800;
+}
+
+.history-date{
+  margin-top:3px;
+  color:#666b75;
+  font-size:9px;
+}
+
+.history-value{
+  font-weight:900;
+}
+
+.bottom-nav{
   position:fixed;
-  z-index:30;
   left:50%;
-  bottom:calc(9px + env(safe-area-inset-bottom));
+  bottom:0;
+  z-index:30;
+  width:100%;
+  max-width:620px;
   transform:translateX(-50%);
-  width:min(94%,590px);
-  height:65px;
-  padding:6px;
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:4px;
-  background:rgba(19,21,25,.96);
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+  background:rgba(11,12,15,.94);
   backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border:1px solid var(--line);
-  border-radius:19px;
-  box-shadow:0 18px 45px rgba(0,0,0,.5);
+  border-top:1px solid rgba(255,255,255,.06);
 }
 
-.navBtn{
-  border-radius:13px;
-  background:transparent;
-  color:#777d87;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  font-size:9px;
-  font-weight:700;
+.nav-btn{
+  border:0;
+  background:none;
+  color:#646974;
+  padding:7px 2px;
+  font-size:10px;
+  font-weight:800;
 }
 
-.navIcon{
-  font-size:17px;
-}
-
-.navBtn.active{
+.nav-btn.active{
   color:#fff;
-  background:#23262c;
 }
 
-/* MODAL */
+.nav-icon{
+  display:block;
+  margin-bottom:3px;
+  font-size:18px;
+}
 
 .modal{
   position:fixed;
-  z-index:100;
   inset:0;
+  z-index:100;
   display:none;
-  align-items:center;
+  align-items:flex-end;
   justify-content:center;
-  padding:18px;
-  background:rgba(0,0,0,.78);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(7px);
 }
 
 .modal.show{
   display:flex;
 }
 
-.modalBox{
-  width:min(100%,520px);
-  max-height:90vh;
+.modal-box{
+  width:100%;
+  max-width:620px;
+  max-height:92vh;
   overflow:auto;
-  background:#121419;
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:17px;
-  box-shadow:0 30px 90px rgba(0,0,0,.7);
-  animation:modalIn .22s ease;
+  padding:18px 16px calc(20px + env(safe-area-inset-bottom));
+  border-radius:25px 25px 0 0;
+  background:#111318;
+  border-top:1px solid rgba(255,255,255,.08);
 }
 
-@keyframes modalIn{
-  from{
-    opacity:0;
-    transform:translateY(16px) scale(.98);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.modalHead{
+.modal-head{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:12px;
 }
 
-.modalTitle{
+.modal-title{
+  font-size:19px;
   font-weight:900;
-  font-size:17px;
 }
 
 .close{
-  width:33px;
-  height:33px;
-  border-radius:9px;
-  background:#22252b;
-  color:#aeb3bb;
-  font-size:17px;
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:50%;
+  background:#20232a;
+  color:#fff;
+  font-size:18px;
 }
 
-/* PREVIEW */
-
-.casePreview{
-  display:none;
+.case-preview{
+  padding:20px 0;
   text-align:center;
 }
 
-.casePreview.show{
-  display:block;
-}
-
-.previewVisual{
-  height:145px;
-  position:relative;
-  margin:3px 0 4px;
-}
-
-.previewCar{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%) scale(.95);
-  width:240px;
-  height:145px;
-}
-
-.previewDescription{
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.5;
-  margin:0 auto 14px;
-  max-width:290px;
-}
-
-.previewPrice{
-  font-size:11px;
-  color:#d1d4d9;
-  margin-bottom:12px;
-}
-
-.startOpenBtn{
-  width:100%;
-  height:44px;
-  border-radius:11px;
-  background:#e9eaec;
-  color:#08090b;
-  font-size:11px;
-  font-weight:900;
-}
-
-.cancelOpenBtn{
-  width:100%;
-  height:38px;
-  margin-top:8px;
-  border-radius:10px;
-  background:#24272d;
-  color:#bfc3ca;
-  font-size:10px;
-  font-weight:800;
-}
-
-/* ROULETTE */
-
-.rouletteArea{
-  display:none;
-}
-
-.rouletteArea.show{
-  display:block;
-}
-
-.roulette{
-  position:relative;
-  overflow:hidden;
-  height:148px;
-  border-radius:15px;
-  background:#090a0c;
-  border:1px solid var(--line);
-}
-
-.rouletteTrack{
-  position:absolute;
-  left:0;
-  top:0;
-  height:100%;
+.big-case{
+  width:140px;
+  height:100px;
+  margin:0 auto;
   display:flex;
   align-items:center;
-  gap:8px;
-  padding:12px;
-  will-change:transform;
+  justify-content:center;
+  border-radius:22px;
+  background:linear-gradient(145deg,#252932,#101216);
+  box-shadow:0 20px 50px rgba(0,0,0,.45);
+  font-size:50px;
 }
 
-.marker{
+.preview-name{
+  margin-top:15px;
+  font-size:21px;
+  font-weight:950;
+}
+
+.preview-price{
+  margin-top:5px;
+  color:#7c818b;
+  font-size:12px;
+}
+
+.primary-btn{
+  width:100%;
+  border:0;
+  padding:15px;
+  border-radius:15px;
+  background:#fff;
+  color:#090a0c;
+  font-size:14px;
+  font-weight:950;
+}
+
+.primary-btn:active{
+  transform:scale(.98);
+}
+
+.roulette-area{
+  display:none;
+  overflow:hidden;
+  margin-top:15px;
+}
+
+.roulette-wrap{
+  position:relative;
+  overflow:hidden;
+  border-radius:17px;
+  background:#0b0d10;
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.roulette-pointer{
   position:absolute;
-  z-index:4;
+  z-index:5;
   top:0;
-  bottom:0;
   left:50%;
   width:2px;
-  background:#e4e6e9;
+  height:100%;
+  transform:translateX(-50%);
+  background:#fff;
+  box-shadow:0 0 15px rgba(255,255,255,.6);
 }
 
-.marker:before,
-.marker:after{
-  content:"";
-  position:absolute;
-  left:50%;
-  width:9px;
-  height:9px;
-  background:#e4e6e9;
-  transform:translateX(-50%) rotate(45deg);
+.roulette-track{
+  display:flex;
+  gap:8px;
+  width:max-content;
+  padding:15px;
+  transform:translateX(0);
 }
 
-.marker:before{
-  top:-4px;
-}
-
-.marker:after{
-  bottom:-4px;
-}
-
-.rouletteCard{
-  width:112px;
-  min-width:112px;
+.roulette-card{
+  width:100px;
   height:120px;
-  border-radius:13px;
-  background:#17191e;
-  border:1px solid var(--line);
-  padding:7px;
+  flex:0 0 100px;
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  justify-content:flex-end;
+  padding:9px;
+  border-radius:14px;
+  background:#171a20;
+  border:1px solid rgba(255,255,255,.06);
 }
 
-.rouletteImage{
-  height:75px;
-  position:relative;
+.roulette-car{
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-.rouletteName{
+.roulette-car .car-mini{
+  transform:scale(1.1);
+}
+
+.roulette-name{
   font-size:9px;
+  line-height:1.2;
   font-weight:800;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
-.roulettePrice{
+.roulette-value{
+  margin-top:3px;
+  color:#777c86;
   font-size:8px;
-  color:#858b95;
 }
-
-.spinHint{
-  text-align:center;
-  color:var(--muted);
-  font-size:9px;
-  margin-top:9px;
-}
-
-/* RESULT */
 
 .result{
-  text-align:center;
-  padding:15px 0 3px;
   display:none;
+  padding-top:15px;
+  text-align:center;
 }
 
-.result.show{
-  display:block;
-  animation:resultIn .3s ease;
-}
-
-@keyframes resultIn{
-  from{
-    opacity:0;
-    transform:translateY(7px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.resultLabel{
-  color:var(--muted);
-  font-size:9px;
+.result-title{
+  font-size:12px;
+  color:#747984;
   text-transform:uppercase;
-  letter-spacing:1.3px;
+  letter-spacing:1.5px;
 }
 
-.resultName{
-  font-size:21px;
-  font-weight:900;
-  margin-top:4px;
+.result-car{
+  margin:10px auto;
+  width:180px;
+  height:100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:20px;
+  background:linear-gradient(145deg,#20242b,#101216);
 }
 
-.resultValue{
-  color:#d0d3d8;
-  font-size:11px;
-  margin-top:4px;
+.result-name{
+  font-size:22px;
+  font-weight:950;
 }
 
-.resultDiff{
-  display:inline-block;
-  margin-top:7px;
-  padding:6px 9px;
-  border-radius:7px;
-  font-size:10px;
-  font-weight:800;
+.result-value{
+  margin-top:5px;
+  color:#898e98;
+  font-size:13px;
 }
 
-.profit{
-  background:rgba(69,211,155,.1);
-  color:var(--green);
-}
-
-.loss{
-  background:rgba(255,83,104,.1);
-  color:var(--red);
-}
-
-.neutral{
-  background:#202329;
-  color:#b8bdc5;
-}
-
-.resultActions{
+.result-buttons{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:12px;
+  gap:10px;
+  margin-top:18px;
 }
 
-.keepBtn,
-.instantSellBtn{
-  height:40px;
-  border-radius:10px;
-  font-size:10px;
+.secondary-btn{
+  border:0;
+  padding:14px;
+  border-radius:14px;
+  background:#25282f;
+  color:#fff;
+  font-size:13px;
   font-weight:850;
 }
 
-.keepBtn{
-  background:#25282e;
-}
-
-.instantSellBtn{
-  background:#e9eaec;
-  color:#08090b;
-}
-
-.sellInfo{
-  font-size:9px;
-  color:var(--muted);
-  margin-top:8px;
-}
-
-/* LOADING */
-
 .loading{
+  display:none;
+  padding:25px;
   text-align:center;
-  padding:18px;
-  color:var(--muted);
-  font-size:10px;
+  color:#888d97;
+  font-size:13px;
 }
 
-.loader{
-  width:24px;
-  height:24px;
+.spinner{
+  width:25px;
+  height:25px;
   margin:0 auto 10px;
+  border:3px solid #30343c;
+  border-top-color:#fff;
   border-radius:50%;
-  border:2px solid #292c32;
-  border-top-color:#e7e9ec;
-  animation:loader .7s linear infinite;
+  animation:spin .8s linear infinite;
 }
 
-@keyframes loader{
-  to{
-    transform:rotate(360deg);
-  }
+@keyframes spin{
+  to{transform:rotate(360deg)}
 }
-
-/* TOAST */
 
 .toast{
   position:fixed;
   z-index:200;
   left:50%;
-  bottom:87px;
-  transform:translateX(-50%) translateY(18px);
+  bottom:90px;
+  transform:translateX(-50%) translateY(20px);
+  max-width:calc(100% - 30px);
+  padding:11px 15px;
+  border-radius:13px;
+  background:#25282f;
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
   opacity:0;
   pointer-events:none;
-  background:#e9eaec;
-  color:#090a0c;
-  padding:9px 13px;
-  border-radius:10px;
-  font-size:10px;
-  font-weight:800;
-  transition:.22s;
-  white-space:nowrap;
+  transition:.25s;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
 }
 
 .toast.show{
@@ -1011,24 +811,16 @@ button{
 }
 
 @media(max-width:380px){
-  .cases,
-  .grid{
-    gap:8px;
+  .cases{
+    gap:9px;
   }
 
   .case{
-    min-height:195px;
     padding:12px;
   }
 
-  .hero{
-    min-height:205px;
-  }
-
-  .heroCar{
-    transform:scale(.85);
-    transform-origin:right bottom;
-    right:-18px;
+  .case-name{
+    font-size:15px;
   }
 }
 </style>
@@ -1038,18 +830,17 @@ button{
 
 <div class="app">
 
-<header class="header">
-  <div class="brand">
-    <div class="brandMark">🚘</div>
-    <div>
-      <div class="brandName">АВТОИМПЕРИЯ</div>
-      <div class="brandSub">CAR CASES</div>
+<header>
+  <div class="header-row">
+    <div class="brand">
+      <div class="brand-main">АВТОИМПЕРИЯ</div>
+      <div class="brand-sub">CAR CASES</div>
     </div>
-  </div>
 
-  <div class="balance">
-    <div class="balanceLabel">Баланс</div>
-    <div class="balanceValue" id="balance">5 000 000 ₽</div>
+    <div class="balance-box">
+      <div class="balance-label">Баланс</div>
+      <div class="balance" id="balance">5 000 000 ₽</div>
+    </div>
   </div>
 </header>
 
@@ -1057,169 +848,90 @@ button{
 
 </div>
 
-<nav class="nav">
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-cases" onclick="showPage('cases')">
+    <span class="nav-icon">📦</span>
+    Кейсы
+  </button>
 
-<button class="navBtn active"
-        onclick="showPage('cases')"
-        id="navCases">
-  <div class="navIcon">🎁</div>
-  Кейсы
-</button>
+  <button class="nav-btn" id="nav-garage" onclick="showPage('garage')">
+    <span class="nav-icon">🚘</span>
+    Гараж
+  </button>
 
-<button class="navBtn"
-        onclick="showPage('garage')"
-        id="navGarage">
-  <div class="navIcon">🚘</div>
-  Гараж
-</button>
+  <button class="nav-btn" id="nav-market" onclick="showPage('market')">
+    <span class="nav-icon">🏪</span>
+    Рынок
+  </button>
 
-<button class="navBtn"
-        onclick="showPage('market')"
-        id="navMarket">
-  <div class="navIcon">🛒</div>
-  Рынок
-</button>
-
-<button class="navBtn"
-        onclick="showPage('profile')"
-        id="navProfile">
-  <div class="navIcon">👤</div>
-  Профиль
-</button>
-
+  <button class="nav-btn" id="nav-profile" onclick="showPage('profile')">
+    <span class="nav-icon">👤</span>
+    Профиль
+  </button>
 </nav>
 
 <div class="modal" id="modal">
 
-  <div class="modalBox">
+  <div class="modal-box">
 
-    <div class="modalHead">
-      <div class="modalTitle" id="modalTitle">
-        Открытие кейса
-      </div>
-
-      <button class="close"
-              onclick="closeModal()">
-        ×
-      </button>
+    <div class="modal-head">
+      <div class="modal-title" id="modalTitle">Кейс</div>
+      <button class="close" onclick="closeModal()">×</button>
     </div>
 
-    <!-- ПЕРВЫЙ ЭТАП -->
+    <div class="case-preview" id="casePreview"></div>
 
-    <div class="casePreview" id="casePreview">
+    <div class="roulette-area" id="rouletteArea">
+      <div class="roulette-wrap">
+        <div class="roulette-pointer"></div>
+        <div class="roulette-track" id="rouletteTrack"></div>
+      </div>
+    </div>
 
-      <div class="previewVisual">
-        <div class="previewCar">
-          <div class="carBody"></div>
-          <div class="carRoof"></div>
-          <div class="carWindow"></div>
-          <div class="carLight"></div>
-          <div class="wheel left"></div>
-          <div class="wheel right"></div>
+    <div class="result" id="result">
+
+      <div class="result-title">Тебе выпало</div>
+
+      <div class="result-car">
+        <div class="car-mini">
+          <div class="body"></div>
+          <div class="roof"></div>
+          <div class="w w1"></div>
+          <div class="w w2"></div>
         </div>
       </div>
 
-      <div class="previewDescription"
-           id="previewDescription">
-      </div>
+      <div class="result-name" id="resultName"></div>
+      <div class="result-value" id="resultValue"></div>
 
-      <div class="previewPrice"
-           id="previewPrice">
-      </div>
+      <div class="result-buttons">
+        <button class="secondary-btn" onclick="keepResult()">
+          Оставить
+        </button>
 
-      <button class="startOpenBtn"
-              onclick="startCaseOpening()">
-        ОТКРЫТЬ КЕЙС
-      </button>
-
-      <button class="cancelOpenBtn"
-              onclick="closeModal()">
-        ОТМЕНА
-      </button>
-
-    </div>
-
-    <!-- ВТОРОЙ ЭТАП -->
-
-    <div class="rouletteArea"
-         id="rouletteArea">
-
-      <div class="roulette">
-
-        <div class="marker"></div>
-
-        <div class="rouletteTrack"
-             id="rouletteTrack">
-        </div>
-
-      </div>
-
-      <div class="spinHint"
-           id="spinHint">
-        Определяем автомобиль...
+        <button class="primary-btn" onclick="sellResult()">
+          Продать
+        </button>
       </div>
 
     </div>
 
-    <!-- РЕЗУЛЬТАТ -->
-
-    <div class="result"
-         id="result">
-
-      <div class="resultLabel">
-        Твой автомобиль
-      </div>
-
-      <div class="resultName"
-           id="resultName">
-      </div>
-
-      <div class="resultValue"
-           id="resultValue">
-      </div>
-
-      <div class="resultDiff"
-           id="resultDiff">
-      </div>
-
-      <div class="resultActions">
-
-        <button class="keepBtn"
-                onclick="keepResult()">
-          ОСТАВИТЬ
-        </button>
-
-        <button class="instantSellBtn"
-                onclick="sellResult()">
-          ПРОДАТЬ СРАЗУ
-        </button>
-
-      </div>
-
-      <div class="sellInfo"
-           id="sellInfo">
-      </div>
-
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      Обработка...
     </div>
 
   </div>
 
 </div>
 
-<div class="toast"
-     id="toast">
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-
-/* =========================================================
-   TELEGRAM
-========================================================= */
 
 const tg = window.Telegram?.WebApp;
 
 if(tg){
-
   tg.ready();
   tg.expand();
 
@@ -1227,15 +939,14 @@ if(tg){
     tg.setHeaderColor("#0b0c0f");
     tg.setBackgroundColor("#0b0c0f");
   }catch(e){}
-
 }
 
 
-/* =========================================================
+/* =========================
    SERVER
-========================================================= */
+========================= */
 
-const API_BASE = "";
+const API_BASE = "https://autoempire-gspr.onrender.com";
 
 let serverReady = false;
 let serverUser = null;
@@ -1259,345 +970,112 @@ async function api(path,options={}){
     }
   );
 
-  const json =
-    await response
-      .json()
-      .catch(()=>({}));
+  const json = await response.json().catch(()=>({}));
 
   if(!response.ok){
-
-    throw new Error(
-      json.error || "Ошибка сервера"
-    );
-
+    throw new Error(json.error || "Ошибка сервера");
   }
 
   return json;
-
 }
 
-
-/* =========================================================
-   LOAD SERVER
-========================================================= */
 
 async function loadServer(){
 
   try{
 
-    const response =
-      await api(
-        "/api/auth",
-        {
-          method:"POST",
-          body:JSON.stringify({
-            initData:tg?.initData || ""
-          })
-        }
-      );
+    const response = await api("/api/auth",{
+      method:"POST",
+      body:JSON.stringify({
+        initData:tg?.initData || ""
+      })
+    });
 
     serverReady = true;
-    serverUser = response.user;
 
-    data = response.data;
+    serverUser = response.user || null;
 
-    saveLocal();
+    if(response.data){
+      data = response.data;
+      saveLocal();
+    }
+
     updateBalance();
-
-    showPage(currentPage);
+    renderCases();
 
   }catch(error){
 
-    console.warn(
-      "Server auth:",
-      error.message
-    );
+    console.error(error);
 
-    toast(
-      "Не удалось подключиться к серверу"
-    );
+    serverReady = false;
+
+    toast("Не удалось подключиться к серверу");
 
   }
-
 }
 
 
-/* =========================================================
+/* =========================
    CARS
-========================================================= */
+========================= */
 
 const cars = {
 
-  "Lada VAZ 2114":{
-    price:180000,
-    rarity:"common",
-    emoji:"🚗"
-  },
+  "Lada VAZ 2114":{price:180000,rarity:"common"},
+  "Lada VAZ 2109":{price:160000,rarity:"common"},
+  "Lada Priora":{price:350000,rarity:"common"},
+  "Lada Granta":{price:550000,rarity:"common"},
+  "Daewoo Matiz":{price:280000,rarity:"common"},
+  "Daewoo Nexia":{price:420000,rarity:"common"},
+  "УАЗ Patriot":{price:750000,rarity:"common"},
+  "Lada Vesta":{price:1000000,rarity:"common"},
+  "Hyundai Solaris":{price:1100000,rarity:"common"},
+  "Kia Rio":{price:1150000,rarity:"common"},
+  "Renault Logan":{price:850000,rarity:"common"},
+  "Ford Focus":{price:1300000,rarity:"common"},
+  "Skoda Octavia":{price:1700000,rarity:"common"},
+  "Toyota Corolla":{price:1800000,rarity:"common"},
 
-  "Lada VAZ 2109":{
-    price:160000,
-    rarity:"common",
-    emoji:"🚗"
-  },
+  "Volkswagen Passat":{price:1900000,rarity:"rare"},
+  "Haval F7":{price:2200000,rarity:"rare"},
+  "Toyota Camry 70":{price:3000000,rarity:"rare"},
+  "BMW E60":{price:2200000,rarity:"rare"},
+  "BMW E90":{price:2400000,rarity:"rare"},
+  "Mercedes W212":{price:3000000,rarity:"rare"},
+  "Audi A6 C7":{price:3000000,rarity:"rare"},
 
-  "Lada Priora":{
-    price:350000,
-    rarity:"common",
-    emoji:"🚗"
-  },
+  "BMW M4 F82":{price:5000000,rarity:"epic"},
+  "BMW M5 F10":{price:6000000,rarity:"epic"},
+  "BMW M6":{price:7000000,rarity:"epic"},
+  "BMW M3 Competition":{price:7500000,rarity:"epic"},
+  "BMW M4 Competition":{price:8500000,rarity:"epic"},
+  "Mercedes-AMG GT":{price:9000000,rarity:"epic"},
+  "Nissan GT-R R35":{price:9500000,rarity:"epic"},
 
-  "Lada Granta":{
-    price:550000,
-    rarity:"common",
-    emoji:"🚗"
-  },
+  "Audi RS6 C8":{price:10000000,rarity:"legendary"},
+  "BMW M5 CS":{price:10000000,rarity:"legendary"},
+  "BMW M8 Competition":{price:12000000,rarity:"legendary"},
+  "Mercedes-AMG GT 63":{price:14000000,rarity:"legendary"},
+  "Porsche 911 Turbo S":{price:16000000,rarity:"legendary"},
 
-  "Daewoo Matiz":{
-    price:280000,
-    rarity:"common",
-    emoji:"🚗"
-  },
-
-  "Daewoo Nexia":{
-    price:420000,
-    rarity:"common",
-    emoji:"🚗"
-  },
-
-  "УАЗ Patriot":{
-    price:750000,
-    rarity:"common",
-    emoji:"🚙"
-  },
-
-  "Lada Vesta":{
-    price:1000000,
-    rarity:"common",
-    emoji:"🚘"
-  },
-
-  "Hyundai Solaris":{
-    price:1100000,
-    rarity:"common",
-    emoji:"🚘"
-  },
-
-  "Kia Rio":{
-    price:1150000,
-    rarity:"common",
-    emoji:"🚘"
-  },
-
-  "Renault Logan":{
-    price:850000,
-    rarity:"common",
-    emoji:"🚘"
-  },
-
-  "Ford Focus":{
-    price:1300000,
-    rarity:"common",
-    emoji:"🚘"
-  },
-
-  "Skoda Octavia":{
-    price:1700000,
-    rarity:"common",
-    emoji:"🚘"
-  },
-
-  "Toyota Corolla":{
-    price:1800000,
-    rarity:"common",
-    emoji:"🚘"
-  },
-
-  "Volkswagen Passat":{
-    price:1900000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "Haval F7":{
-    price:2200000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "Toyota Camry 70":{
-    price:3000000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "BMW E60":{
-    price:2200000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "BMW E90":{
-    price:2400000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "Mercedes W212":{
-    price:3000000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "Audi A6 C7":{
-    price:3000000,
-    rarity:"rare",
-    emoji:"🚘"
-  },
-
-  "BMW M4 F82":{
-    price:5000000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "BMW M5 F10":{
-    price:6000000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "BMW M6":{
-    price:7000000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "BMW M3 Competition":{
-    price:7500000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "BMW M4 Competition":{
-    price:8500000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "Mercedes-AMG GT":{
-    price:9000000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "Nissan GT-R R35":{
-    price:9500000,
-    rarity:"epic",
-    emoji:"🏎️"
-  },
-
-  "Audi RS6 C8":{
-    price:10000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "BMW M5 CS":{
-    price:10000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "BMW M8 Competition":{
-    price:12000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "Mercedes-AMG GT 63":{
-    price:14000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "Porsche 911 Turbo S":{
-    price:16000000,
-    rarity:"legendary",
-    emoji:"🏎️"
-  },
-
-  "Lamborghini Huracan":{
-    price:20000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Lamborghini Urus":{
-    price:22000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "McLaren 720S":{
-    price:25000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Lamborghini Aventador":{
-    price:25000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Ferrari 488":{
-    price:28000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Ferrari F8 Tributo":{
-    price:32000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "McLaren 765LT":{
-    price:35000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Bentley Continental GT":{
-    price:15000000,
-    rarity:"mythic",
-    emoji:"🚘"
-  },
-
-  "Porsche 918 Spyder":{
-    price:45000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  },
-
-  "Rolls-Royce Phantom":{
-    price:50000000,
-    rarity:"mythic",
-    emoji:"🚘"
-  },
-
-  "Bugatti Chiron":{
-    price:100000000,
-    rarity:"mythic",
-    emoji:"🏎️"
-  }
+  "Lamborghini Huracan":{price:20000000,rarity:"mythic"},
+  "Lamborghini Urus":{price:22000000,rarity:"mythic"},
+  "McLaren 720S":{price:25000000,rarity:"mythic"},
+  "Lamborghini Aventador":{price:25000000,rarity:"mythic"},
+  "Ferrari 488":{price:28000000,rarity:"mythic"},
+  "Ferrari F8 Tributo":{price:32000000,rarity:"mythic"},
+  "McLaren 765LT":{price:35000000,rarity:"mythic"},
+  "Bentley Continental GT":{price:15000000,rarity:"mythic"},
+  "Porsche 918 Spyder":{price:45000000,rarity:"mythic"},
+  "Rolls-Royce Phantom":{price:50000000,rarity:"mythic"},
+  "Bugatti Chiron":{price:100000000,rarity:"mythic"}
 
 };
 
 
-/* =========================================================
-   RARITIES
-========================================================= */
+/* =========================
+   RARITY
+========================= */
 
 const rarityNames = {
 
@@ -1610,19 +1088,17 @@ const rarityNames = {
 };
 
 
-/* =========================================================
+/* =========================
    CASES
-   ИДЕНТИЧНЫ server.js
-========================================================= */
+========================= */
 
-const cases = [
+const casesData = {
 
-  {
-    id:"starter",
+  starter:{
     name:"Стартовый",
     rarity:"common",
     price:300000,
-    description:"Доступный кейс",
+
     items:[
       ["Lada VAZ 2114",42],
       ["Lada VAZ 2109",30],
@@ -1635,12 +1111,11 @@ const cases = [
     ]
   },
 
-  {
-    id:"street",
+  street:{
     name:"Уличный",
     rarity:"rare",
     price:900000,
-    description:"Городские автомобили",
+
     items:[
       ["Hyundai Solaris",20],
       ["Kia Rio",18],
@@ -1655,12 +1130,11 @@ const cases = [
     ]
   },
 
-  {
-    id:"premium",
+  premium:{
     name:"Премиум",
     rarity:"epic",
     price:5000000,
-    description:"Премиальные автомобили",
+
     items:[
       ["BMW E60",15],
       ["BMW E90",12],
@@ -1676,12 +1150,11 @@ const cases = [
     ]
   },
 
-  {
-    id:"elite",
+  elite:{
     name:"Элитный",
     rarity:"legendary",
     price:15000000,
-    description:"Высокий шанс на дорогие авто",
+
     items:[
       ["BMW M5 CS",20],
       ["BMW M8 Competition",16],
@@ -1693,12 +1166,11 @@ const cases = [
     ]
   },
 
-  {
-    id:"imperial",
+  imperial:{
     name:"Императорский",
     rarity:"mythic",
     price:100000000,
-    description:"Максимальная редкость",
+
     items:[
       ["Lamborghini Aventador",20],
       ["Ferrari 488",18],
@@ -1711,154 +1183,89 @@ const cases = [
     ]
   }
 
-];
+};
 
 
-/* =========================================================
+/* =========================
    MARKET
-========================================================= */
+========================= */
 
 const market = [
 
   ["Lada Vesta",1000000],
-
   ["BMW E60",2200000],
-
   ["Toyota Camry 70",3000000],
-
   ["BMW M4 F82",5000000],
-
   ["BMW M5 F10",6000000],
-
   ["Nissan GT-R R35",9500000],
-
   ["BMW M5 CS",10000000],
-
   ["Mercedes-AMG GT 63",14000000],
-
   ["Porsche 911 Turbo S",16000000],
-
   ["Lamborghini Huracan",20000000],
-
   ["Lamborghini Aventador",25000000],
-
   ["Ferrari 488",28000000],
-
   ["Rolls-Royce Phantom",50000000],
-
   ["Bugatti Chiron",100000000]
 
 ];
 
 
-/* =========================================================
+/* =========================
    LOCAL DATA
-========================================================= */
+========================= */
 
 const defaultData = {
 
   balance:5000000,
-
   spent:0,
-
   opened:0,
-
   sold:0,
-
   garage:[],
-
   history:[]
 
 };
 
-let data;
-
-try{
-
-  data =
-    JSON.parse(
-      localStorage.getItem("autoEmpire2")
-    );
-
-}catch(error){
-
-  data = null;
-
-}
-
-if(!data){
-
-  data =
-    JSON.parse(
-      JSON.stringify(defaultData)
-    );
-
-}
-
-data.balance =
-  Number(data.balance || 0);
-
-data.spent =
-  Number(data.spent || 0);
-
-data.opened =
-  Number(data.opened || 0);
-
-data.sold =
-  Number(data.sold || 0);
-
-data.garage =
-  Array.isArray(data.garage)
-  ? data.garage
-  : [];
-
-data.history =
-  Array.isArray(data.history)
-  ? data.history
-  : [];
+let data = JSON.parse(
+  localStorage.getItem("autoEmpire2") || "null"
+) || structuredClone(defaultData);
 
 
 function saveLocal(){
 
-  try{
-
-    localStorage.setItem(
-      "autoEmpire2",
-      JSON.stringify(data)
-    );
-
-  }catch(error){}
+  localStorage.setItem(
+    "autoEmpire2",
+    JSON.stringify(data)
+  );
 
 }
 
 
-function money(number){
+/* =========================
+   HELPERS
+========================= */
 
-  return Math
-    .round(Number(number || 0))
-    .toLocaleString("ru-RU")
-    + " ₽";
+function money(value){
+
+  return Number(value || 0).toLocaleString("ru-RU") + " ₽";
 
 }
 
 
 function level(){
 
-  return Math.floor(
-    data.spent / 2500000
-  ) + 1;
+  return Math.max(
+    1,
+    Math.floor(data.opened / 5) + 1
+  );
 
 }
 
 
 function levelProgress(){
 
-  return Math.min(
-    100,
-    (data.spent % 2500000)
-    / 2500000
-    * 100
-  );
+  const current = data.opened % 5;
+
+  return (current / 5) * 100;
 
 }
 
@@ -1878,597 +1285,470 @@ function escapeHTML(value){
 function getCar(name){
 
   return cars[name] || {
-
     price:0,
-    rarity:"common",
-    emoji:"🚗"
-
+    rarity:"common"
   };
 
 }
 
 
-function carVisual(name,small=false){
+function carVisual(){
 
   return `
-    <div
-      class="miniCar"
-      style="${small
-        ? "transform:translate(-50%,-50%) scale(.58);"
-        : ""}"
-    >
-
-      <div class="carBody"></div>
-
-      <div class="carRoof"></div>
-
-      <div class="carWindow"></div>
-
-      <div class="carLight"></div>
-
-      <div class="wheel left"></div>
-
-      <div class="wheel right"></div>
-
+    <div class="car-mini">
+      <div class="body"></div>
+      <div class="roof"></div>
+      <div class="w w1"></div>
+      <div class="w w2"></div>
     </div>
   `;
 
 }
 
-
-/* =========================================================
-   BALANCE
-========================================================= */
 
 function updateBalance(){
 
-  const element =
-    document.getElementById("balance");
-
-  if(element){
-
-    element.textContent =
-      money(data.balance);
-
-  }
+  document.getElementById("balance").textContent =
+    money(data.balance);
 
 }
 
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+/* =========================
+   TOAST
+========================= */
 
-let currentPage = "cases";
+let toastTimer;
+
+function toast(message){
+
+  const el = document.getElementById("toast");
+
+  el.textContent = message;
+
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(()=>{
+    el.classList.remove("show");
+  },2600);
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
 
 function showPage(page){
 
-  currentPage = page;
-
-  document
-    .querySelectorAll(".navBtn")
-    .forEach(button=>{
-      button.classList.remove("active");
-    });
-
-  const nav = {
-
-    cases:"navCases",
-    garage:"navGarage",
-    market:"navMarket",
-    profile:"navProfile"
-
-  };
+  document.querySelectorAll(".nav-btn")
+    .forEach(btn=>btn.classList.remove("active"));
 
   const active =
-    document.getElementById(nav[page]);
+    document.getElementById("nav-" + page);
 
   if(active){
-
     active.classList.add("active");
-
   }
 
-  if(page==="cases"){
+  if(page === "cases"){
     renderCases();
   }
 
-  if(page==="garage"){
+  if(page === "garage"){
     renderGarage();
   }
 
-  if(page==="market"){
+  if(page === "market"){
     renderMarket();
   }
 
-  if(page==="profile"){
+  if(page === "profile"){
     renderProfile();
   }
 
-  updateBalance();
-
 }
 
 
-/* =========================================================
-   CASES PAGE
-========================================================= */
+/* =========================
+   CASES
+========================= */
 
 function renderCases(){
 
-  document.getElementById("content").innerHTML = `
+  const content =
+    document.getElementById("content");
+
+  content.innerHTML = `
 
     <section class="hero">
 
-      <div class="heroTop">
-
-        <div class="heroEyebrow">
-          Автомобильная коллекция
-        </div>
-
-        <div class="heroTitle">
-          Открывай.<br>
-          Собирай.
-        </div>
-
-        <div class="heroText">
-          Кейсы с популярными автомобилями.
-          Собирай коллекцию или продавай машины.
-        </div>
-
+      <div class="hero-title">
+        Открывай.<br>
+        Собирай.
       </div>
 
-      <div class="heroCar">
-
-        ${carVisual("BMW E60")}
-
+      <div class="hero-text">
+        Открывай автомобильные кейсы,
+        собирай коллекцию и создавай
+        свою автоимперию.
       </div>
 
-      <div class="heroBottom">
-
-        <div class="levelBadge">
-
-          <span class="levelDot"></span>
-
-          Уровень ${level()}
-
-        </div>
-
+      <div class="hero-car">
+        <div class="car-body"></div>
+        <div class="car-roof"></div>
+        <div class="car-window"></div>
+        <div class="wheel one"></div>
+        <div class="wheel two"></div>
       </div>
 
     </section>
 
-    <section class="section">
+    <div class="section-title">
+      <h2>Кейсы</h2>
+      <span>${Object.keys(casesData).length} кейсов</span>
+    </div>
 
-      <div class="sectionHead">
+    <div class="cases">
 
-        <div>
+      ${Object.entries(casesData)
+        .map(([id,c])=>renderCase(id,c))
+        .join("")}
 
-          <div class="sectionTitle">
-            Кейсы
-          </div>
-
-          <div class="sectionSub">
-            ${cases.length} уровней стоимости
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="cases">
-
-        ${cases.map(renderCase).join("")}
-
-      </div>
-
-    </section>
-
+    </div>
   `;
-
-  updateBalance();
 
 }
 
 
-function renderCase(c){
+function renderCase(id,c){
 
   return `
 
-    <div class="case">
+    <div
+      class="case"
+      onclick="openCase('${id}')"
+    >
 
-      <div class="caseTop">
+      <div class="case-top">
 
-        <div class="rarity ${c.rarity}">
+        <div class="case-rarity">
           ${rarityNames[c.rarity]}
         </div>
 
-        <div style="font-size:8px;color:#777d86">
-          ${c.items.length} авто
+        <div class="case-icon">
+          📦
         </div>
 
       </div>
 
-      <div class="caseName">
+      <div class="case-name">
         ${escapeHTML(c.name)}
       </div>
 
-      <div class="casePrice">
+      <div class="case-desc">
+        ${c.items.length} автомобилей
+      </div>
+
+      <div class="case-price">
         ${money(c.price)}
       </div>
 
-      <div class="caseVisual">
-
-        ${carVisual(
-          c.items[0][0],
-          true
-        )}
-
-      </div>
-
-      <div class="caseBottom">
-
-        <div class="caseChance">
-
-          <span>
-            ${escapeHTML(c.description)}
-          </span>
-
-          <span>
-            100%
-          </span>
-
-        </div>
-
-        <button
-          class="openBtn"
-          onclick="openCase('${c.id}')"
-        >
-          ОТКРЫТЬ
-        </button>
-
-      </div>
+      <div class="case-glow"></div>
 
     </div>
-
   `;
 
 }
 
 
-/* =========================================================
-   MODAL STATE
-========================================================= */
+/* =========================
+   CASE MODAL
+========================= */
 
 let spinning = false;
-
 let currentResult = null;
-
 let currentCase = null;
 
 
-/* =========================================================
-   AUDIO ENGINE
-   НОВЫЙ ЗВУК РУЛЕТКИ
-========================================================= */
-
-let audioContext = null;
-
-function getAudio(){
-
-  if(!audioContext){
-
-    const AudioCtx =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    if(!AudioCtx){
-      return null;
-    }
-
-    audioContext =
-      new AudioCtx();
-
-  }
-
-  if(audioContext.state==="suspended"){
-
-    audioContext.resume()
-      .catch(()=>{});
-
-  }
-
-  return audioContext;
-
-}
-
-
-/*
-  Мягкий механический "клац".
-  Не квадратная волна.
-*/
-
-function rouletteTick(progress=0){
-
-  try{
-
-    const ctx = getAudio();
-
-    if(!ctx)return;
-
-    const now = ctx.currentTime;
-
-    const oscillator =
-      ctx.createOscillator();
-
-    const gain =
-      ctx.createGain();
-
-    oscillator.type = "triangle";
-
-    const base =
-      145 +
-      progress * 80;
-
-    oscillator.frequency.setValueAtTime(
-      base,
-      now
-    );
-
-    oscillator.frequency.exponentialRampToValueAtTime(
-      base * .68,
-      now + .055
-    );
-
-    gain.gain.setValueAtTime(
-      .0001,
-      now
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .035,
-      now + .004
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .0001,
-      now + .065
-    );
-
-    oscillator.connect(gain);
-    gain.connect(ctx.destination);
-
-    oscillator.start(now);
-    oscillator.stop(now + .07);
-
-  }catch(error){}
-
-}
-
-
-/*
-  Более приятный звук победы.
-*/
-
-function rouletteWinSound(){
-
-  try{
-
-    const ctx = getAudio();
-
-    if(!ctx)return;
-
-    const now = ctx.currentTime;
-
-    const notes = [
-      392,
-      494,
-      587,
-      784
-    ];
-
-    notes.forEach(
-      (frequency,index)=>{
-
-        const oscillator =
-          ctx.createOscillator();
-
-        const gain =
-          ctx.createGain();
-
-        const start =
-          now + index * .075;
-
-        oscillator.type =
-          index === 3
-          ? "sine"
-          : "triangle";
-
-        oscillator.frequency.setValueAtTime(
-          frequency,
-          start
-        );
-
-        gain.gain.setValueAtTime(
-          .0001,
-          start
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-          index === 3 ? .12 : .075,
-          start + .025
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-          .0001,
-          start + .38
-        );
-
-        oscillator.connect(gain);
-        gain.connect(ctx.destination);
-
-        oscillator.start(start);
-        oscillator.stop(start + .4);
-
-      }
-    );
-
-  }catch(error){}
-
-}
-
-
-/* =========================================================
-   FIRST STEP:
-   ONLY OPEN MODAL
-========================================================= */
-
 function openCase(id){
-
-  if(spinning)return;
-
-  const selected =
-    cases.find(
-      item=>item.id===id
-    );
-
-  if(!selected)return;
 
   if(!serverReady){
 
-    toast(
-      "Сначала подключись к серверу"
-    );
+    toast("Сначала подключись к серверу");
 
     return;
-
   }
 
-  currentCase = selected;
-  currentResult = null;
+  const c = casesData[id];
 
-  document
-    .getElementById("modal")
-    .classList.add("show");
+  if(!c) return;
 
-  document
-    .getElementById("modalTitle")
-    .textContent =
-      "Кейс · " + selected.name;
+  currentCase = id;
 
-  document
-    .getElementById("casePreview")
-    .classList.add("show");
+  const modal =
+    document.getElementById("modal");
 
-  document
-    .getElementById("rouletteArea")
-    .classList.remove("show");
+  document.getElementById("modalTitle")
+    .textContent = c.name;
 
-  document
-    .getElementById("result")
-    .classList.remove("show");
+  document.getElementById("casePreview")
+    .style.display = "block";
 
-  document
-    .getElementById("previewDescription")
-    .textContent =
-      selected.description;
+  document.getElementById("rouletteArea")
+    .style.display = "none";
 
-  document
-    .getElementById("previewPrice")
-    .textContent =
-      "Стоимость открытия: " +
-      money(selected.price);
+  document.getElementById("result")
+    .style.display = "none";
+
+  document.getElementById("loading")
+    .style.display = "none";
+
+  document.getElementById("casePreview").innerHTML = `
+
+    <div class="big-case">
+      📦
+    </div>
+
+    <div class="preview-name">
+      ${escapeHTML(c.name)}
+    </div>
+
+    <div class="preview-price">
+      Стоимость: ${money(c.price)}
+    </div>
+
+    <div style="margin-top:20px">
+
+      <button
+        class="primary-btn"
+        onclick="startCaseOpening()"
+      >
+        ОТКРЫТЬ ЗА ${money(c.price)}
+      </button>
+
+    </div>
+  `;
+
+  modal.classList.add("show");
 
 }
 
 
-/* =========================================================
-   SECOND STEP:
-   SERVER OPEN
-========================================================= */
+function closeModal(){
+
+  if(spinning) return;
+
+  document
+    .getElementById("modal")
+    .classList.remove("show");
+
+}
+
+
+/* =========================
+   AUDIO
+========================= */
+
+let audioCtx = null;
+
+
+function initAudio(){
+
+  if(!audioCtx){
+
+    try{
+      audioCtx =
+        new (window.AudioContext ||
+        window.webkitAudioContext)();
+    }catch(e){}
+
+  }
+
+}
+
+
+function rouletteTick(progress){
+
+  if(!audioCtx) return;
+
+  try{
+
+    const osc =
+      audioCtx.createOscillator();
+
+    const gain =
+      audioCtx.createGain();
+
+    osc.type = "triangle";
+
+    osc.frequency.value =
+      120 + progress * 100;
+
+    gain.gain.setValueAtTime(
+      0.035,
+      audioCtx.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioCtx.currentTime + 0.045
+    );
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+
+  }catch(e){}
+
+}
+
+
+function rouletteWinSound(){
+
+  if(!audioCtx) return;
+
+  const notes = [
+    392,
+    494,
+    587,
+    784
+  ];
+
+  notes.forEach((frequency,index)=>{
+
+    setTimeout(()=>{
+
+      try{
+
+        const osc =
+          audioCtx.createOscillator();
+
+        const gain =
+          audioCtx.createGain();
+
+        osc.type = "sine";
+
+        osc.frequency.value =
+          frequency;
+
+        gain.gain.setValueAtTime(
+          0.001,
+          audioCtx.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.08,
+          audioCtx.currentTime + .02
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.001,
+          audioCtx.currentTime + .3
+        );
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+
+        osc.stop(
+          audioCtx.currentTime + .32
+        );
+
+      }catch(e){}
+
+    },index * 110);
+
+  });
+
+}
+
+
+/* =========================
+   OPEN CASE
+========================= */
 
 async function startCaseOpening(){
 
-  if(!currentCase)return;
-
-  if(spinning)return;
+  if(spinning) return;
 
   if(!serverReady){
 
     toast("Нет соединения с сервером");
 
     return;
-
   }
 
-  if(
-    Number(data.balance) <
-    Number(currentCase.price)
-  ){
+  const c = casesData[currentCase];
+
+  if(!c) return;
+
+  if(data.balance < c.price){
 
     toast("Недостаточно средств");
 
     return;
-
   }
 
-  /*
-    AudioContext запускаем именно
-    после пользовательского нажатия.
-  */
+  initAudio();
 
   try{
 
-    const audio =
-      getAudio();
-
-    if(audio){
-      await audio.resume();
+    if(audioCtx?.state === "suspended"){
+      await audioCtx.resume();
     }
 
-  }catch(error){}
-
+  }catch(e){}
 
   spinning = true;
 
-  document
-    .getElementById("casePreview")
-    .classList.remove("show");
+  document.getElementById("casePreview")
+    .style.display = "none";
 
-  document
-    .getElementById("rouletteArea")
-    .classList.add("show");
+  document.getElementById("result")
+    .style.display = "none";
 
-  document
-    .getElementById("result")
-    .classList.remove("show");
+  document.getElementById("rouletteArea")
+    .style.display = "block";
 
-  document
-    .getElementById("spinHint")
-    .textContent =
-      "Сервер определяет автомобиль...";
+  document.getElementById("loading")
+    .style.display = "block";
 
-  buildRoulette(currentCase);
-
+  let response;
 
   try{
 
-    /*
-      Деньги списываются только здесь.
-    */
+    response = await api("/api/cases/open",{
 
-    const response =
-      await api(
-        "/api/cases/open",
-        {
-          method:"POST",
+      method:"POST",
 
-          body:JSON.stringify({
-            caseId:currentCase.id
-          })
+      body:JSON.stringify({
+        caseId:currentCase
+      })
 
-        }
-      );
+    });
+
+  }catch(error){
+
+    spinning = false;
+
+    document.getElementById("loading")
+      .style.display = "none";
+
+    toast(error.message || "Ошибка открытия кейса");
+
+    return;
+  }
+
+  document.getElementById("loading")
+    .style.display = "none";
+
+  if(response.data){
 
     data = response.data;
 
@@ -2476,120 +1756,85 @@ async function startCaseOpening(){
 
     updateBalance();
 
-    /*
-      Рулетка останавливается
-      именно на серверном результате.
-    */
+  }
 
-    setTimeout(
-      ()=>{
-        spinRoulette(
-          currentCase,
-          response.result.name,
-          response.result.value
-        );
-      },
-      180
-    );
+  const winner =
+    response.result?.name;
 
-  }catch(error){
+  const value =
+    response.result?.value ||
+    getCar(winner).price;
+
+  if(!winner){
 
     spinning = false;
 
-    document
-      .getElementById("rouletteArea")
-      .classList.remove("show");
+    toast("Сервер не вернул автомобиль");
 
-    document
-      .getElementById("casePreview")
-      .classList.add("show");
-
-    toast(
-      error.message ||
-      "Ошибка открытия"
-    );
-
+    return;
   }
+
+  spinRoulette(
+    c,
+    winner,
+    value
+  );
 
 }
 
 
-/* =========================================================
-   BUILD ROULETTE
-========================================================= */
+/* =========================
+   ROULETTE
+========================= */
 
 function buildRoulette(c){
 
   const track =
-    document.getElementById(
-      "rouletteTrack"
-    );
+    document.getElementById("rouletteTrack");
 
-  track.innerHTML = "";
+  let list = [];
 
-  /*
-    Делаем длинную ленту.
-    Победитель будет вставлен
-    в заранее определённую позицию.
-  */
-
-  const count = 46;
-
-  for(let i=0;i<count;i++){
+  for(let i=0;i<46;i++){
 
     const item =
       c.items[
-        i % c.items.length
-      ];
+        Math.floor(
+          Math.random() * c.items.length
+        )
+      ][0];
 
-    const name = item[0];
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "rouletteCard";
-
-    card.innerHTML = `
-
-      <div class="rouletteImage">
-
-        ${carVisual(
-          name,
-          true
-        )}
-
-      </div>
-
-      <div>
-
-        <div class="rouletteName">
-          ${escapeHTML(name)}
-        </div>
-
-        <div class="roulettePrice">
-          ${money(getCar(name).price)}
-        </div>
-
-      </div>
-
-    `;
-
-    track.appendChild(card);
+    list.push(item);
 
   }
 
-  track.style.transition = "none";
+  track.innerHTML = list.map(name=>{
 
-  track.style.transform =
-    "translateX(0)";
+    const car =
+      getCar(name);
+
+    return `
+
+      <div class="roulette-card">
+
+        <div class="roulette-car">
+          ${carVisual()}
+        </div>
+
+        <div class="roulette-name">
+          ${escapeHTML(name)}
+        </div>
+
+        <div class="roulette-value">
+          ${money(car.price)}
+        </div>
+
+      </div>
+    `;
+
+  }).join("");
 
 }
 
-
-/* =========================================================
-   SPIN
-========================================================= */
 
 function spinRoulette(
   c,
@@ -2598,331 +1843,191 @@ function spinRoulette(
 ){
 
   const track =
-    document.getElementById(
-      "rouletteTrack"
-    );
+    document.getElementById("rouletteTrack");
+
+  buildRoulette(c);
 
   const cards =
-    Array.from(
-      track.children
-    );
+    track.querySelectorAll(".roulette-card");
 
-  const cardWidth = 120;
+  if(cards[35]){
 
-  /*
-    Победитель находится далеко
-    от начала ленты.
-  */
+    const car =
+      getCar(winner);
 
-  const winnerIndex = 35;
+    cards[35].innerHTML = `
 
-  if(cards[winnerIndex]){
-
-    cards[winnerIndex].innerHTML = `
-
-      <div class="rouletteImage">
-
-        ${carVisual(
-          winner,
-          true
-        )}
-
+      <div class="roulette-car">
+        ${carVisual()}
       </div>
 
-      <div>
-
-        <div class="rouletteName">
-          ${escapeHTML(winner)}
-        </div>
-
-        <div class="roulettePrice">
-          ${money(serverValue)}
-        </div>
-
+      <div class="roulette-name">
+        ${escapeHTML(winner)}
       </div>
 
+      <div class="roulette-value">
+        ${money(serverValue)}
+      </div>
     `;
 
   }
 
+  const cardWidth = 108;
 
-  const roulette =
-    document.querySelector(
-      ".roulette"
-    );
-
-  const center =
-    roulette.clientWidth / 2;
+  const centerOffset =
+    window.innerWidth / 2;
 
   const target =
-    -(winnerIndex * cardWidth)
-    + center
-    - 56;
+    -(35 * cardWidth)
+    + centerOffset
+    - 50
+    + (Math.random() * 20 - 10);
 
-  const duration = 5200;
+  track.style.transition = "none";
 
-  let startTime = null;
+  track.style.transform =
+    "translateX(0px)";
 
-  let lastTick = 0;
+  requestAnimationFrame(()=>{
 
-  function animationFrame(time){
+    requestAnimationFrame(()=>{
 
-    if(!startTime){
+      const start =
+        performance.now();
 
-      startTime = time;
+      const duration = 5200;
 
-    }
+      let lastTick = -1;
 
-    const elapsed =
-      time - startTime;
+      function frame(now){
 
-    const progress =
-      Math.min(
-        elapsed / duration,
-        1
-      );
+        const elapsed =
+          now - start;
 
-    /*
-      Частота звуковых кликов
-      меняется по скорости рулетки.
-    */
+        const progress =
+          Math.min(elapsed / duration,1);
 
-    const interval =
-      progress < .2
-      ? 95
-      : progress < .45
-      ? 125
-      : progress < .7
-      ? 165
-      : progress < .87
-      ? 215
-      : 300;
+        const eased =
+          1 - Math.pow(1-progress,4);
 
-    if(
-      time - lastTick >= interval &&
-      progress < .97
-    ){
+        const x =
+          target * eased;
 
-      rouletteTick(progress);
+        track.style.transform =
+          `translateX(${x}px)`;
 
-      lastTick = time;
+        const tick =
+          Math.floor(progress * 38);
 
-    }
+        if(tick !== lastTick){
 
-    if(progress < 1){
+          lastTick = tick;
 
-      requestAnimationFrame(
-        animationFrame
-      );
+          rouletteTick(progress);
 
-    }
+        }
 
-  }
+        if(progress < 1){
 
-  requestAnimationFrame(
-    animationFrame
-  );
+          requestAnimationFrame(frame);
 
+        }else{
 
-  requestAnimationFrame(
-    ()=>{
+          finishCase(
+            winner,
+            serverValue
+          );
 
-      track.style.transition =
-        `transform ${duration}ms cubic-bezier(.08,.72,.14,1)`;
+        }
 
-      track.style.transform =
-        `translateX(${target}px)`;
+      }
 
-    }
-  );
+      requestAnimationFrame(frame);
 
+    });
 
-  setTimeout(
-    ()=>{
-      finishCase(
-        c,
-        winner,
-        serverValue
-      );
-    },
-    duration + 160
-  );
+  });
 
 }
 
 
-/* =========================================================
-   FINISH
-========================================================= */
+/* =========================
+   RESULT
+========================= */
 
 function finishCase(
-  c,
   winner,
-  serverValue
+  value
 ){
 
-  const car =
-    getCar(winner);
-
-  const actualValue =
-    Number(serverValue || car.price);
-
   currentResult = {
-
     name:winner,
-
-    value:actualValue,
-
-    casePrice:c.price
-
+    value:Number(value || 0)
   };
-
-
-  const difference =
-    actualValue -
-    c.price;
-
-
-  document
-    .getElementById("resultName")
-    .textContent =
-      winner;
-
-
-  document
-    .getElementById("resultValue")
-    .textContent =
-      money(actualValue);
-
-
-  const diffElement =
-    document.getElementById(
-      "resultDiff"
-    );
-
-
-  if(difference > 0){
-
-    diffElement.textContent =
-      "+" + money(difference);
-
-    diffElement.className =
-      "resultDiff profit";
-
-  }
-
-  else if(difference < 0){
-
-    diffElement.textContent =
-      "-" +
-      money(
-        Math.abs(difference)
-      );
-
-    diffElement.className =
-      "resultDiff loss";
-
-  }
-
-  else{
-
-    diffElement.textContent =
-      "В ноль";
-
-    diffElement.className =
-      "resultDiff neutral";
-
-  }
-
-
-  const sellPrice =
-    Math.floor(
-      actualValue * .85
-    );
-
-
-  document
-    .getElementById("sellInfo")
-    .textContent =
-      "Мгновенная продажа: " +
-      money(sellPrice) +
-      " (85% от стоимости)";
-
-
-  document
-    .getElementById("spinHint")
-    .textContent =
-      "Результат определён";
-
-
-  document
-    .getElementById("result")
-    .classList.add("show");
-
 
   spinning = false;
 
   rouletteWinSound();
 
+  document.getElementById("resultName")
+    .textContent = winner;
+
+  document.getElementById("resultValue")
+    .textContent = money(currentResult.value);
+
+  document.getElementById("rouletteArea")
+    .style.display = "none";
+
+  document.getElementById("result")
+    .style.display = "block";
+
 }
 
 
-/* =========================================================
-   KEEP
-========================================================= */
+/* =========================
+   KEEP RESULT
+========================= */
 
 async function keepResult(){
 
-  if(
-    !currentResult ||
-    !currentCase
-  ){
-
-    return;
-
-  }
+  if(!currentResult) return;
 
   try{
 
     const response =
-      await api(
-        "/api/cases/keep",
-        {
-          method:"POST",
+      await api("/api/cases/keep",{
 
-          body:JSON.stringify({
+        method:"POST",
 
-            name:
-              currentResult.name
+        body:JSON.stringify({
+          name:currentResult.name
+        })
 
-          })
+      });
 
-        }
-      );
+    if(response.data){
 
+      data = response.data;
 
-    data = response.data;
+      saveLocal();
 
-    saveLocal();
+      updateBalance();
 
-    toast(
-      "Автомобиль добавлен в гараж"
-    );
-
-
-    closeModal();
+    }
 
     currentResult = null;
 
-    currentCase = null;
+    closeModal();
 
-    showPage(currentPage);
+    renderCases();
+
+    toast("Автомобиль добавлен в гараж");
 
   }catch(error){
 
     toast(
       error.message ||
-      "Ошибка сохранения"
+      "Не удалось сохранить автомобиль"
     );
 
   }
@@ -2930,67 +2035,50 @@ async function keepResult(){
 }
 
 
-/* =========================================================
+/* =========================
    SELL RESULT
-========================================================= */
+========================= */
 
 async function sellResult(){
 
-  if(
-    !currentResult ||
-    !currentCase
-  ){
-
-    return;
-
-  }
+  if(!currentResult) return;
 
   try{
 
     const response =
-      await api(
-        "/api/cases/sell",
-        {
-          method:"POST",
+      await api("/api/cases/sell",{
 
-          body:JSON.stringify({
+        method:"POST",
 
-            name:
-              currentResult.name
+        body:JSON.stringify({
+          name:currentResult.name
+        })
 
-          })
+      });
 
-        }
-      );
+    if(response.data){
 
+      data = response.data;
 
-    data = response.data;
+      saveLocal();
 
-    saveLocal();
+      updateBalance();
 
-    updateBalance();
-
-
-    toast(
-      currentResult.name +
-      " продан за " +
-      money(response.sellPrice)
-    );
-
-
-    closeModal();
+    }
 
     currentResult = null;
 
-    currentCase = null;
+    closeModal();
 
-    showPage(currentPage);
+    renderCases();
+
+    toast("Автомобиль продан");
 
   }catch(error){
 
     toast(
       error.message ||
-      "Ошибка продажи"
+      "Не удалось продать автомобиль"
     );
 
   }
@@ -2998,253 +2086,128 @@ async function sellResult(){
 }
 
 
-/* =========================================================
-   CLOSE
-========================================================= */
-
-function closeModal(){
-
-  /*
-    Во время рулетки закрыть нельзя.
-  */
-
-  if(spinning){
-
-    toast(
-      "Дождись окончания рулетки"
-    );
-
-    return;
-
-  }
-
-
-  document
-    .getElementById("modal")
-    .classList.remove("show");
-
-
-  document
-    .getElementById("casePreview")
-    .classList.remove("show");
-
-
-  document
-    .getElementById("rouletteArea")
-    .classList.remove("show");
-
-
-  document
-    .getElementById("result")
-    .classList.remove("show");
-
-
-  currentResult = null;
-
-  currentCase = null;
-
-}
-
-
-/* =========================================================
+/* =========================
    GARAGE
-========================================================= */
+========================= */
 
 function renderGarage(){
 
   const content =
-    document.getElementById(
-      "content"
-    );
-
+    document.getElementById("content");
 
   if(!data.garage.length){
 
     content.innerHTML = `
 
-      <section class="section">
+      <div class="section-title">
+        <h2>Гараж</h2>
+      </div>
 
-        <div class="sectionHead">
-
-          <div>
-
-            <div class="sectionTitle">
-              Гараж
-            </div>
-
-            <div class="sectionSub">
-              Твоя коллекция
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="empty">
-
-          В гараже пока нет автомобилей.<br>
-          Открой первый кейс.
-
-        </div>
-
-      </section>
-
+      <div class="empty">
+        Гараж пока пуст.<br>
+        Открой первый кейс.
+      </div>
     `;
 
     return;
 
   }
 
-
   content.innerHTML = `
 
-    <section class="section">
+    <div class="section-title">
+      <h2>Гараж</h2>
+      <span>${data.garage.length} авто</span>
+    </div>
 
-      <div class="sectionHead">
+    <div class="garage-list">
 
-        <div>
+      ${data.garage.map((name,index)=>{
 
-          <div class="sectionTitle">
-            Гараж
-          </div>
+        const car =
+          getCar(name);
 
-          <div class="sectionSub">
-            ${data.garage.length}
-            автомобилей
-          </div>
+        return `
 
-        </div>
+          <div class="car-card">
 
-      </div>
+            ${carVisual()}
 
-      <div class="grid">
+            <div class="car-info">
 
-        ${data.garage.map(
-          (car,index)=>{
-
-            const info =
-              getCar(car.name);
-
-            return `
-
-              <div class="carCard">
-
-                <div class="carImage">
-
-                  ${carVisual(
-                    car.name,
-                    true
-                  )}
-
-                </div>
-
-                <div class="carInfo">
-
-                  <div class="carName">
-
-                    ${escapeHTML(
-                      car.name
-                    )}
-
-                  </div>
-
-                  <div class="carValue">
-
-                    ${money(
-                      car.value
-                    )}
-
-                  </div>
-
-                  <span class="rarityTag">
-
-                    ${
-                      rarityNames[
-                        info.rarity
-                      ]
-                    }
-
-                  </span>
-
-                </div>
-
-                <button
-                  class="sellBtn"
-                  onclick="sellCar(${index})"
-                >
-
-                  ПРОДАТЬ ·
-                  ${money(
-                    Math.floor(
-                      car.value * .85
-                    )
-                  )}
-
-                </button>
-
+              <div class="car-name">
+                ${escapeHTML(name)}
               </div>
 
-            `;
+              <div class="car-rarity">
+                ${rarityNames[car.rarity]}
+              </div>
 
-          }
-        ).join("")}
+              <div class="car-value">
+                ${money(car.price)}
+              </div>
 
-      </div>
+            </div>
 
-    </section>
+            <button
+              class="action-btn"
+              onclick="sellCar(${index})"
+            >
+              Продать
+            </button>
 
+          </div>
+        `;
+
+      }).join("")}
+
+    </div>
   `;
 
 }
 
 
-/* =========================================================
-   SELL GARAGE CAR
-========================================================= */
-
 async function sellCar(index){
 
-  const car =
-    data.garage[index];
+  if(!serverReady){
 
-  if(!car)return;
+    toast("Нет соединения с сервером");
 
+    return;
+  }
 
   try{
 
     const response =
-      await api(
-        "/api/garage/sell",
-        {
-          method:"POST",
+      await api("/api/garage/sell",{
 
-          body:JSON.stringify({
-            index
-          })
+        method:"POST",
 
-        }
-      );
+        body:JSON.stringify({
+          index
+        })
 
+      });
 
-    data =
-      response.data;
+    if(response.data){
 
-    saveLocal();
+      data = response.data;
 
-    toast(
-      "Продано за " +
-      money(response.sellPrice)
-    );
+      saveLocal();
+
+      updateBalance();
+
+    }
 
     renderGarage();
 
-    updateBalance();
+    toast("Автомобиль продан");
 
   }catch(error){
 
     toast(
       error.message ||
-      "Ошибка продажи"
+      "Не удалось продать автомобиль"
     );
 
   }
@@ -3252,127 +2215,124 @@ async function sellCar(index){
 }
 
 
-/* =========================================================
+/* =========================
    MARKET
-========================================================= */
+========================= */
 
 function renderMarket(){
 
-  document
-    .getElementById("content")
-    .innerHTML = `
+  const content =
+    document.getElementById("content");
 
-      <section class="section">
+  content.innerHTML = `
 
-        <div class="sectionHead">
+    <div class="section-title">
+      <h2>Рынок</h2>
+      <span>Автомобили</span>
+    </div>
 
-          <div>
+    <div class="market-list">
 
-            <div class="sectionTitle">
-              Рынок
-            </div>
+      ${market.map(([name,price])=>{
 
-            <div class="sectionSub">
-              Купить автомобиль напрямую
-            </div>
+        const car =
+          getCar(name);
 
-          </div>
+        return `
 
-        </div>
+          <div class="car-card">
 
-        ${market.map(
-          ([name,price])=>`
+            ${carVisual()}
 
-            <div class="marketCard">
+            <div class="car-info">
 
-              <div class="marketImage">
-
-                ${carVisual(
-                  name,
-                  true
-                )}
-
+              <div class="car-name">
+                ${escapeHTML(name)}
               </div>
 
-              <div class="marketInfo">
-
-                <div class="marketName">
-
-                  ${escapeHTML(
-                    name
-                  )}
-
-                </div>
-
-                <div class="marketPrice">
-
-                  ${money(price)}
-
-                </div>
-
+              <div class="car-rarity">
+                ${rarityNames[car.rarity]}
               </div>
+
+            </div>
+
+            <div class="market-price">
+
+              <strong>
+                ${money(price)}
+              </strong>
 
               <button
-                class="marketBuy"
-                onclick="buyMarket('${name}')"
+                class="action-btn"
+                onclick="buyMarket('${name.replaceAll("'","\\'")}')"
               >
                 Купить
               </button>
 
             </div>
 
-          `
-        ).join("")}
+          </div>
+        `;
 
-      </section>
+      }).join("")}
 
-    `;
+    </div>
+  `;
 
 }
 
 
-/* =========================================================
-   BUY MARKET
-========================================================= */
-
 async function buyMarket(name){
+
+  if(!serverReady){
+
+    toast("Нет соединения с сервером");
+
+    return;
+  }
+
+  const car =
+    getCar(name);
+
+  if(data.balance < car.price){
+
+    toast("Недостаточно средств");
+
+    return;
+  }
 
   try{
 
     const response =
-      await api(
-        "/api/market/buy",
-        {
-          method:"POST",
+      await api("/api/market/buy",{
 
-          body:JSON.stringify({
-            name
-          })
+        method:"POST",
 
-        }
-      );
+        body:JSON.stringify({
+          name
+        })
 
+      });
 
-    data =
-      response.data;
+    if(response.data){
 
-    saveLocal();
+      data = response.data;
 
-    updateBalance();
+      saveLocal();
 
-    toast(
-      "Автомобиль добавлен в гараж"
-    );
+      updateBalance();
 
-    showPage(
-      currentPage
-    );
+    }
+
+    renderMarket();
+
+    toast("Автомобиль куплен");
 
   }catch(error){
 
     toast(
       error.message ||
-      "Ошибка покупки"
+      "Не удалось купить автомобиль"
     );
 
   }
@@ -3380,270 +2340,166 @@ async function buyMarket(name){
 }
 
 
-/* =========================================================
+/* =========================
    PROFILE
-========================================================= */
+========================= */
 
 function renderProfile(){
 
-  const lvl =
-    level();
-
+  const content =
+    document.getElementById("content");
 
   const username =
     serverUser?.username
-    ? "@" + serverUser.username
-    : (
-        serverUser?.firstName ||
-        "Владелец"
-      );
+      ? "@" + serverUser.username
+      : serverUser?.firstName ||
+        "Игрок";
 
+  const photo =
+    serverUser?.photoUrl;
 
-  const avatar =
-    serverUser?.photoUrl
-    ? `
-      <img
-        src="${escapeHTML(
-          serverUser.photoUrl
-        )}"
-        alt=""
-      >
-    `
-    : "🚘";
+  content.innerHTML = `
 
+    <div class="section-title">
+      <h2>Профиль</h2>
+    </div>
 
-  document
-    .getElementById("content")
-    .innerHTML = `
+    <div class="profile-card">
 
-      <section class="section">
+      <div class="profile-head">
 
-        <div class="sectionHead">
+        <div class="avatar">
 
-          <div>
+          ${
+            photo
+              ? `<img src="${photo}" alt="">`
+              : "👤"
+          }
 
-            <div class="sectionTitle">
-              Профиль
-            </div>
+        </div>
 
-            <div class="sectionSub">
-              Статистика
-            </div>
+        <div>
 
+          <div class="profile-name">
+            ${escapeHTML(username)}
+          </div>
+
+          <div class="profile-level">
+            Уровень ${level()}
           </div>
 
         </div>
 
+      </div>
 
-        <div class="profile">
+      <div class="progress">
+        <div
+          class="progress-bar"
+          style="width:${levelProgress()}%"
+        ></div>
+      </div>
 
-          <div class="profileTop">
+      <div class="stats">
 
-            <div class="avatar">
-
-              ${avatar}
-
-            </div>
-
-            <div>
-
-              <div class="profileName">
-
-                ${escapeHTML(
-                  username
-                )}
-
-              </div>
-
-              <div class="profileLevel">
-
-                Уровень ${lvl}
-
-              </div>
-
-            </div>
-
+        <div class="stat">
+          <div class="stat-label">
+            Кейсов открыто
           </div>
 
-
-          <div class="progress">
-
-            <div class="progressLine">
-
-              <span>
-                Прогресс уровня
-              </span>
-
-              <span>
-
-                ${Math.floor(
-                  data.spent %
-                  2500000
-                ).toLocaleString(
-                  "ru-RU"
-                )}
-
-                /
-                2 500 000 ₽
-
-              </span>
-
-            </div>
-
-
-            <div class="progressBar">
-
-              <div
-                class="progressFill"
-                style="
-                  width:${levelProgress()}%
-                "
-              ></div>
-
-            </div>
-
+          <div class="stat-value">
+            ${data.opened}
           </div>
-
-
-          <div class="stats">
-
-            <div class="stat">
-
-              <div class="statValue">
-                ${data.opened}
-              </div>
-
-              <div class="statLabel">
-                КЕЙСОВ
-              </div>
-
-            </div>
-
-
-            <div class="stat">
-
-              <div class="statValue">
-                ${data.garage.length}
-              </div>
-
-              <div class="statLabel">
-                АВТО
-              </div>
-
-            </div>
-
-
-            <div class="stat">
-
-              <div class="statValue">
-                ${money(data.spent)}
-              </div>
-
-              <div class="statLabel">
-                ПОТРАЧЕНО
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="stats">
-
-            <div class="stat">
-
-              <div class="statValue">
-                ${data.sold}
-              </div>
-
-              <div class="statLabel">
-                ПРОДАНО
-              </div>
-
-            </div>
-
-
-            <div class="stat">
-
-              <div class="statValue">
-                ${money(data.balance)}
-              </div>
-
-              <div class="statLabel">
-                БАЛАНС
-              </div>
-
-            </div>
-
-
-            <div class="stat">
-
-              <div class="statValue">
-                ${data.history.length}
-              </div>
-
-              <div class="statLabel">
-                ИСТОРИЯ
-              </div>
-
-            </div>
-
-          </div>
-
         </div>
 
-      </section>
+        <div class="stat">
+          <div class="stat-label">
+            В гараже
+          </div>
 
-    `;
+          <div class="stat-value">
+            ${data.garage.length}
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">
+            Потрачено
+          </div>
+
+          <div class="stat-value">
+            ${money(data.spent)}
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">
+            Продано
+          </div>
+
+          <div class="stat-value">
+            ${data.sold}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section-title">
+        <h2>История</h2>
+      </div>
+
+      <div class="history">
+
+        ${
+          data.history?.length
+            ? data.history
+                .slice()
+                .reverse()
+                .slice(0,10)
+                .map(item=>`
+
+                  <div class="history-item">
+
+                    <div>
+
+                      <div class="history-name">
+                        ${escapeHTML(item.name || "Автомобиль")}
+                      </div>
+
+                      <div class="history-date">
+                        ${item.date || ""}
+                      </div>
+
+                    </div>
+
+                    <div class="history-value">
+                      ${money(item.value || 0)}
+                    </div>
+
+                  </div>
+
+                `).join("")
+            : `
+              <div class="empty">
+                История пока пустая
+              </div>
+            `
+        }
+
+      </div>
+
+    </div>
+  `;
 
 }
 
 
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimer;
-
-function toast(text){
-
-  const element =
-    document.getElementById(
-      "toast"
-    );
-
-  element.textContent =
-    text;
-
-  element.classList.add(
-    "show"
-  );
-
-  clearTimeout(
-    toastTimer
-  );
-
-  toastTimer =
-    setTimeout(
-      ()=>{
-        element.classList.remove(
-          "show"
-        );
-      },
-      2200
-    );
-
-}
-
-
-/* =========================================================
+/* =========================
    INIT
-========================================================= */
+========================= */
 
 renderCases();
 
 updateBalance();
-
 
 document.addEventListener(
   "gesturestart",
@@ -3659,35 +2515,26 @@ if(tg?.initData){
 
 }else{
 
-  toast(
-    "Открой игру через Telegram"
-  );
+  toast("Открой игру через Telegram");
 
 }
 
 
-/* =========================================================
-   MODAL OUTSIDE CLICK
-========================================================= */
+/* =========================
+   MODAL CLICK OUTSIDE
+========================= */
 
-document
-  .getElementById("modal")
-  .addEventListener(
-    "click",
-    event=>{
+document.getElementById("modal")
+  .addEventListener("click",event=>{
 
-      if(
-        event.target.id === "modal" &&
-        !spinning
-      ){
-
-        closeModal();
-
-      }
-
+    if(
+      event.target.id === "modal" &&
+      !spinning
+    ){
+      closeModal();
     }
-  );
 
+  });
 
 </script>
 
