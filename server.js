@@ -1,30 +1,43 @@
-console.log("!!! НОВЫЙ SERVER.JS ЗАПУЩЕН !!!");
-"use strict";
-
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const Database = require("better-sqlite3");
 
-const PORT = Number(process.env.PORT || 3000);
+console.log("!!! НОВЫЙ SERVER.JS ЗАПУЩЕН !!!");
+
+const PORT = Number(process.env.PORT || 10000);
+const HOST = "0.0.0.0";
+
 const BOT_TOKEN = process.env.BOT_TOKEN || "";
 const NODE_ENV = process.env.NODE_ENV || "production";
 
-const ROOT = __dirname;
-const INDEX_FILE = path.join(ROOT, "index.html");
-const DB_PATH = process.env.DB_PATH || path.join(ROOT, "autoimperiya.db");
+const DB_PATH =
+  process.env.DB_PATH ||
+  path.join(__dirname, "autoimperiya.db");
+
+const INDEX_PATH = path.join(__dirname, "index.html");
 
 const db = new Database(DB_PATH);
 
-// SQLite настройки
 db.pragma("journal_mode = WAL");
 db.pragma("foreign_keys = ON");
 db.pragma("busy_timeout = 5000");
 
-// ============================================================
-// DATABASE
-// ============================================================
+console.log("======================================");
+console.log("🚗 АВТОИМПЕРИЯ SERVER");
+console.log("======================================");
+console.log("PORT:", PORT);
+console.log("NODE:", process.version);
+console.log("ENV:", NODE_ENV);
+console.log("DB:", DB_PATH);
+console.log("BOT TOKEN:", BOT_TOKEN ? "configured" : "NOT CONFIGURED");
+console.log("======================================");
+
+
+/* =========================================================
+   DATABASE
+========================================================= */
 
 db.exec(`
 CREATE TABLE IF NOT EXISTS users (
@@ -37,56 +50,71 @@ CREATE TABLE IF NOT EXISTS users (
   spent INTEGER NOT NULL DEFAULT 0,
   opened INTEGER NOT NULL DEFAULT 0,
   sold INTEGER NOT NULL DEFAULT 0,
+  level INTEGER NOT NULL DEFAULT 1,
   referral_code TEXT UNIQUE,
-  referred_by TEXT,
+  referred_by TEXT DEFAULT '',
   referral_earned INTEGER NOT NULL DEFAULT 0,
-  last_daily TEXT DEFAULT '',
-  created_at INTEGER NOT NULL,
-  updated_at INTEGER NOT NULL
+  daily_streak INTEGER NOT NULL DEFAULT 0,
+  daily_last TEXT DEFAULT '',
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS garage (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  telegram_id TEXT NOT NULL,
-  car_name TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
   rarity TEXT NOT NULL,
   value INTEGER NOT NULL,
-  created_at INTEGER NOT NULL
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS history (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  telegram_id TEXT NOT NULL,
-  action TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  type TEXT NOT NULL,
   car_name TEXT DEFAULT '',
   rarity TEXT DEFAULT '',
   value INTEGER NOT NULL DEFAULT 0,
-  amount INTEGER NOT NULL DEFAULT 0,
-  created_at INTEGER NOT NULL
+  case_id TEXT DEFAULT '',
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS openings (
-  telegram_id TEXT PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
   case_id TEXT NOT NULL,
-  started_at INTEGER NOT NULL
+  started_at INTEGER NOT NULL,
+  finished_at INTEGER DEFAULT 0,
+  result_name TEXT DEFAULT '',
+  result_rarity TEXT DEFAULT '',
+  result_value INTEGER DEFAULT 0,
+  status TEXT NOT NULL DEFAULT 'active',
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE INDEX IF NOT EXISTS idx_users_telegram
+ON users(telegram_id);
+
 CREATE INDEX IF NOT EXISTS idx_garage_user
-ON garage(telegram_id);
+ON garage(user_id);
 
 CREATE INDEX IF NOT EXISTS idx_history_user
-ON history(telegram_id);
+ON history(user_id);
 
-CREATE INDEX IF NOT EXISTS idx_history_date
-ON history(telegram_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_openings_user
+ON openings(user_id);
 `);
 
-// ============================================================
-// CASES
-// ============================================================
 
-const CASES = {
-  starter: {
+/* =========================================================
+   CASES
+========================================================= */
+
+const CASES = [
+  {
     id: "starter",
     name: "Стартовый кейс",
     price: 300000,
@@ -98,8 +126,7 @@ const CASES = {
       mythic: 0.01
     }
   },
-
-  street: {
+  {
     id: "street",
     name: "Уличный кейс",
     price: 900000,
@@ -111,8 +138,7 @@ const CASES = {
       mythic: 0.1
     }
   },
-
-  premium: {
+  {
     id: "premium",
     name: "Премиум кейс",
     price: 5000000,
@@ -124,8 +150,7 @@ const CASES = {
       mythic: 0.5
     }
   },
-
-  elite: {
+  {
     id: "elite",
     name: "Элитный кейс",
     price: 15000000,
@@ -137,8 +162,7 @@ const CASES = {
       mythic: 2
     }
   },
-
-  imperial: {
+  {
     id: "imperial",
     name: "Императорский кейс",
     price: 100000000,
@@ -150,266 +174,78 @@ const CASES = {
       mythic: 30
     }
   }
-};
-
-// ============================================================
-// CARS
-// ============================================================
-
-const CARS = [
-  // COMMON
-  {
-    name: "Lada VAZ 2114",
-    rarity: "common",
-    value: 180000
-  },
-  {
-    name: "Lada VAZ 2109",
-    rarity: "common",
-    value: 160000
-  },
-  {
-    name: "Lada Priora",
-    rarity: "common",
-    value: 350000
-  },
-  {
-    name: "Lada Granta",
-    rarity: "common",
-    value: 550000
-  },
-  {
-    name: "Daewoo Matiz",
-    rarity: "common",
-    value: 280000
-  },
-  {
-    name: "Daewoo Nexia",
-    rarity: "common",
-    value: 420000
-  },
-  {
-    name: "УАЗ Patriot",
-    rarity: "common",
-    value: 750000
-  },
-  {
-    name: "Lada Vesta",
-    rarity: "common",
-    value: 1000000
-  },
-  {
-    name: "Hyundai Solaris",
-    rarity: "common",
-    value: 1100000
-  },
-  {
-    name: "Kia Rio",
-    rarity: "common",
-    value: 1150000
-  },
-  {
-    name: "Renault Logan",
-    rarity: "common",
-    value: 850000
-  },
-  {
-    name: "Ford Focus",
-    rarity: "common",
-    value: 1300000
-  },
-  {
-    name: "Skoda Octavia",
-    rarity: "common",
-    value: 1700000
-  },
-  {
-    name: "Toyota Corolla",
-    rarity: "common",
-    value: 1800000
-  },
-
-  // RARE
-  {
-    name: "Volkswagen Passat",
-    rarity: "rare",
-    value: 1900000
-  },
-  {
-    name: "Haval F7",
-    rarity: "rare",
-    value: 2200000
-  },
-  {
-    name: "Toyota Camry 70",
-    rarity: "rare",
-    value: 3000000
-  },
-  {
-    name: "BMW E60",
-    rarity: "rare",
-    value: 2200000
-  },
-  {
-    name: "BMW E90",
-    rarity: "rare",
-    value: 2400000
-  },
-  {
-    name: "Mercedes W212",
-    rarity: "rare",
-    value: 3000000
-  },
-  {
-    name: "Audi A6 C7",
-    rarity: "rare",
-    value: 3000000
-  },
-  {
-    name: "Subaru WRX",
-    rarity: "rare",
-    value: 1900000
-  },
-
-  // EPIC
-  {
-    name: "BMW M4 F82",
-    rarity: "epic",
-    value: 5000000
-  },
-  {
-    name: "BMW M5 F10",
-    rarity: "epic",
-    value: 6000000
-  },
-  {
-    name: "BMW M6",
-    rarity: "epic",
-    value: 7000000
-  },
-  {
-    name: "BMW M3 Competition",
-    rarity: "epic",
-    value: 7500000
-  },
-  {
-    name: "BMW M4 Competition",
-    rarity: "epic",
-    value: 8500000
-  },
-  {
-    name: "Mercedes-AMG GT",
-    rarity: "epic",
-    value: 9000000
-  },
-  {
-    name: "Nissan GT-R R35",
-    rarity: "epic",
-    value: 9500000
-  },
-
-  // LEGENDARY
-  {
-    name: "Audi RS6 C8",
-    rarity: "legendary",
-    value: 10000000
-  },
-  {
-    name: "BMW M5 CS",
-    rarity: "legendary",
-    value: 10000000
-  },
-  {
-    name: "BMW M8 Competition",
-    rarity: "legendary",
-    value: 12000000
-  },
-  {
-    name: "Mercedes-AMG GT 63",
-    rarity: "legendary",
-    value: 14000000
-  },
-  {
-    name: "Porsche 911 Turbo S",
-    rarity: "legendary",
-    value: 16000000
-  },
-
-  // MYTHIC
-  {
-    name: "Lamborghini Huracan",
-    rarity: "mythic",
-    value: 20000000
-  },
-  {
-    name: "Lamborghini Urus",
-    rarity: "mythic",
-    value: 22000000
-  },
-  {
-    name: "McLaren 720S",
-    rarity: "mythic",
-    value: 25000000
-  },
-  {
-    name: "Lamborghini Aventador",
-    rarity: "mythic",
-    value: 25000000
-  },
-  {
-    name: "Ferrari 488",
-    rarity: "mythic",
-    value: 28000000
-  },
-  {
-    name: "Ferrari F8 Tributo",
-    rarity: "mythic",
-    value: 32000000
-  },
-  {
-    name: "McLaren 765LT",
-    rarity: "mythic",
-    value: 35000000
-  },
-  {
-    name: "Bentley Continental GT",
-    rarity: "mythic",
-    value: 15000000
-  },
-  {
-    name: "Porsche 918 Spyder",
-    rarity: "mythic",
-    value: 45000000
-  },
-  {
-    name: "Rolls-Royce Phantom",
-    rarity: "mythic",
-    value: 50000000
-  },
-  {
-    name: "Bugatti Chiron",
-    rarity: "mythic",
-    value: 100000000
-  }
 ];
 
-// ============================================================
-// HELPERS
-// ============================================================
 
-function now() {
-  return Date.now();
-}
+/* =========================================================
+   CARS
+========================================================= */
 
-function todayString() {
-  const d = new Date();
+const CARS = [
+  { name: "Lada VAZ 2114", rarity: "common", value: 180000 },
+  { name: "Lada VAZ 2109", rarity: "common", value: 160000 },
+  { name: "Lada Priora", rarity: "common", value: 350000 },
+  { name: "Lada Granta", rarity: "common", value: 550000 },
+  { name: "Daewoo Matiz", rarity: "common", value: 280000 },
+  { name: "Daewoo Nexia", rarity: "common", value: 420000 },
+  { name: "УАЗ Patriot", rarity: "common", value: 750000 },
+  { name: "Lada Vesta", rarity: "common", value: 1000000 },
+  { name: "Hyundai Solaris", rarity: "common", value: 1100000 },
+  { name: "Kia Rio", rarity: "common", value: 1150000 },
+  { name: "Renault Logan", rarity: "common", value: 850000 },
+  { name: "Ford Focus", rarity: "common", value: 1300000 },
+  { name: "Skoda Octavia", rarity: "common", value: 1700000 },
+  { name: "Toyota Corolla", rarity: "common", value: 1800000 },
 
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+  { name: "Volkswagen Passat", rarity: "rare", value: 1900000 },
+  { name: "Haval F7", rarity: "rare", value: 2200000 },
+  { name: "Toyota Camry 70", rarity: "rare", value: 3000000 },
+  { name: "BMW E60", rarity: "rare", value: 2200000 },
+  { name: "BMW E90", rarity: "rare", value: 2400000 },
+  { name: "Mercedes W212", rarity: "rare", value: 3000000 },
+  { name: "Audi A6 C7", rarity: "rare", value: 3000000 },
+  { name: "Subaru WRX", rarity: "rare", value: 1900000 },
 
-  return `${y}-${m}-${day}`;
-}
+  { name: "BMW M4 F82", rarity: "epic", value: 5000000 },
+  { name: "BMW M5 F10", rarity: "epic", value: 6000000 },
+  { name: "BMW M6", rarity: "epic", value: 7000000 },
+  { name: "BMW M3 Competition", rarity: "epic", value: 7500000 },
+  { name: "BMW M4 Competition", rarity: "epic", value: 8500000 },
+  { name: "Mercedes-AMG GT", rarity: "epic", value: 9000000 },
+  { name: "Nissan GT-R R35", rarity: "epic", value: 9500000 },
+
+  { name: "Audi RS6 C8", rarity: "legendary", value: 10000000 },
+  { name: "BMW M5 CS", rarity: "legendary", value: 10000000 },
+  { name: "BMW M8 Competition", rarity: "legendary", value: 12000000 },
+  { name: "Mercedes-AMG GT 63", rarity: "legendary", value: 14000000 },
+  { name: "Porsche 911 Turbo S", rarity: "legendary", value: 16000000 },
+
+  { name: "Lamborghini Huracan", rarity: "mythic", value: 20000000 },
+  { name: "Lamborghini Urus", rarity: "mythic", value: 22000000 },
+  { name: "McLaren 720S", rarity: "mythic", value: 25000000 },
+  { name: "Lamborghini Aventador", rarity: "mythic", value: 25000000 },
+  { name: "Ferrari 488", rarity: "mythic", value: 28000000 },
+  { name: "Ferrari F8 Tributo", rarity: "mythic", value: 32000000 },
+  { name: "McLaren 765LT", rarity: "mythic", value: 35000000 },
+  { name: "Bentley Continental GT", rarity: "mythic", value: 15000000 },
+  { name: "Porsche 918 Spyder", rarity: "mythic", value: 45000000 },
+  { name: "Rolls-Royce Phantom", rarity: "mythic", value: 50000000 },
+  { name: "Bugatti Chiron", rarity: "mythic", value: 100000000 }
+];
+
+
+const RARITIES = [
+  "common",
+  "rare",
+  "epic",
+  "legendary",
+  "mythic"
+];
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function json(res, status, data) {
   const body = JSON.stringify(data);
@@ -420,13 +256,15 @@ function json(res, status, data) {
   res.end(body);
 }
 
-function text(res, status, value, contentType = "text/plain; charset=utf-8") {
+
+function text(res, status, value) {
   res.statusCode = status;
-  res.setHeader("Content-Type", contentType);
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
   res.end(value);
 }
 
-function setCors(res) {
+
+function cors(res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -434,9 +272,11 @@ function setCors(res) {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS"
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
   );
+  res.setHeader("Access-Control-Max-Age", "86400");
 }
+
 
 function sendError(res, status, message) {
   return json(res, status, {
@@ -445,247 +285,88 @@ function sendError(res, status, message) {
   });
 }
 
-function randomInt(max) {
-  return Math.floor(Math.random() * max);
+
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let data = "";
+
+    req.on("data", chunk => {
+      data += chunk;
+
+      if (data.length > 2 * 1024 * 1024) {
+        reject(new Error("Request body too large"));
+        req.destroy();
+      }
+    });
+
+    req.on("end", () => {
+      if (!data) {
+        resolve({});
+        return;
+      }
+
+      const contentType =
+        String(req.headers["content-type"] || "").toLowerCase();
+
+      if (contentType.includes("application/json")) {
+        try {
+          resolve(JSON.parse(data));
+        } catch {
+          reject(new Error("Invalid JSON"));
+        }
+
+        return;
+      }
+
+      try {
+        const params = new URLSearchParams(data);
+        const obj = {};
+
+        for (const [key, value] of params.entries()) {
+          obj[key] = value;
+        }
+
+        resolve(obj);
+      } catch {
+        resolve({});
+      }
+    });
+
+    req.on("error", reject);
+  });
 }
 
-function randomFrom(array) {
-  return array[randomInt(array.length)];
-}
 
-function weightedRarity(chances) {
-  const entries = Object.entries(chances);
-
-  let total = 0;
-
-  for (const [, weight] of entries) {
-    total += Number(weight) || 0;
-  }
-
-  if (total <= 0) {
-    return "common";
-  }
-
-  let random = Math.random() * total;
-
-  for (const [rarity, weight] of entries) {
-    random -= Number(weight) || 0;
-
-    if (random <= 0) {
-      return rarity;
-    }
-  }
-
-  return entries[entries.length - 1][0];
-}
-
-function getCarByRarity(rarity) {
-  const list = CARS.filter(car => car.rarity === rarity);
-
-  if (!list.length) {
-    return CARS[0];
-  }
-
-  return randomFrom(list);
-}
-
-function generateReferralCode(telegramId) {
-  const hash = crypto
-    .createHash("sha256")
-    .update(String(telegramId))
-    .digest("hex")
-    .slice(0, 10)
-    .toUpperCase();
-
-  return "AE" + hash;
-}
-
-function levelFromSpent(spent) {
-  spent = Number(spent) || 0;
-
-  if (spent < 1000000) return 1;
-  if (spent < 5000000) return 2;
-  if (spent < 10000000) return 3;
-  if (spent < 25000000) return 4;
-  if (spent < 50000000) return 5;
-  if (spent < 100000000) return 6;
-  if (spent < 250000000) return 7;
-  if (spent < 500000000) return 8;
-  if (spent < 1000000000) return 9;
-
-  return 10;
-}
-
-function publicUser(user) {
-  if (!user) return null;
-
-  return {
-    id: user.telegram_id,
-    telegram_id: user.telegram_id,
-    username: user.username || "",
-    first_name: user.first_name || "",
-    last_name: user.last_name || "",
-
-    balance: Number(user.balance) || 0,
-    spent: Number(user.spent) || 0,
-    opened: Number(user.opened) || 0,
-    sold: Number(user.sold) || 0,
-
-    level: levelFromSpent(user.spent),
-
-    referralCode: user.referral_code || "",
-    referral_code: user.referral_code || "",
-
-    referralEarned: Number(user.referral_earned) || 0,
-    referral_earned: Number(user.referral_earned) || 0,
-
-    lastDaily: user.last_daily || ""
-  };
-}
-
-function serializeGarage(telegramId) {
-  return db
-    .prepare(`
-      SELECT
-        id,
-        car_name AS name,
-        car_name,
-        rarity,
-        value,
-        created_at AS createdAt
-      FROM garage
-      WHERE telegram_id = ?
-      ORDER BY id DESC
-    `)
-    .all(telegramId);
-}
-
-function serializeHistory(telegramId) {
-  return db
-    .prepare(`
-      SELECT
-        id,
-        action,
-        car_name AS name,
-        car_name,
-        rarity,
-        value,
-        amount,
-        created_at AS createdAt
-      FROM history
-      WHERE telegram_id = ?
-      ORDER BY id DESC
-      LIMIT 100
-    `)
-    .all(telegramId);
-}
-
-function serializeCases() {
-  return Object.values(CASES).map(c => ({
-    id: c.id,
-    name: c.name,
-    price: c.price,
-    chances: c.chances
-  }));
-}
-
-function getUser(telegramId) {
-  return db
-    .prepare(`
-      SELECT *
-      FROM users
-      WHERE telegram_id = ?
-    `)
-    .get(String(telegramId));
-}
-
-function ensureUser(tgUser) {
-  const telegramId = String(tgUser.id);
-
-  let user = getUser(telegramId);
-
-  if (user) {
-    db.prepare(`
-      UPDATE users
-      SET
-        username = ?,
-        first_name = ?,
-        last_name = ?,
-        updated_at = ?
-      WHERE telegram_id = ?
-    `).run(
-      tgUser.username || "",
-      tgUser.first_name || "",
-      tgUser.last_name || "",
-      now(),
-      telegramId
-    );
-
-    return getUser(telegramId);
-  }
-
-  const referralCode = generateReferralCode(telegramId);
-
-  db.prepare(`
-    INSERT INTO users (
-      telegram_id,
-      username,
-      first_name,
-      last_name,
-      balance,
-      spent,
-      opened,
-      sold,
-      referral_code,
-      referral_earned,
-      last_daily,
-      created_at,
-      updated_at
-    )
-    VALUES (?, ?, ?, ?, ?, 0, 0, 0, ?, 0, '', ?, ?)
-  `).run(
-    telegramId,
-    tgUser.username || "",
-    tgUser.first_name || "",
-    tgUser.last_name || "",
-    5000000,
-    referralCode,
-    now(),
-    now()
+function getTelegramInitData(req, body = {}) {
+  return (
+    req.headers["x-telegram-init-data"] ||
+    body.initData ||
+    body.init_data ||
+    ""
   );
-
-  return getUser(telegramId);
 }
 
-// ============================================================
-// TELEGRAM AUTH
-// ============================================================
 
-function getInitDataFromRequest(req, body) {
-  const header = req.headers["x-telegram-init-data"];
+function parseTelegramInitData(initData) {
+  const params = new URLSearchParams(initData);
 
-  if (header) {
-    return String(header);
+  const result = {};
+
+  for (const [key, value] of params.entries()) {
+    result[key] = value;
   }
 
-  if (body && body.initData) {
-    return String(body.initData);
-  }
-
-  if (body && body.init_data) {
-    return String(body.init_data);
-  }
-
-  return "";
+  return result;
 }
+
 
 function validateTelegramInitData(initData) {
   if (!BOT_TOKEN) {
-    throw new Error("BOT_TOKEN не настроен на сервере");
+    throw new Error("BOT_TOKEN is not configured");
   }
 
   if (!initData) {
-    throw new Error("Telegram initData отсутствует");
+    throw new Error("Telegram initData is missing");
   }
 
   const params = new URLSearchParams(initData);
@@ -693,18 +374,16 @@ function validateTelegramInitData(initData) {
   const hash = params.get("hash");
 
   if (!hash) {
-    throw new Error("Telegram hash отсутствует");
+    throw new Error("Telegram hash is missing");
   }
 
   params.delete("hash");
 
   const pairs = [];
 
-  for (const [key, value] of params.entries()) {
+  for (const [key, value] of [...params.entries()].sort()) {
     pairs.push(`${key}=${value}`);
   }
-
-  pairs.sort();
 
   const dataCheckString = pairs.join("\n");
 
@@ -725,7 +404,7 @@ function validateTelegramInitData(initData) {
       Buffer.from(hash)
     )
   ) {
-    throw new Error("Неверная Telegram авторизация");
+    throw new Error("Telegram initData validation failed");
   }
 
   const authDate = Number(params.get("auth_date") || 0);
@@ -733,669 +412,252 @@ function validateTelegramInitData(initData) {
   if (authDate) {
     const age = Math.floor(Date.now() / 1000) - authDate;
 
-    // 24 часа
     if (age > 86400) {
-      throw new Error("Telegram авторизация устарела");
-    }
-
-    if (age < -60) {
-      throw new Error("Некорректная дата Telegram авторизации");
+      throw new Error("Telegram initData expired");
     }
   }
 
   const userRaw = params.get("user");
 
   if (!userRaw) {
-    throw new Error("Telegram user отсутствует");
+    throw new Error("Telegram user is missing");
   }
 
-  let tgUser;
+  let user;
 
   try {
-    tgUser = JSON.parse(userRaw);
+    user = JSON.parse(userRaw);
   } catch {
-    throw new Error("Не удалось прочитать Telegram user");
+    throw new Error("Invalid Telegram user data");
   }
 
-  if (!tgUser.id) {
-    throw new Error("Telegram user.id отсутствует");
+  if (!user.id) {
+    throw new Error("Telegram user id is missing");
   }
 
-  return tgUser;
+  return user;
 }
 
-// ============================================================
-// REQUEST BODY
-// ============================================================
 
-function readBody(req) {
-  return new Promise((resolve, reject) => {
-    let data = "";
+function getLevel(spent) {
+  if (spent < 1000000) return 1;
+  if (spent < 5000000) return 2;
+  if (spent < 10000000) return 3;
+  if (spent < 25000000) return 4;
+  if (spent < 50000000) return 5;
+  if (spent < 100000000) return 6;
+  if (spent < 250000000) return 7;
+  if (spent < 500000000) return 8;
+  if (spent < 1000000000) return 9;
 
-    req.on("data", chunk => {
-      data += chunk.toString();
-
-      if (data.length > 2 * 1024 * 1024) {
-        req.destroy();
-        reject(new Error("Слишком большой запрос"));
-      }
-    });
-
-    req.on("end", () => {
-      if (!data) {
-        resolve({});
-        return;
-      }
-
-      try {
-        resolve(JSON.parse(data));
-      } catch {
-        resolve({});
-      }
-    });
-
-    req.on("error", reject);
-  });
+  return 10;
 }
 
-// ============================================================
-// AUTH MIDDLEWARE
-// ============================================================
 
-async function authenticate(req, body) {
-  const initData = getInitDataFromRequest(req, body);
+function generateReferralCode(telegramId) {
+  return crypto
+    .createHash("sha256")
+    .update(String(telegramId) + ":" + BOT_TOKEN)
+    .digest("hex")
+    .slice(0, 10)
+    .toUpperCase();
+}
+
+
+function randomFloat() {
+  return Math.random() * 100;
+}
+
+
+function pickRarity(chances) {
+  const roll = randomFloat();
+
+  let cursor = 0;
+
+  for (const rarity of RARITIES) {
+    cursor += Number(chances[rarity] || 0);
+
+    if (roll < cursor) {
+      return rarity;
+    }
+  }
+
+  return "common";
+}
+
+
+function pickCar(caseData) {
+  const rarity = pickRarity(caseData.chances);
+
+  let cars = CARS.filter(car => car.rarity === rarity);
+
+  if (!cars.length) {
+    cars = CARS.filter(car => car.rarity === "common");
+  }
+
+  return cars[Math.floor(Math.random() * cars.length)];
+}
+
+
+function findCase(caseId) {
+  return CASES.find(item => item.id === String(caseId));
+}
+
+
+function publicUser(user) {
+  return {
+    id: user.id,
+    telegram_id: user.telegram_id,
+    username: user.username,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    balance: user.balance,
+    spent: user.spent,
+    opened: user.opened,
+    sold: user.sold,
+    level: getLevel(user.spent),
+    referral_code: user.referral_code,
+    referred_by: user.referred_by,
+    referral_earned: user.referral_earned,
+    daily_streak: user.daily_streak,
+    daily_last: user.daily_last
+  };
+}
+
+
+function getUserByTelegramId(telegramId) {
+  return db
+    .prepare("SELECT * FROM users WHERE telegram_id = ?")
+    .get(String(telegramId));
+}
+
+
+function getUserById(id) {
+  return db
+    .prepare("SELECT * FROM users WHERE id = ?")
+    .get(Number(id));
+}
+
+
+function createOrUpdateUser(tgUser) {
+  const telegramId = String(tgUser.id);
+
+  let user = getUserByTelegramId(telegramId);
+
+  if (!user) {
+    const referralCode = generateReferralCode(telegramId);
+
+    const insert = db.prepare(`
+      INSERT INTO users (
+        telegram_id,
+        username,
+        first_name,
+        last_name,
+        balance,
+        spent,
+        opened,
+        sold,
+        level,
+        referral_code
+      )
+      VALUES (?, ?, ?, ?, 5000000, 0, 0, 1, 1, ?)
+    `);
+
+    insert.run(
+      telegramId,
+      tgUser.username || "",
+      tgUser.first_name || "",
+      tgUser.last_name || "",
+      referralCode
+    );
+
+    user = getUserByTelegramId(telegramId);
+
+    return user;
+  }
+
+  db.prepare(`
+    UPDATE users
+    SET
+      username = ?,
+      first_name = ?,
+      last_name = ?,
+      updated_at = CURRENT_TIMESTAMP
+    WHERE telegram_id = ?
+  `).run(
+    tgUser.username || "",
+    tgUser.first_name || "",
+    tgUser.last_name || "",
+    telegramId
+  );
+
+  return getUserByTelegramId(telegramId);
+}
+
+
+function getUserFromRequest(req, body) {
+  const initData = getTelegramInitData(req, body);
+
+  if (!initData) {
+    throw new Error("Telegram initData is missing");
+  }
 
   const tgUser = validateTelegramInitData(initData);
 
-  const user = ensureUser(tgUser);
-
-  return {
-    tgUser,
-    user
-  };
+  return createOrUpdateUser(tgUser);
 }
 
-// ============================================================
-// DAILY REWARD
-// ============================================================
 
-function dailyReward(user) {
-  const today = todayString();
+/* =========================================================
+   AUTH
+========================================================= */
 
-  if (user.last_daily === today) {
-    return {
-      claimed: false,
-      reward: 0,
-      balance: Number(user.balance)
-    };
-  }
-
-  const reward = 250000;
-
-  db.prepare(`
-    UPDATE users
-    SET
-      balance = balance + ?,
-      last_daily = ?,
-      updated_at = ?
-    WHERE telegram_id = ?
-  `).run(
-    reward,
-    today,
-    now(),
-    user.telegram_id
-  );
-
-  db.prepare(`
-    INSERT INTO history (
-      telegram_id,
-      action,
-      car_name,
-      rarity,
-      value,
-      amount,
-      created_at
-    )
-    VALUES (?, 'daily', '', '', 0, ?, ?)
-  `).run(
-    user.telegram_id,
-    reward,
-    now()
-  );
-
-  const updated = getUser(user.telegram_id);
-
-  return {
-    claimed: true,
-    reward,
-    balance: Number(updated.balance)
-  };
-}
-
-// ============================================================
-// OPEN CASE
-// ============================================================
-
-function openCase(user, caseId) {
-  const selectedCase = CASES[caseId];
-
-  if (!selectedCase) {
-    throw new Error("Кейс не найден");
-  }
-
-  const existingOpening = db
-    .prepare(`
-      SELECT *
-      FROM openings
-      WHERE telegram_id = ?
-    `)
-    .get(user.telegram_id);
-
-  // Защита от одновременного открытия
-  if (existingOpening) {
-    const age = now() - Number(existingOpening.started_at);
-
-    if (age < 10 * 60 * 1000) {
-      throw new Error("Кейс уже открывается");
-    }
-
-    db.prepare(`
-      DELETE FROM openings
-      WHERE telegram_id = ?
-    `).run(user.telegram_id);
-  }
-
-  if (Number(user.balance) < selectedCase.price) {
-    throw new Error("Недостаточно средств");
-  }
-
-  db.prepare(`
-    INSERT INTO openings (
-      telegram_id,
-      case_id,
-      started_at
-    )
-    VALUES (?, ?, ?)
-  `).run(
-    user.telegram_id,
-    selectedCase.id,
-    now()
-  );
+async function handleAuth(req, res, body) {
+  /*
+    ВАЖНО:
+    Этот endpoint специально принимает POST.
+    Также OPTIONS обрабатывается глобально выше.
+  */
 
   try {
-    const rarity = weightedRarity(selectedCase.chances);
-    const car = getCarByRarity(rarity);
+    const initData = getTelegramInitData(req, body);
 
-    const transaction = db.transaction(() => {
-      db.prepare(`
-        UPDATE users
-        SET
-          balance = balance - ?,
-          spent = spent + ?,
-          opened = opened + 1,
-          updated_at = ?
-        WHERE telegram_id = ?
-      `).run(
-        selectedCase.price,
-        selectedCase.price,
-        now(),
-        user.telegram_id
+    if (!initData) {
+      return sendError(
+        res,
+        401,
+        "Telegram initData не передан"
       );
-
-      db.prepare(`
-        INSERT INTO garage (
-          telegram_id,
-          car_name,
-          rarity,
-          value,
-          created_at
-        )
-        VALUES (?, ?, ?, ?, ?)
-      `).run(
-        user.telegram_id,
-        car.name,
-        car.rarity,
-        car.value,
-        now()
-      );
-
-      db.prepare(`
-        INSERT INTO history (
-          telegram_id,
-          action,
-          car_name,
-          rarity,
-          value,
-          amount,
-          created_at
-        )
-        VALUES (?, 'open', ?, ?, ?, ?, ?)
-      `).run(
-        user.telegram_id,
-        car.name,
-        car.rarity,
-        car.value,
-        selectedCase.price,
-        now()
-      );
-    });
-
-    transaction();
-
-    // Реферальный бонус
-    const currentUser = getUser(user.telegram_id);
-
-    if (
-      currentUser &&
-      Number(currentUser.spent) > 0 &&
-      currentUser.referred_by
-    ) {
-      // Бонус начисляется только от фактически потраченной суммы.
-      // Чтобы не начислять повторно на каждый запрос,
-      // используем 1% от открытия.
-      const referrer = getUser(currentUser.referred_by);
-
-      if (referrer) {
-        const bonus = Math.floor(selectedCase.price * 0.01);
-
-        db.prepare(`
-          UPDATE users
-          SET
-            balance = balance + ?,
-            referral_earned = referral_earned + ?,
-            updated_at = ?
-          WHERE telegram_id = ?
-        `).run(
-          bonus,
-          bonus,
-          now(),
-          referrer.telegram_id
-        );
-      }
     }
 
-    return {
-      car: {
-        name: car.name,
-        rarity: car.rarity,
-        value: car.value
-      },
-      case: {
-        id: selectedCase.id,
-        name: selectedCase.name,
-        price: selectedCase.price
-      },
-      user: publicUser(getUser(user.telegram_id)),
-      balance: Number(getUser(user.telegram_id).balance),
-      garage: serializeGarage(user.telegram_id)
-    };
-  } finally {
-    db.prepare(`
-      DELETE FROM openings
-      WHERE telegram_id = ?
-    `).run(user.telegram_id);
+    const tgUser = validateTelegramInitData(initData);
+
+    const user = createOrUpdateUser(tgUser);
+
+    return json(res, 200, {
+      ok: true,
+      authenticated: true,
+      user: publicUser(user)
+    });
+  } catch (error) {
+    console.error("AUTH ERROR:", error.message);
+
+    return sendError(
+      res,
+      401,
+      error.message || "Ошибка авторизации"
+    );
   }
 }
 
-// ============================================================
-// KEEP CAR
-// ============================================================
 
-function keepCar(user, name) {
-  const car = db
-    .prepare(`
-      SELECT *
-      FROM garage
-      WHERE telegram_id = ?
-        AND car_name = ?
-      ORDER BY id DESC
-      LIMIT 1
-    `)
-    .get(user.telegram_id, name);
+/* =========================================================
+   API HANDLERS
+========================================================= */
 
-  if (!car) {
-    throw new Error("Автомобиль не найден");
-  }
+async function handleApi(req, res, pathname, body) {
 
-  return {
-    ok: true,
-    user: publicUser(getUser(user.telegram_id)),
-    garage: serializeGarage(user.telegram_id)
-  };
-}
-
-// ============================================================
-// SELL CAR FROM CASE
-// ============================================================
-
-function sellCarByName(user, name) {
-  const car = db
-    .prepare(`
-      SELECT *
-      FROM garage
-      WHERE telegram_id = ?
-        AND car_name = ?
-      ORDER BY id DESC
-      LIMIT 1
-    `)
-    .get(user.telegram_id, name);
-
-  if (!car) {
-    throw new Error("Автомобиль не найден");
-  }
-
-  const transaction = db.transaction(() => {
-    db.prepare(`
-      DELETE FROM garage
-      WHERE id = ?
-    `).run(car.id);
-
-    db.prepare(`
-      UPDATE users
-      SET
-        balance = balance + ?,
-        sold = sold + 1,
-        updated_at = ?
-      WHERE telegram_id = ?
-    `).run(
-      car.value,
-      now(),
-      user.telegram_id
-    );
-
-    db.prepare(`
-      INSERT INTO history (
-        telegram_id,
-        action,
-        car_name,
-        rarity,
-        value,
-        amount,
-        created_at
-      )
-      VALUES (?, 'sell', ?, ?, ?, ?, ?)
-    `).run(
-      user.telegram_id,
-      car.car_name,
-      car.rarity,
-      car.value,
-      car.value,
-      now()
-    );
-  });
-
-  transaction();
-
-  const updated = getUser(user.telegram_id);
-
-  return {
-    ok: true,
-    sold: {
-      name: car.car_name,
-      rarity: car.rarity,
-      value: car.value
-    },
-    balance: Number(updated.balance),
-    user: publicUser(updated),
-    garage: serializeGarage(user.telegram_id)
-  };
-}
-
-// ============================================================
-// GARAGE SELL BY INDEX
-// ============================================================
-
-function sellGarageByIndex(user, index) {
-  const cars = serializeGarage(user.telegram_id);
-
-  const numericIndex = Number(index);
-
-  if (
-    !Number.isInteger(numericIndex) ||
-    numericIndex < 0 ||
-    numericIndex >= cars.length
-  ) {
-    throw new Error("Автомобиль не найден");
-  }
-
-  const selected = cars[numericIndex];
-
-  const car = db
-    .prepare(`
-      SELECT *
-      FROM garage
-      WHERE id = ?
-        AND telegram_id = ?
-    `)
-    .get(
-      selected.id,
-      user.telegram_id
-    );
-
-  if (!car) {
-    throw new Error("Автомобиль не найден");
-  }
-
-  const transaction = db.transaction(() => {
-    db.prepare(`
-      DELETE FROM garage
-      WHERE id = ?
-    `).run(car.id);
-
-    db.prepare(`
-      UPDATE users
-      SET
-        balance = balance + ?,
-        sold = sold + 1,
-        updated_at = ?
-      WHERE telegram_id = ?
-    `).run(
-      car.value,
-      now(),
-      user.telegram_id
-    );
-
-    db.prepare(`
-      INSERT INTO history (
-        telegram_id,
-        action,
-        car_name,
-        rarity,
-        value,
-        amount,
-        created_at
-      )
-      VALUES (?, 'sell', ?, ?, ?, ?, ?)
-    `).run(
-      user.telegram_id,
-      car.car_name,
-      car.rarity,
-      car.value,
-      car.value,
-      now()
-    );
-  });
-
-  transaction();
-
-  const updated = getUser(user.telegram_id);
-
-  return {
-    ok: true,
-    sold: {
-      name: car.car_name,
-      rarity: car.rarity,
-      value: car.value
-    },
-    balance: Number(updated.balance),
-    user: publicUser(updated),
-    garage: serializeGarage(user.telegram_id)
-  };
-}
-
-// ============================================================
-// MARKET BUY
-// ============================================================
-
-function marketBuy(user, name) {
-  const car = CARS.find(car => car.name === name);
-
-  if (!car) {
-    throw new Error("Автомобиль не найден");
-  }
-
-  if (Number(user.balance) < car.value) {
-    throw new Error("Недостаточно средств");
-  }
-
-  const transaction = db.transaction(() => {
-    db.prepare(`
-      UPDATE users
-      SET
-        balance = balance - ?,
-        spent = spent + ?,
-        updated_at = ?
-      WHERE telegram_id = ?
-    `).run(
-      car.value,
-      car.value,
-      now(),
-      user.telegram_id
-    );
-
-    db.prepare(`
-      INSERT INTO garage (
-        telegram_id,
-        car_name,
-        rarity,
-        value,
-        created_at
-      )
-      VALUES (?, ?, ?, ?, ?)
-    `).run(
-      user.telegram_id,
-      car.name,
-      car.rarity,
-      car.value,
-      now()
-    );
-
-    db.prepare(`
-      INSERT INTO history (
-        telegram_id,
-        action,
-        car_name,
-        rarity,
-        value,
-        amount,
-        created_at
-      )
-      VALUES (?, 'market_buy', ?, ?, ?, ?, ?)
-    `).run(
-      user.telegram_id,
-      car.name,
-      car.rarity,
-      car.value,
-      car.value,
-      now()
-    );
-  });
-
-  transaction();
-
-  const updated = getUser(user.telegram_id);
-
-  return {
-    ok: true,
-    bought: {
-      name: car.name,
-      rarity: car.rarity,
-      value: car.value
-    },
-    balance: Number(updated.balance),
-    user: publicUser(updated),
-    garage: serializeGarage(user.telegram_id)
-  };
-}
-
-// ============================================================
-// REFERRAL
-// ============================================================
-
-function applyReferral(user, code) {
-  if (!code) {
-    return publicUser(user);
-  }
-
-  const cleanCode = String(code).trim().toUpperCase();
-
-  if (!cleanCode) {
-    return publicUser(user);
-  }
-
-  if (user.referred_by) {
-    return publicUser(user);
-  }
-
-  const referrer = db
-    .prepare(`
-      SELECT *
-      FROM users
-      WHERE referral_code = ?
-      LIMIT 1
-    `)
-    .get(cleanCode);
-
-  if (!referrer) {
-    throw new Error("Реферальный код не найден");
-  }
-
-  if (referrer.telegram_id === user.telegram_id) {
-    throw new Error("Нельзя использовать собственный код");
-  }
-
-  db.prepare(`
-    UPDATE users
-    SET
-      referred_by = ?,
-      updated_at = ?
-    WHERE telegram_id = ?
-  `).run(
-    referrer.telegram_id,
-    now(),
-    user.telegram_id
-  );
-
-  return publicUser(getUser(user.telegram_id));
-}
-
-// ============================================================
-// CLEAN STALE OPENINGS
-// ============================================================
-
-function cleanupOpenings() {
-  db.prepare(`
-    DELETE FROM openings
-    WHERE started_at < ?
-  `).run(
-    now() - 10 * 60 * 1000
-  );
-}
-
-setInterval(cleanupOpenings, 60 * 1000);
-
-// ============================================================
-// ROUTER
-// ============================================================
-
-async function handleApi(req, res, url, body) {
-  const pathname = url.pathname;
-
-  // ----------------------------------------------------------
-  // HEALTH
-  // ----------------------------------------------------------
-
-  if (pathname === "/api/health" && req.method === "GET") {
+  if (pathname === "/api/health") {
     return json(res, 200, {
       ok: true,
       status: "ok",
@@ -1405,14 +667,11 @@ async function handleApi(req, res, url, body) {
     });
   }
 
-  // ----------------------------------------------------------
-  // CONFIG
-  // ----------------------------------------------------------
 
-  if (pathname === "/api/config" && req.method === "GET") {
+  if (pathname === "/api/config") {
     return json(res, 200, {
       ok: true,
-      cases: serializeCases(),
+      cases: CASES,
       cars: CARS,
       features: {
         referrals: true,
@@ -1424,380 +683,906 @@ async function handleApi(req, res, url, body) {
     });
   }
 
-  // ----------------------------------------------------------
-  // AUTH
-  // ----------------------------------------------------------
 
-  if (
-    pathname === "/api/auth" &&
-    (
-      req.method === "POST" ||
-      req.method === "GET"
-    )
-  ) {
-    try {
-      let authBody = body;
+  /*
+    Главный фикс.
+    При любом POST на /api/auth попадаем сюда.
+  */
 
-      if (req.method === "GET") {
-        authBody = {};
+  if (pathname === "/api/auth") {
 
-        if (url.searchParams.get("initData")) {
-          authBody.initData = url.searchParams.get("initData");
-        }
-
-        if (url.searchParams.get("init_data")) {
-          authBody.init_data = url.searchParams.get("init_data");
-        }
-      }
-
-      const { user } = await authenticate(req, authBody);
-
-      if (authBody.referral || authBody.ref) {
-        try {
-          applyReferral(
-            user,
-            authBody.referral || authBody.ref
-          );
-        } catch {
-          // Неверный реферальный код не ломает авторизацию
-        }
-      }
-
-      const updated = getUser(user.telegram_id);
-
-      return json(res, 200, {
-        ok: true,
-        user: publicUser(updated),
-        balance: Number(updated.balance),
-        garage: serializeGarage(updated.telegram_id),
-        history: serializeHistory(updated.telegram_id),
-        cases: serializeCases()
-      });
-    } catch (error) {
+    if (req.method !== "POST") {
       return sendError(
         res,
-        401,
-        error.message || "Ошибка авторизации"
+        405,
+        "Method Not Allowed. Используйте POST /api/auth"
       );
     }
+
+    return handleAuth(req, res, body);
   }
 
-  // Все остальные API требуют Telegram auth
-  let auth;
+
+  /* Все остальные API требуют Telegram */
+
+  let user;
 
   try {
-    auth = await authenticate(req, body);
+    user = getUserFromRequest(req, body);
   } catch (error) {
     return sendError(
       res,
       401,
-      error.message || "Ошибка авторизации"
+      error.message || "Необходима авторизация Telegram"
     );
   }
 
-  const user = auth.user;
 
-  // ----------------------------------------------------------
-  // USER
-  // ----------------------------------------------------------
-
-  if (pathname === "/api/user" && req.method === "GET") {
-    const fresh = getUser(user.telegram_id);
-
+  if (pathname === "/api/user") {
     return json(res, 200, {
       ok: true,
-      user: publicUser(fresh),
-      balance: Number(fresh.balance),
-      garage: serializeGarage(fresh.telegram_id),
-      history: serializeHistory(fresh.telegram_id)
+      user: publicUser(user)
     });
   }
 
-  // ----------------------------------------------------------
-  // CASES
-  // ----------------------------------------------------------
 
-  if (pathname === "/api/cases" && req.method === "GET") {
+  if (pathname === "/api/cases") {
     return json(res, 200, {
       ok: true,
-      cases: serializeCases()
+      cases: CASES
     });
   }
 
-  // ----------------------------------------------------------
-  // OPEN CASE
-  // ----------------------------------------------------------
 
-  if (
-    pathname === "/api/cases/open" &&
-    req.method === "POST"
-  ) {
-    try {
-      const result = openCase(
-        user,
-        body.caseId || body.case_id
+  /* =======================================================
+     OPEN CASE
+  ======================================================= */
+
+  if (pathname === "/api/cases/open") {
+
+    if (req.method !== "POST") {
+      return sendError(res, 405, "Method Not Allowed");
+    }
+
+    const caseId = body.caseId || body.case_id;
+    const caseData = findCase(caseId);
+
+    if (!caseData) {
+      return sendError(res, 400, "Кейс не найден");
+    }
+
+    /*
+      Защита от одновременного открытия нескольких кейсов.
+      Активная попытка считается зависшей после 2 минут.
+    */
+
+    const staleTime = Date.now() - 120000;
+
+    db.prepare(`
+      UPDATE openings
+      SET status = 'expired'
+      WHERE user_id = ?
+        AND status = 'active'
+        AND started_at < ?
+    `).run(user.id, staleTime);
+
+    const activeOpening = db.prepare(`
+      SELECT *
+      FROM openings
+      WHERE user_id = ?
+        AND status = 'active'
+      LIMIT 1
+    `).get(user.id);
+
+    if (activeOpening) {
+      return sendError(
+        res,
+        409,
+        "Кейс уже открывается"
       );
+    }
+
+
+    const freshUser = getUserById(user.id);
+
+    if (freshUser.balance < caseData.price) {
+      return sendError(
+        res,
+        400,
+        "Недостаточно средств"
+      );
+    }
+
+
+    const transaction = db.transaction(() => {
+
+      const startedAt = Date.now();
+
+      db.prepare(`
+        INSERT INTO openings (
+          user_id,
+          case_id,
+          started_at,
+          status
+        )
+        VALUES (?, ?, ?, 'active')
+      `).run(
+        user.id,
+        caseData.id,
+        startedAt
+      );
+
+
+      const car = pickCar(caseData);
+
+      const newBalance =
+        freshUser.balance - caseData.price;
+
+      const newSpent =
+        freshUser.spent + caseData.price;
+
+      const newOpened =
+        freshUser.opened + 1;
+
+      const newLevel =
+        getLevel(newSpent);
+
+
+      db.prepare(`
+        UPDATE users
+        SET
+          balance = ?,
+          spent = ?,
+          opened = ?,
+          level = ?,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(
+        newBalance,
+        newSpent,
+        newOpened,
+        newLevel,
+        user.id
+      );
+
+
+      const opening = db.prepare(`
+        SELECT id
+        FROM openings
+        WHERE user_id = ?
+          AND case_id = ?
+          AND status = 'active'
+        ORDER BY id DESC
+        LIMIT 1
+      `).get(
+        user.id,
+        caseData.id
+      );
+
+
+      db.prepare(`
+        UPDATE openings
+        SET
+          finished_at = ?,
+          result_name = ?,
+          result_rarity = ?,
+          result_value = ?,
+          status = 'finished'
+        WHERE id = ?
+      `).run(
+        Date.now(),
+        car.name,
+        car.rarity,
+        car.value,
+        opening.id
+      );
+
+
+      db.prepare(`
+        INSERT INTO history (
+          user_id,
+          type,
+          car_name,
+          rarity,
+          value,
+          case_id
+        )
+        VALUES (?, 'open', ?, ?, ?, ?)
+      `).run(
+        user.id,
+        car.name,
+        car.rarity,
+        car.value,
+        caseData.id
+      );
+
+
+      return {
+        car,
+        balance: newBalance,
+        spent: newSpent,
+        opened: newOpened,
+        level: newLevel
+      };
+    });
+
+
+    const result = transaction();
+
+    return json(res, 200, {
+      ok: true,
+      result: {
+        name: result.car.name,
+        rarity: result.car.rarity,
+        value: result.car.value
+      },
+      user: {
+        balance: result.balance,
+        spent: result.spent,
+        opened: result.opened,
+        level: result.level
+      }
+    });
+  }
+
+
+  /* =======================================================
+     KEEP CAR
+  ======================================================= */
+
+  if (pathname === "/api/cases/keep") {
+
+    if (req.method !== "POST") {
+      return sendError(res, 405, "Method Not Allowed");
+    }
+
+    const name = String(body.name || "");
+
+    const car = CARS.find(
+      item => item.name === name
+    );
+
+    if (!car) {
+      return sendError(res, 404, "Машина не найдена");
+    }
+
+    db.prepare(`
+      INSERT INTO garage (
+        user_id,
+        name,
+        rarity,
+        value
+      )
+      VALUES (?, ?, ?, ?)
+    `).run(
+      user.id,
+      car.name,
+      car.rarity,
+      car.value
+    );
+
+    return json(res, 200, {
+      ok: true,
+      message: "Машина добавлена в гараж"
+    });
+  }
+
+
+  /* =======================================================
+     SELL CASE RESULT
+  ======================================================= */
+
+  if (pathname === "/api/cases/sell") {
+
+    if (req.method !== "POST") {
+      return sendError(res, 405, "Method Not Allowed");
+    }
+
+    const name = String(body.name || "");
+
+    const car = CARS.find(
+      item => item.name === name
+    );
+
+    if (!car) {
+      return sendError(res, 404, "Машина не найдена");
+    }
+
+    const transaction = db.transaction(() => {
+
+      const currentUser = getUserById(user.id);
+
+      const balance =
+        currentUser.balance + car.value;
+
+      const sold =
+        currentUser.sold + 1;
+
+      db.prepare(`
+        UPDATE users
+        SET
+          balance = ?,
+          sold = ?,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(
+        balance,
+        sold,
+        user.id
+      );
+
+
+      db.prepare(`
+        INSERT INTO history (
+          user_id,
+          type,
+          car_name,
+          rarity,
+          value,
+          case_id
+        )
+        VALUES (?, 'sell', ?, ?, ?, '')
+      `).run(
+        user.id,
+        car.name,
+        car.rarity,
+        car.value
+      );
+
+
+      return {
+        balance,
+        sold
+      };
+    });
+
+
+    const result = transaction();
+
+    return json(res, 200, {
+      ok: true,
+      balance: result.balance,
+      sold: result.sold
+    });
+  }
+
+
+  /* =======================================================
+     GARAGE
+  ======================================================= */
+
+  if (pathname === "/api/garage") {
+
+    const cars = db.prepare(`
+      SELECT
+        id,
+        name,
+        rarity,
+        value,
+        created_at
+      FROM garage
+      WHERE user_id = ?
+      ORDER BY id DESC
+    `).all(user.id);
+
+    return json(res, 200, {
+      ok: true,
+      garage: cars
+    });
+  }
+
+
+  /* =======================================================
+     GARAGE SELL
+  ======================================================= */
+
+  if (pathname === "/api/garage/sell") {
+
+    if (req.method !== "POST") {
+      return sendError(res, 405, "Method Not Allowed");
+    }
+
+    const index =
+      Number(body.index);
+
+    if (!Number.isInteger(index) || index < 0) {
+      return sendError(
+        res,
+        400,
+        "Некорректный индекс машины"
+      );
+    }
+
+
+    const cars = db.prepare(`
+      SELECT
+        id,
+        name,
+        rarity,
+        value
+      FROM garage
+      WHERE user_id = ?
+      ORDER BY id DESC
+    `).all(user.id);
+
+
+    const car = cars[index];
+
+    if (!car) {
+      return sendError(
+        res,
+        404,
+        "Машина не найдена в гараже"
+      );
+    }
+
+
+    const transaction = db.transaction(() => {
+
+      const currentUser = getUserById(user.id);
+
+      const balance =
+        currentUser.balance + car.value;
+
+      const sold =
+        currentUser.sold + 1;
+
+
+      db.prepare(`
+        DELETE FROM garage
+        WHERE id = ?
+          AND user_id = ?
+      `).run(
+        car.id,
+        user.id
+      );
+
+
+      db.prepare(`
+        UPDATE users
+        SET
+          balance = ?,
+          sold = ?,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(
+        balance,
+        sold,
+        user.id
+      );
+
+
+      db.prepare(`
+        INSERT INTO history (
+          user_id,
+          type,
+          car_name,
+          rarity,
+          value,
+          case_id
+        )
+        VALUES (?, 'garage_sell', ?, ?, ?, '')
+      `).run(
+        user.id,
+        car.name,
+        car.rarity,
+        car.value
+      );
+
+
+      return {
+        balance,
+        sold
+      };
+    });
+
+
+    const result = transaction();
+
+    return json(res, 200, {
+      ok: true,
+      balance: result.balance,
+      sold: result.sold
+    });
+  }
+
+
+  /* =======================================================
+     MARKET
+  ======================================================= */
+
+  if (pathname === "/api/market") {
+
+    return json(res, 200, {
+      ok: true,
+      cars: CARS.map(car => ({
+        name: car.name,
+        rarity: car.rarity,
+        value: car.value
+      }))
+    });
+  }
+
+
+  /* =======================================================
+     MARKET BUY
+  ======================================================= */
+
+  if (pathname === "/api/market/buy") {
+
+    if (req.method !== "POST") {
+      return sendError(res, 405, "Method Not Allowed");
+    }
+
+    const name = String(body.name || "");
+
+    const car = CARS.find(
+      item => item.name === name
+    );
+
+    if (!car) {
+      return sendError(
+        res,
+        404,
+        "Машина не найдена"
+      );
+    }
+
+
+    const transaction = db.transaction(() => {
+
+      const currentUser = getUserById(user.id);
+
+      if (currentUser.balance < car.value) {
+        throw new Error("Недостаточно средств");
+      }
+
+
+      const balance =
+        currentUser.balance - car.value;
+
+
+      db.prepare(`
+        UPDATE users
+        SET
+          balance = ?,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(
+        balance,
+        user.id
+      );
+
+
+      db.prepare(`
+        INSERT INTO garage (
+          user_id,
+          name,
+          rarity,
+          value
+        )
+        VALUES (?, ?, ?, ?)
+      `).run(
+        user.id,
+        car.name,
+        car.rarity,
+        car.value
+      );
+
+
+      db.prepare(`
+        INSERT INTO history (
+          user_id,
+          type,
+          car_name,
+          rarity,
+          value,
+          case_id
+        )
+        VALUES (?, 'market_buy', ?, ?, ?, '')
+      `).run(
+        user.id,
+        car.name,
+        car.rarity,
+        car.value
+      );
+
+
+      return {
+        balance
+      };
+    });
+
+
+    try {
+      const result = transaction();
 
       return json(res, 200, {
         ok: true,
-        ...result
+        balance: result.balance,
+        car
       });
     } catch (error) {
       return sendError(
         res,
         400,
-        error.message || "Не удалось открыть кейс"
+        error.message || "Не удалось купить машину"
       );
     }
   }
 
-  // ----------------------------------------------------------
-  // KEEP
-  // ----------------------------------------------------------
 
-  if (
-    pathname === "/api/cases/keep" &&
-    req.method === "POST"
-  ) {
-    try {
-      const result = keepCar(
-        user,
-        body.name
-      );
+  /* =======================================================
+     HISTORY
+  ======================================================= */
 
-      return json(res, 200, result);
-    } catch (error) {
-      return sendError(
-        res,
-        400,
-        error.message || "Не удалось сохранить автомобиль"
-      );
-    }
-  }
+  if (pathname === "/api/history") {
 
-  // ----------------------------------------------------------
-  // SELL
-  // ----------------------------------------------------------
+    const history = db.prepare(`
+      SELECT
+        id,
+        type,
+        car_name,
+        rarity,
+        value,
+        case_id,
+        created_at
+      FROM history
+      WHERE user_id = ?
+      ORDER BY id DESC
+      LIMIT 100
+    `).all(user.id);
 
-  if (
-    pathname === "/api/cases/sell" &&
-    req.method === "POST"
-  ) {
-    try {
-      const result = sellCarByName(
-        user,
-        body.name
-      );
-
-      return json(res, 200, result);
-    } catch (error) {
-      return sendError(
-        res,
-        400,
-        error.message || "Не удалось продать автомобиль"
-      );
-    }
-  }
-
-  // ----------------------------------------------------------
-  // GARAGE
-  // ----------------------------------------------------------
-
-  if (
-    pathname === "/api/garage" &&
-    req.method === "GET"
-  ) {
     return json(res, 200, {
       ok: true,
-      garage: serializeGarage(user.telegram_id)
+      history
     });
   }
 
-  if (
-    pathname === "/api/garage/sell" &&
-    req.method === "POST"
-  ) {
-    try {
-      const result = sellGarageByIndex(
-        user,
-        body.index
-      );
 
-      return json(res, 200, result);
-    } catch (error) {
-      return sendError(
-        res,
-        400,
-        error.message || "Не удалось продать автомобиль"
-      );
+  /* =======================================================
+     DAILY
+  ======================================================= */
+
+  if (pathname === "/api/daily") {
+
+    if (req.method !== "POST" && req.method !== "GET") {
+      return sendError(res, 405, "Method Not Allowed");
     }
-  }
 
-  // ----------------------------------------------------------
-  // MARKET
-  // ----------------------------------------------------------
+    const currentUser = getUserById(user.id);
 
-  if (
-    pathname === "/api/market" &&
-    req.method === "GET"
-  ) {
+    const today =
+      new Date().toISOString().slice(0, 10);
+
+    if (currentUser.daily_last === today) {
+      return json(res, 200, {
+        ok: true,
+        claimed: true,
+        reward: 0,
+        user: publicUser(currentUser)
+      });
+    }
+
+
+    const yesterdayDate =
+      new Date(Date.now() - 86400000)
+        .toISOString()
+        .slice(0, 10);
+
+
+    let streak = Number(
+      currentUser.daily_streak || 0
+    );
+
+    if (currentUser.daily_last === yesterdayDate) {
+      streak++;
+    } else {
+      streak = 1;
+    }
+
+
+    const rewards = [
+      100000,
+      150000,
+      200000,
+      300000,
+      400000,
+      500000,
+      1000000
+    ];
+
+    const reward =
+      rewards[Math.min(streak, 7) - 1];
+
+
+    db.prepare(`
+      UPDATE users
+      SET
+        balance = balance + ?,
+        daily_streak = ?,
+        daily_last = ?,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).run(
+      reward,
+      streak,
+      today,
+      user.id
+    );
+
+
+    const updated =
+      getUserById(user.id);
+
+
     return json(res, 200, {
       ok: true,
-      cars: CARS
+      claimed: true,
+      reward,
+      streak,
+      user: publicUser(updated)
     });
   }
 
-  if (
-    pathname === "/api/market/buy" &&
-    req.method === "POST"
-  ) {
-    try {
-      const result = marketBuy(
-        user,
-        body.name
-      );
 
-      return json(res, 200, result);
-    } catch (error) {
+  /* =======================================================
+     REFERRAL
+  ======================================================= */
+
+  if (pathname === "/api/referral") {
+
+    if (req.method !== "POST" && req.method !== "GET") {
+      return sendError(res, 405, "Method Not Allowed");
+    }
+
+
+    const currentUser =
+      getUserById(user.id);
+
+
+    const referralCode =
+      String(
+        body.referralCode ||
+        body.referral_code ||
+        body.code ||
+        ""
+      ).trim();
+
+
+    if (!referralCode) {
+      return json(res, 200, {
+        ok: true,
+        referral_code: currentUser.referral_code,
+        referral_earned: currentUser.referral_earned
+      });
+    }
+
+
+    if (currentUser.referred_by) {
       return sendError(
         res,
         400,
-        error.message || "Не удалось купить автомобиль"
+        "Реферальный код уже использован"
       );
     }
-  }
 
-  // ----------------------------------------------------------
-  // HISTORY
-  // ----------------------------------------------------------
 
-  if (
-    pathname === "/api/history" &&
-    req.method === "GET"
-  ) {
-    return json(res, 200, {
-      ok: true,
-      history: serializeHistory(user.telegram_id)
+    if (
+      referralCode === currentUser.referral_code
+    ) {
+      return sendError(
+        res,
+        400,
+        "Нельзя использовать свой код"
+      );
+    }
+
+
+    const inviter = db.prepare(`
+      SELECT *
+      FROM users
+      WHERE referral_code = ?
+      LIMIT 1
+    `).get(referralCode);
+
+
+    if (!inviter) {
+      return sendError(
+        res,
+        404,
+        "Реферальный код не найден"
+      );
+    }
+
+
+    const transaction = db.transaction(() => {
+
+      const bonus = 100000;
+
+
+      db.prepare(`
+        UPDATE users
+        SET
+          referred_by = ?,
+          balance = balance + ?,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(
+        inviter.referral_code,
+        bonus,
+        user.id
+      );
+
+
+      db.prepare(`
+        UPDATE users
+        SET
+          balance = balance + ?,
+          referral_earned = referral_earned + ?,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(
+        bonus,
+        bonus,
+        inviter.id
+      );
+
+
+      db.prepare(`
+        INSERT INTO history (
+          user_id,
+          type,
+          car_name,
+          rarity,
+          value,
+          case_id
+        )
+        VALUES (?, 'referral', '', '', ?, '')
+      `).run(
+        user.id,
+        bonus
+      );
     });
-  }
 
-  // ----------------------------------------------------------
-  // DAILY
-  // ----------------------------------------------------------
 
-  if (
-    pathname === "/api/daily" &&
-    req.method === "POST"
-  ) {
     try {
-      const result = dailyReward(user);
+      transaction();
 
-      const updated = getUser(user.telegram_id);
+      const updated =
+        getUserById(user.id);
 
       return json(res, 200, {
         ok: true,
-        ...result,
+        bonus: 100000,
         user: publicUser(updated)
       });
+
     } catch (error) {
       return sendError(
         res,
         400,
-        error.message || "Ошибка ежедневной награды"
+        error.message || "Ошибка реферала"
       );
     }
   }
 
-  if (
-    pathname === "/api/daily" &&
-    req.method === "GET"
-  ) {
-    const fresh = getUser(user.telegram_id);
-    const today = todayString();
-
-    return json(res, 200, {
-      ok: true,
-      claimed: fresh.last_daily === today,
-      reward: 250000
-    });
-  }
-
-  // ----------------------------------------------------------
-  // REFERRAL
-  // ----------------------------------------------------------
-
-  if (
-    pathname === "/api/referral" &&
-    req.method === "GET"
-  ) {
-    const fresh = getUser(user.telegram_id);
-
-    const count = db
-      .prepare(`
-        SELECT COUNT(*) AS count
-        FROM users
-        WHERE referred_by = ?
-      `)
-      .get(user.telegram_id);
-
-    return json(res, 200, {
-      ok: true,
-      code: fresh.referral_code,
-      referralCode: fresh.referral_code,
-      referrals: Number(count.count) || 0,
-      earned: Number(fresh.referral_earned) || 0,
-      referralEarned: Number(fresh.referral_earned) || 0
-    });
-  }
-
-  if (
-    pathname === "/api/referral/apply" &&
-    req.method === "POST"
-  ) {
-    try {
-      const updatedUser = applyReferral(
-        user,
-        body.code || body.referralCode
-      );
-
-      return json(res, 200, {
-        ok: true,
-        user: updatedUser
-      });
-    } catch (error) {
-      return sendError(
-        res,
-        400,
-        error.message || "Не удалось применить код"
-      );
-    }
-  }
-
-  // ----------------------------------------------------------
-  // 404
-  // ----------------------------------------------------------
 
   return sendError(
     res,
     404,
-    "API route not found"
+    "API endpoint not found"
   );
 }
 
-// ============================================================
-// STATIC FILES
-// ============================================================
+
+/* =========================================================
+   STATIC FILE
+========================================================= */
 
 function serveIndex(req, res) {
-  if (req.method !== "GET" && req.method !== "HEAD") {
-    return sendError(
-      res,
-      405,
-      "Method Not Allowed"
-    );
-  }
 
-  if (!fs.existsSync(INDEX_FILE)) {
+  if (!fs.existsSync(INDEX_PATH)) {
     return sendError(
       res,
       500,
@@ -1805,106 +1590,363 @@ function serveIndex(req, res) {
     );
   }
 
-  const stat = fs.statSync(INDEX_FILE);
+  fs.readFile(
+    INDEX_PATH,
+    (error, data) => {
 
-  res.statusCode = 200;
-  res.setHeader(
-    "Content-Type",
-    "text/html; charset=utf-8"
-  );
-  res.setHeader(
-    "Cache-Control",
-    "no-cache, no-store, must-revalidate"
-  );
-  res.setHeader(
-    "Content-Length",
-    stat.size
-  );
+      if (error) {
+        console.error(
+          "INDEX READ ERROR:",
+          error
+        );
 
-  if (req.method === "HEAD") {
-    res.end();
-    return;
-  }
+        return sendError(
+          res,
+          500,
+          "Не удалось прочитать index.html"
+        );
+      }
 
-  fs.createReadStream(INDEX_FILE).pipe(res);
+      res.statusCode = 200;
+
+      res.setHeader(
+        "Content-Type",
+        "text/html; charset=utf-8"
+      );
+
+      res.setHeader(
+        "Cache-Control",
+        "no-store, no-cache, must-revalidate"
+      );
+
+      res.end(data);
+    }
+  );
 }
 
-// ============================================================
-// SERVER
-// ============================================================
 
-const server = http.createServer(async (req, res) => {
-  setCors(res);
+/* =========================================================
+   SERVER
+========================================================= */
 
-  // OPTIONS
-  if (req.method === "OPTIONS") {
-    res.statusCode = 204;
-    res.end();
-    return;
-  }
+const server = http.createServer(
+  async (req, res) => {
 
-  try {
-    const parsedUrl = new URL(
-      req.url,
-      `http://${req.headers.host || "localhost"}`
-    );
+    cors(res);
 
-    const pathname = parsedUrl.pathname;
+    const method =
+      String(req.method || "GET").toUpperCase();
 
-    // API
-    if (pathname.startsWith("/api/")) {
-      const body = await readBody(req);
+    const host =
+      String(req.headers.host || "");
 
-      await handleApi(
-        req,
-        res,
-        parsedUrl,
-        body
+    const rawUrl =
+      String(req.url || "/");
+
+    let url;
+
+    try {
+      url = new URL(
+        rawUrl,
+        `http://${host || "localhost"}`
       );
+    } catch {
+      return sendError(
+        res,
+        400,
+        "Invalid URL"
+      );
+    }
+
+    const pathname = url.pathname;
+
+
+    /*
+      OPTIONS должен отвечать 204.
+      Это особенно важно для Telegram Mini App
+      и CORS preflight.
+    */
+
+    if (method === "OPTIONS") {
+      res.statusCode = 204;
+      res.end();
+      return;
+    }
+
+
+    /*
+      API
+    */
+
+    if (pathname.startsWith("/api/")) {
+
+      let body = {};
+
+      try {
+        if (
+          method === "POST" ||
+          method === "PUT" ||
+          method === "PATCH"
+        ) {
+          body = await readBody(req);
+        }
+      } catch (error) {
+        return sendError(
+          res,
+          400,
+          error.message || "Invalid request body"
+        );
+      }
+
+
+      try {
+        await handleApi(
+          req,
+          res,
+          pathname,
+          body
+        );
+      } catch (error) {
+
+        console.error(
+          "API ERROR:",
+          error
+        );
+
+        if (!res.writableEnded) {
+          sendError(
+            res,
+            500,
+            "Внутренняя ошибка сервера"
+          );
+        }
+      }
 
       return;
     }
 
-    // favicon
+
+    /*
+      favicon
+    */
+
     if (pathname === "/favicon.ico") {
       res.statusCode = 204;
       res.end();
       return;
     }
 
-    // Всё остальное отдаём как Mini App
-    serveIndex(req, res);
-  } catch (error) {
-    console.error("SERVER ERROR:", error);
 
-    if (!res.headersSent) {
-      sendError(
-        res,
-        500,
-        NODE_ENV === "production"
-          ? "Внутренняя ошибка сервера"
-          : error.message
-      );
-    } else {
-      res.end();
+    /*
+      Главная страница
+    */
+
+    if (
+      pathname === "/" ||
+      pathname === "/index.html"
+    ) {
+
+      if (
+        method !== "GET" &&
+        method !== "HEAD"
+      ) {
+        return sendError(
+          res,
+          405,
+          "Method Not Allowed"
+        );
+      }
+
+      return serveIndex(req, res);
     }
+
+
+    /*
+      Остальные статические файлы.
+      Если они понадобятся фронтенду.
+    */
+
+    const requestedPath =
+      path.normalize(
+        path.join(
+          __dirname,
+          pathname.replace(/^\/+/, "")
+        )
+      );
+
+
+    if (
+      requestedPath.startsWith(__dirname) &&
+      fs.existsSync(requestedPath) &&
+      fs.statSync(requestedPath).isFile()
+    ) {
+
+      if (
+        method !== "GET" &&
+        method !== "HEAD"
+      ) {
+        return sendError(
+          res,
+          405,
+          "Method Not Allowed"
+        );
+      }
+
+
+      const ext =
+        path.extname(requestedPath)
+          .toLowerCase();
+
+
+      const types = {
+        ".html": "text/html; charset=utf-8",
+        ".js": "application/javascript; charset=utf-8",
+        ".css": "text/css; charset=utf-8",
+        ".json": "application/json; charset=utf-8",
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".webp": "image/webp",
+        ".svg": "image/svg+xml",
+        ".ico": "image/x-icon",
+        ".mp3": "audio/mpeg",
+        ".wav": "audio/wav",
+        ".ogg": "audio/ogg"
+      };
+
+
+      res.statusCode = 200;
+
+      res.setHeader(
+        "Content-Type",
+        types[ext] ||
+        "application/octet-stream"
+      );
+
+      res.setHeader(
+        "Cache-Control",
+        "no-store"
+      );
+
+
+      if (method === "HEAD") {
+        res.end();
+        return;
+      }
+
+
+      fs.createReadStream(
+        requestedPath
+      ).pipe(res);
+
+      return;
+    }
+
+
+    sendError(
+      res,
+      404,
+      "Not Found"
+    );
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+server.on("error", error => {
+  console.error("SERVER ERROR:", error);
+
+  if (error.code === "EADDRINUSE") {
+    console.error(
+      `Port ${PORT} is already in use`
+    );
   }
 });
 
-server.on("error", error => {
-  console.error("HTTP SERVER ERROR:", error);
-});
 
-server.listen(PORT, "0.0.0.0", () => {
-  console.log("======================================");
-  console.log("🚗 АВТОИМПЕРИЯ SERVER");
-  console.log("======================================");
-  console.log(`PORT: ${PORT}`);
-  console.log(`NODE: ${process.version}`);
-  console.log(`ENV: ${NODE_ENV}`);
-  console.log(`DB: ${DB_PATH}`);
-  console.log(`BOT TOKEN: ${BOT_TOKEN ? "configured" : "NOT SET"}`);
-  console.log("======================================");
-  console.log("SERVER STARTED");
-  console.log("======================================");
-});
+server.listen(
+  PORT,
+  HOST,
+  () => {
+
+    console.log("======================================");
+    console.log("SERVER STARTED");
+    console.log("======================================");
+    console.log(
+      `Listening on http://${HOST}:${PORT}`
+    );
+    console.log(
+      `Health: http://${HOST}:${PORT}/api/health`
+    );
+    console.log(
+      `Config: http://${HOST}:${PORT}/api/config`
+    );
+    console.log("======================================");
+  }
+);
+
+
+/* =========================================================
+   GRACEFUL SHUTDOWN
+========================================================= */
+
+function shutdown(signal) {
+
+  console.log(
+    `Received ${signal}. Shutting down...`
+  );
+
+  try {
+    server.close(() => {
+
+      try {
+        db.close();
+      } catch {}
+
+      process.exit(0);
+    });
+
+  } catch {
+    process.exit(0);
+  }
+}
+
+
+process.on(
+  "SIGTERM",
+  () => shutdown("SIGTERM")
+);
+
+process.on(
+  "SIGINT",
+  () => shutdown("SIGINT")
+);
+
+
+/* =========================================================
+   SAFETY
+========================================================= */
+
+process.on(
+  "uncaughtException",
+  error => {
+    console.error(
+      "UNCAUGHT EXCEPTION:",
+      error
+    );
+  }
+);
+
+
+process.on(
+  "unhandledRejection",
+  error => {
+    console.error(
+      "UNHANDLED REJECTION:",
+      error
+    );
+  }
+);
