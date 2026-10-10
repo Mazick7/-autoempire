@@ -3,2441 +3,324 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#08090c">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+<meta name="theme-color" content="#0b0c0f">
 <title>Автоимперия</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-html,body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  background:#08090c;
-  color:#fff;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  overflow-x:hidden;
-}
-
-body{
-  min-height:100vh;
-}
-
-button,
-input{
-  font:inherit;
-}
-
-button{
-  border:0;
-  cursor:pointer;
-}
-
-.app{
-  width:100%;
-  max-width:520px;
-  margin:0 auto;
-  min-height:100vh;
-  padding-bottom:90px;
-  position:relative;
-}
-
-.header{
-  position:sticky;
-  top:0;
-  z-index:50;
-  padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;
-  background:rgba(8,9,12,.92);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-
-.header-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.logo{
-  font-weight:900;
-  font-size:20px;
-  letter-spacing:-.7px;
-}
-
-.logo span{
-  color:#ffb000;
-}
-
-.balance{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  background:#111318;
-  border:1px solid rgba(255,176,0,.2);
-  padding:8px 11px;
-  border-radius:14px;
-  font-size:13px;
-  font-weight:800;
-}
-
-.coin{
-  width:18px;
-  height:18px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#ffb000;
-  color:#111;
-  font-size:11px;
-  font-weight:1000;
-}
-
-.page{
-  display:none;
-  padding:16px;
-}
-
-.page.active{
-  display:block;
-}
-
-.hero{
-  background:
-    radial-gradient(circle at 85% 10%,rgba(255,176,0,.22),transparent 35%),
-    linear-gradient(145deg,#17191f,#0d0f13);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:24px;
-  padding:20px;
-  margin-bottom:16px;
-  overflow:hidden;
-  position:relative;
-}
-
-.hero:after{
-  content:"";
-  position:absolute;
-  right:-70px;
-  bottom:-90px;
-  width:190px;
-  height:190px;
-  border-radius:50%;
-  border:30px solid rgba(255,176,0,.04);
-}
-
-.hero-title{
-  font-size:27px;
-  line-height:1.05;
-  font-weight:950;
-  letter-spacing:-1px;
-  margin-bottom:9px;
-}
-
-.hero-text{
-  color:#aeb2bb;
-  font-size:13px;
-  line-height:1.45;
-}
-
-.section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin:20px 2px 11px;
-}
-
-.section-title h2{
-  font-size:17px;
-  margin:0;
-  font-weight:900;
-}
-
-.section-title span{
-  color:#858995;
-  font-size:12px;
-}
-
-.cases{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
-}
-
-.case{
-  position:relative;
-  overflow:hidden;
-  min-height:180px;
-  padding:15px;
-  border-radius:21px;
-  background:linear-gradient(145deg,#17191f,#0d0f13);
-  border:1px solid rgba(255,255,255,.07);
-  transition:.18s;
-}
-
-.case:active{
-  transform:scale(.97);
-}
-
-.case-icon{
-  font-size:39px;
-  margin-bottom:10px;
-  filter:drop-shadow(0 8px 20px rgba(255,176,0,.12));
-}
-
-.case-name{
-  font-size:15px;
-  font-weight:900;
-  margin-bottom:5px;
-}
-
-.case-price{
-  color:#ffb000;
-  font-size:13px;
-  font-weight:900;
-  margin-bottom:12px;
-}
-
-.case-button{
-  width:100%;
-  padding:10px;
-  border-radius:12px;
-  background:#ffb000;
-  color:#101010;
-  font-size:12px;
-  font-weight:950;
-}
-
-.case-button:disabled{
-  opacity:.45;
-}
-
-.card{
-  background:#111318;
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:20px;
-  padding:16px;
-  margin-bottom:12px;
-}
-
-.stat-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.stat{
-  padding:14px;
-  border-radius:16px;
-  background:#181a20;
-  border:1px solid rgba(255,255,255,.05);
-}
-
-.stat-label{
-  color:#8d919b;
-  font-size:11px;
-  margin-bottom:6px;
-}
-
-.stat-value{
-  font-size:18px;
-  font-weight:950;
-}
-
-.car-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.car{
-  background:#111318;
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:18px;
-  padding:14px;
-}
-
-.car-top{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.car-name{
-  font-size:14px;
-  font-weight:900;
-}
-
-.car-price{
-  color:#ffb000;
-  font-size:13px;
-  font-weight:900;
-  white-space:nowrap;
-}
-
-.car-rarity{
-  margin-top:5px;
-  font-size:11px;
-  color:#8e929c;
-}
-
-.car-actions{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
-}
-
-.btn{
-  flex:1;
-  min-height:40px;
-  border-radius:12px;
-  background:#1a1c22;
-  color:#fff;
-  font-weight:850;
-  font-size:12px;
-  border:1px solid rgba(255,255,255,.06);
-}
-
-.btn.primary{
-  background:#ffb000;
-  color:#111;
-  border-color:#ffb000;
-}
-
-.btn.danger{
-  background:#2a1416;
-  color:#ff7077;
-  border-color:rgba(255,80,90,.16);
-}
-
-.btn:disabled{
-  opacity:.4;
-}
-
-.profile-head{
-  text-align:center;
-  padding:15px 0 20px;
-}
-
-.avatar{
-  width:76px;
-  height:76px;
-  margin:0 auto 11px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(145deg,#ffb000,#ff7a00);
-  color:#111;
-  font-size:29px;
-  font-weight:1000;
-  overflow:hidden;
-}
-
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.profile-name{
-  font-size:20px;
-  font-weight:950;
-}
-
-.profile-username{
-  margin-top:4px;
-  color:#858995;
-  font-size:12px;
-}
-
-.level-box{
-  margin-top:15px;
-  padding:15px;
-  border-radius:18px;
-  background:#111318;
-  border:1px solid rgba(255,255,255,.07);
-}
-
-.level-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  font-size:12px;
-  font-weight:800;
-}
-
-.progress{
-  height:7px;
-  margin-top:10px;
-  background:#25272d;
-  border-radius:99px;
-  overflow:hidden;
-}
-
-.progress > div{
-  height:100%;
-  width:0%;
-  background:#ffb000;
-  border-radius:99px;
-  transition:.35s;
-}
-
-.bottom-nav{
-  position:fixed;
-  z-index:60;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
-  width:min(520px,100%);
-  padding:8px 10px calc(env(safe-area-inset-bottom) + 8px);
-  background:rgba(8,9,12,.94);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border-top:1px solid rgba(255,255,255,.07);
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-}
-
-.nav-btn{
-  background:transparent;
-  color:#737782;
-  padding:7px 2px;
-  font-size:10px;
-  font-weight:800;
-}
-
-.nav-btn.active{
-  color:#ffb000;
-}
-
-.nav-icon{
-  display:block;
-  font-size:20px;
-  margin-bottom:3px;
-}
-
-.toast{
-  position:fixed;
-  z-index:1000;
-  left:50%;
-  bottom:85px;
-  transform:translate(-50%,20px);
-  width:calc(100% - 32px);
-  max-width:480px;
-  padding:13px 15px;
-  border-radius:15px;
-  background:#1a1c22;
-  border:1px solid rgba(255,255,255,.08);
-  color:#fff;
-  font-size:12px;
-  font-weight:750;
-  opacity:0;
-  pointer-events:none;
-  transition:.2s;
-  box-shadow:0 15px 40px rgba(0,0,0,.35);
-}
-
-.toast.show{
-  opacity:1;
-  transform:translate(-50%,0);
-}
-
-.toast.error{
-  border-color:rgba(255,70,80,.3);
-}
-
-.loading{
-  position:fixed;
-  inset:0;
-  z-index:2000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#08090c;
-  transition:.25s;
-}
-
-.loading.hidden{
-  opacity:0;
-  pointer-events:none;
-}
-
-.loader{
-  text-align:center;
-}
-
-.loader-logo{
-  font-size:28px;
-  font-weight:1000;
-  margin-bottom:16px;
-}
-
-.loader-logo span{
-  color:#ffb000;
-}
-
-.spinner{
-  width:34px;
-  height:34px;
-  margin:0 auto 12px;
-  border:3px solid #292b31;
-  border-top-color:#ffb000;
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-}
-
-.loader-text{
-  color:#777b85;
-  font-size:12px;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:500;
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  background:rgba(0,0,0,.65);
-  padding:10px;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:min(520px,100%);
-  max-height:85vh;
-  overflow:auto;
-  background:#111318;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:25px 25px 15px 15px;
-  padding:20px;
-  animation:up .2s ease;
-}
-
-@keyframes up{
-  from{transform:translateY(40px);opacity:0}
-  to{transform:translateY(0);opacity:1}
-}
-
-.modal-title{
-  font-size:20px;
-  font-weight:950;
-  margin-bottom:8px;
-}
-
-.modal-text{
-  color:#9a9da6;
-  font-size:13px;
-  line-height:1.5;
-  margin-bottom:16px;
-}
-
-.roulette{
-  position:relative;
-  height:150px;
-  overflow:hidden;
-  border-radius:18px;
-  background:#0a0b0e;
-  border:1px solid rgba(255,255,255,.07);
-  margin:15px 0;
-}
-
-.roulette-line{
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:50%;
-  width:2px;
-  background:#ffb000;
-  z-index:5;
-  box-shadow:0 0 15px rgba(255,176,0,.7);
-}
-
-.roulette-track{
-  position:absolute;
-  left:0;
-  top:15px;
-  height:120px;
-  display:flex;
-  gap:8px;
-  align-items:center;
-  transform:translateX(0);
-}
-
-.roulette-item{
-  flex:0 0 120px;
-  height:115px;
-  border-radius:15px;
-  background:#17191f;
-  border:1px solid rgba(255,255,255,.06);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:8px;
-}
-
-.roulette-car{
-  font-size:28px;
-}
-
-.roulette-name{
-  margin-top:6px;
-  font-size:10px;
-  font-weight:850;
-}
-
-.empty{
-  text-align:center;
-  padding:30px 15px;
-  color:#777b85;
-  font-size:13px;
-}
-
-.market-tabs{
-  display:flex;
-  gap:7px;
-  overflow:auto;
-  margin-bottom:12px;
-}
-
-.market-tab{
-  flex:0 0 auto;
-  padding:9px 13px;
-  border-radius:12px;
-  background:#111318;
-  color:#858995;
-  border:1px solid rgba(255,255,255,.06);
-  font-size:11px;
-  font-weight:850;
-}
-
-.market-tab.active{
-  background:#ffb000;
-  color:#111;
-}
-
-.daily{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.daily-info{
-  flex:1;
-}
-
-.daily-title{
-  font-weight:900;
-  font-size:14px;
-}
-
-.daily-text{
-  color:#858995;
-  font-size:11px;
-  margin-top:4px;
-}
-
-.referral{
-  word-break:break-all;
-  padding:12px;
-  border-radius:12px;
-  background:#181a20;
-  color:#ffb000;
-  font-size:11px;
-  margin-top:10px;
-}
-
-.warning{
-  padding:12px;
-  border-radius:13px;
-  background:#2a2010;
-  border:1px solid rgba(255,176,0,.15);
-  color:#d8b56d;
-  font-size:11px;
-  line-height:1.45;
-}
-
-.success{
-  padding:12px;
-  border-radius:13px;
-  background:#102419;
-  border:1px solid rgba(50,220,120,.14);
-  color:#8ce0ad;
-  font-size:11px;
-  line-height:1.45;
-}
+:root{
+  --bg:#0b0c0f;--panel:#131519;--panel2:#181a1f;--panel3:#202329;
+  --line:rgba(255,255,255,.08);--text:#f1f2f4;--muted:#9297a1;
+  --accent:#e7e9ec;--green:#45d39b;--red:#ff5368;--blue:#69a8ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",Arial,sans-serif}
+body{overflow-x:hidden;padding-bottom:90px}
+button{border:0;font:inherit;color:inherit;cursor:pointer}
+.app{width:100%;max-width:620px;margin:auto;min-height:100vh;
+padding:calc(12px + env(safe-area-inset-top)) 14px calc(95px + env(safe-area-inset-bottom))}
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:10px}
+.brandMark{width:36px;height:36px;border-radius:10px;background:#191b20;border:1px solid var(--line);
+display:flex;align-items:center;justify-content:center;font-size:18px}
+.brandName{font-weight:800;font-size:15px;letter-spacing:.2px}
+.brandSub{color:var(--muted);font-size:9px;margin-top:2px;letter-spacing:1px}
+.balance{text-align:right}.balanceLabel{color:var(--muted);font-size:9px}
+.balanceValue{font-weight:800;font-size:16px;margin-top:2px}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;border-radius:20px;min-height:190px;padding:20px;
+background:#15171b;border:1px solid var(--line);margin-bottom:18px}
+.heroTop{position:relative;z-index:2}.heroEyebrow{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:1.3px}
+.heroTitle{font-size:25px;font-weight:850;letter-spacing:-.8px;margin-top:5px}
+.heroText{color:var(--muted);font-size:11px;line-height:1.5;margin-top:7px;max-width:260px}
+.heroCar{position:absolute;right:-8px;bottom:-8px;width:235px;height:135px;z-index:1;transform:perspective(600px) rotateY(-7deg)}
+.heroBottom{position:absolute;left:20px;bottom:18px;z-index:4}
+.levelBadge{display:inline-flex;align-items:center;gap:7px;background:#202329;border:1px solid var(--line);
+padding:7px 10px;border-radius:9px;font-size:10px;font-weight:700}
+.levelDot{width:6px;height:6px;border-radius:50%;background:#aeb3ba}
+
+/* CAR DRAWING */
+.carBody{position:absolute;left:10%;bottom:25px;width:80%;height:42%;border-radius:42% 28% 14% 13%;
+background:linear-gradient(145deg,#60656d,#181b20 58%,#090a0c);
+box-shadow:inset -10px -8px 18px rgba(0,0,0,.7),inset 8px 7px 15px rgba(255,255,255,.08),0 18px 25px rgba(0,0,0,.5)}
+.carRoof{position:absolute;left:29%;bottom:52%;width:43%;height:32%;
+background:linear-gradient(145deg,#555b63,#121519);clip-path:polygon(20% 100%,37% 5%,74% 0,100% 100%)}
+.carWindow{position:absolute;left:37%;bottom:57%;width:28%;height:20%;
+background:linear-gradient(145deg,#2b3036,#050608);clip-path:polygon(18% 100%,31% 8%,70% 5%,93% 100%)}
+.carLight{position:absolute;right:12%;bottom:39%;width:14%;height:8%;border-radius:20px;background:#dce5ff}
+.wheel{position:absolute;bottom:9%;width:23%;aspect-ratio:1;border-radius:50%;background:#050607;border:7px solid #20242a;box-shadow:inset 0 0 0 4px #090a0c}
+.wheel.left{left:17%}.wheel.right{right:17%}
+
+/* SECTIONS */
+.section{margin-top:22px}.sectionHead{display:flex;align-items:end;justify-content:space-between;margin-bottom:11px}
+.sectionTitle{font-size:18px;font-weight:850;letter-spacing:-.4px}.sectionSub{color:var(--muted);font-size:10px}
+
+/* CASES */
+.cases{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.case{position:relative;overflow:hidden;min-height:202px;padding:14px;border-radius:17px;background:#15171b;border:1px solid var(--line)}
+.caseTop{display:flex;justify-content:space-between;align-items:center}
+.rarity{font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:800}
+.rarity.common{color:#aeb3bb}.rarity.rare{color:#69a8ff}.rarity.epic{color:#b88cff}
+.rarity.legendary{color:#f0ad5c}.rarity.mythic{color:#ff6275}
+.caseName{font-size:16px;font-weight:850;margin-top:5px}.casePrice{font-size:12px;color:#c8ccd2;margin-top:2px}
+.caseVisual{height:78px;position:relative;margin-top:4px}.miniCar{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%) scale(.72);width:210px;height:120px}
+.caseBottom{position:absolute;left:14px;right:14px;bottom:12px}
+.caseChance{display:flex;justify-content:space-between;color:var(--muted);font-size:8px;margin-bottom:7px}
+.openBtn{width:100%;height:37px;border-radius:10px;background:#e9eaec;color:#090a0c;font-weight:850;font-size:10px}
+.openBtn:active,.sellBtn:active,.keepBtn:active{transform:scale(.97)}
+
+/* GARAGE / MARKET */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.carCard,.marketCard,.profile{background:#15171b;border:1px solid var(--line);border-radius:17px}
+.carCard{padding:11px;overflow:hidden}.carImage{height:110px;position:relative;margin:-4px -5px 0}
+.carInfo{margin-top:3px}.carName{font-size:13px;font-weight:800}.carValue{color:var(--muted);font-size:10px;margin-top:3px}
+.rarityTag{display:inline-block;margin-top:6px;padding:4px 7px;border-radius:6px;background:#202329;font-size:8px;color:#aeb3bb}
+.sellBtn{width:100%;height:34px;margin-top:9px;border-radius:9px;background:#24272d;font-size:10px;font-weight:800}
+.empty{padding:35px 20px;text-align:center;color:var(--muted);background:#131519;border:1px solid var(--line);border-radius:17px;font-size:12px}
+.marketCard{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:9px}
+.marketImage{width:95px;height:62px;position:relative;flex:none;transform:scale(.56)}.marketInfo{flex:1}
+.marketName{font-size:13px;font-weight:800}.marketPrice{color:var(--muted);font-size:10px;margin-top:4px}
+.marketBuy{background:#e9eaec;color:#08090b;padding:9px 11px;border-radius:9px;font-size:10px;font-weight:850}
+
+/* PROFILE */
+.profile{padding:17px}.profileTop{display:flex;align-items:center;gap:13px}.avatar{width:50px;height:50px;border-radius:14px;background:#202329;display:flex;align-items:center;justify-content:center;font-size:22px}
+.profileName{font-weight:850;font-size:16px}.profileLevel{color:var(--muted);font-size:10px;margin-top:3px}
+.progress{margin-top:16px}.progressLine{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:6px}
+.progressBar{height:5px;border-radius:20px;background:#25282e;overflow:hidden}.progressFill{height:100%;background:#d7d9dc;border-radius:20px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:14px}.stat{padding:11px 6px;text-align:center;background:#101216;border-radius:10px;border:1px solid var(--line)}
+.statValue{font-size:14px;font-weight:850}.statLabel{font-size:8px;color:var(--muted);margin-top:4px}
+
+/* NAV */
+.nav{position:fixed;z-index:30;left:50%;bottom:calc(9px + env(safe-area-inset-bottom));transform:translateX(-50%);
+width:min(94%,590px);height:65px;padding:6px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
+background:rgba(19,21,25,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:19px;box-shadow:0 18px 45px rgba(0,0,0,.5)}
+.navBtn{border-radius:13px;background:transparent;color:#777d87;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9px;font-weight:700}
+.navIcon{font-size:17px}.navBtn.active{color:#fff;background:#23262c}
+
+/* MODAL */
+.modal{position:fixed;z-index:100;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(12px)}
+.modal.show{display:flex}.modalBox{width:min(100%,520px);background:#121419;border:1px solid var(--line);border-radius:22px;padding:17px;box-shadow:0 30px 90px rgba(0,0,0,.7);animation:modalIn .22s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+.modalHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.modalTitle{font-weight:900;font-size:17px}
+.close{width:33px;height:33px;border-radius:9px;background:#22252b;color:#aeb3bb;font-size:17px}
+.roulette{position:relative;overflow:hidden;height:148px;border-radius:15px;background:#090a0c;border:1px solid var(--line)}
+.rouletteTrack{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;gap:8px;padding:12px;will-change:transform}
+.marker{position:absolute;z-index:4;top:0;bottom:0;left:50%;width:2px;background:#e4e6e9}
+.marker:before,.marker:after{content:"";position:absolute;left:50%;width:9px;height:9px;background:#e4e6e9;transform:translateX(-50%) rotate(45deg)}
+.marker:before{top:-4px}.marker:after{bottom:-4px}
+.rouletteCard{width:112px;min-width:112px;height:120px;border-radius:13px;background:#17191e;border:1px solid var(--line);padding:7px;display:flex;flex-direction:column;justify-content:space-between}
+.rouletteImage{height:75px;position:relative}.rouletteName{font-size:9px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.roulettePrice{font-size:8px;color:#858b95}
+.result{text-align:center;padding:15px 0 3px;display:none}.result.show{display:block;animation:resultIn .3s ease}
+@keyframes resultIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.resultLabel{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:1.3px}
+.resultName{font-size:21px;font-weight:900;margin-top:4px}.resultValue{color:#d0d3d8;font-size:11px;margin-top:4px}
+.resultDiff{display:inline-block;margin-top:7px;padding:6px 9px;border-radius:7px;font-size:10px;font-weight:800}
+.profit{background:rgba(69,211,155,.1);color:var(--green)}.loss{background:rgba(255,83,104,.1);color:var(--red)}.neutral{background:#202329;color:#b8bdc5}
+.resultActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.keepBtn,.instantSellBtn{height:40px;border-radius:10px;font-size:10px;font-weight:850}
+.keepBtn{background:#25282e}.instantSellBtn{background:#e9eaec;color:#08090b}
+.sellInfo{font-size:9px;color:var(--muted);margin-top:8px}
+
+/* TOAST */
+.toast{position:fixed;z-index:200;left:50%;bottom:87px;transform:translateX(-50%) translateY(18px);opacity:0;pointer-events:none;background:#e9eaec;color:#090a0c;padding:9px 13px;border-radius:10px;font-size:10px;font-weight:800;transition:.22s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:380px){.cases,.grid{gap:8px}.case{min-height:195px;padding:12px}.hero{min-height:205px}.heroCar{transform:scale(.85);transform-origin:right bottom;right:-18px}}
+
+/* AUTOIMPERIA UI refresh — mobile-first racing garage */
+:root{--bg:#08090c;--panel:#111318;--panel2:#171a21;--panel3:#20242d;--line:rgba(255,255,255,.075);--text:#f5f6f8;--muted:#9298a4;--accent:#ffb02e;--green:#43d7a0;--red:#ff5368;--blue:#6faaff}
+body{background:radial-gradient(ellipse at 50% -15%,#252019 0%,#0b0c10 42%,#08090c 75%);background-attachment:fixed}
+.app{max-width:680px;padding-left:15px;padding-right:15px}
+.header{padding:5px 2px 14px;margin-bottom:9px;border-bottom:1px solid rgba(255,255,255,.055)}
+.brandMark{background:linear-gradient(145deg,#ffbd4a,#e27b12);border:0;box-shadow:0 5px 22px #ff9b2522;color:#17100a}
+.brandName{letter-spacing:.65px;font-size:14px}.brandSub{color:#ffbd58;letter-spacing:1.8px}
+.balance{padding:8px 11px;border-radius:12px;background:#17181c;border:1px solid #ffffff0b}.balanceLabel{font-size:9px}.balanceValue{font-size:15px;color:#ffbf55}
+.hero{background:linear-gradient(115deg,#1b1a18 0%,#121419 57%,#19140f 100%);border:1px solid #ffb02e25;box-shadow:0 14px 40px #0003;min-height:205px}
+.heroEyebrow{color:#ffbd58}.heroTitle{font-size:28px;line-height:1.02}.heroText{color:#a4a7af;font-size:11px}.levelBadge{background:#24211b;border-color:#ffb02e30}.levelDot{background:#ffb02e;box-shadow:0 0 10px #ffb02e}
+.section{margin-top:24px}.sectionHead{margin-bottom:13px}.sectionTitle{font-size:19px}.sectionSub{margin-top:4px;font-size:10px}
+.cases,.grid{gap:11px}.case,.carCard,.marketCard,.profile{background:linear-gradient(145deg,#17191f,#101115);border-color:#ffffff0b;box-shadow:0 8px 24px #0002}.case{min-height:210px;border-radius:18px}.case:after{content:"";position:absolute;top:0;left:14px;right:14px;height:1px;background:linear-gradient(90deg,transparent,#ffffff18,transparent)}
+.rarity.common{color:#b9c0ca}.rarity.uncommon{color:#57d7b1}.rarity.rare{color:#69a8ff}.rarity.epic{color:#c08bff}.rarity.legendary{color:#ffbc56}.rarity.mythic{color:#ff647d}
+.casePrice{color:#ffbf55;font-weight:800}.openBtn{background:linear-gradient(100deg,#ffc75d,#ff9e26);color:#17110a;box-shadow:0 5px 16px #ff9e261c;font-size:10px;letter-spacing:.4px}.openBtn:active,.sellBtn:active,.keepBtn:active{transform:scale(.97)}
+.carCard{border-radius:16px}.carValue{color:#ffbf55}.rarityTag{background:#24262c}.sellBtn{background:#252830;border:1px solid #ffffff0b}.marketCard{border-radius:15px}.marketPrice{color:#ffbf55;font-weight:750}.marketBuy{background:#ffb02e;color:#191109}
+.profile{border-radius:19px}.avatar{background:linear-gradient(145deg,#ffbf55,#b95f12);color:#191109}.progressFill{background:linear-gradient(90deg,#ff9b27,#ffd16d)}.stat{background:#0c0d11}.statValue{font-size:13px}.statLabel{letter-spacing:.4px}
+.nav{background:rgba(16,17,21,.94);border-color:#ffffff12;box-shadow:0 14px 45px #0008;height:67px}.navBtn.active{color:#ffbf55;background:#29231a}.navIcon{font-size:18px}
+.modalBox{background:linear-gradient(145deg,#17191f,#0f1014);border-color:#ffffff13}.close{background:#272a31}.roulette{background:#090a0d}.rouletteCard{background:#17191f}.resultDiff.profit{background:#43d7a018}.toast{border:1px solid #ffffff15;box-shadow:0 10px 35px #0007}
+/* Added market controls */
+.marketTools{display:grid;gap:9px;margin:12px 0 14px}.marketSearch{width:100%;height:43px;border-radius:12px;padding:0 13px;background:#15171d;border:1px solid #ffffff12;color:#fff;outline:none;font:inherit;font-size:12px}.marketSearch:focus{border-color:#ffb02e77}.filterRow{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}.filterChip{white-space:nowrap;padding:8px 11px;border-radius:10px;background:#17191f;border:1px solid #ffffff0c;color:#9da3ae;font-size:10px;font-weight:750}.filterChip.active{background:#ffb02e1a;color:#ffc45e;border-color:#ffb02e55}.marketEmpty{padding:26px 14px;text-align:center;color:#9298a4;border-radius:14px;background:#121419;border:1px solid #ffffff0b;font-size:12px}.garageTools{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#9298a4;font-size:10px}.garageTools select{background:#17191f;color:#ddd;border:1px solid #ffffff12;border-radius:9px;padding:8px;font:inherit;max-width:160px}.profileCaption{color:#ffbf55;font-size:9px;letter-spacing:1.3px;font-weight:800;margin-bottom:12px}.heroStats{display:flex;gap:7px;margin-top:12px;position:relative;z-index:3}.heroStat{font-size:9px;color:#c2c4ca;padding:6px 8px;border-radius:8px;background:#ffffff08;border:1px solid #ffffff0b}.heroStat b{color:#fff}
+@media(max-width:380px){.heroTitle{font-size:25px}.case{min-height:202px}.balanceValue{font-size:13px}}
 </style>
 </head>
-
 <body>
-
-<div class="loading" id="loading">
-  <div class="loader">
-    <div class="loader-logo">АВТО<span>ИМПЕРИЯ</span></div>
-    <div class="spinner"></div>
-    <div class="loader-text" id="loadingText">Подключение к игре...</div>
-  </div>
-</div>
-
 <div class="app">
-
-  <header class="header">
-    <div class="header-row">
-      <div class="logo">АВТО<span>ИМПЕРИЯ</span></div>
-
-      <div class="balance">
-        <div class="coin">₽</div>
-        <span id="headerBalance">0</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- ГЛАВНАЯ -->
-  <section class="page active" id="page-home">
-
-    <div class="hero">
-      <div class="hero-title">Открывай.<br>Собирай. Богатей.</div>
-      <div class="hero-text">
-        Открывай автомобильные кейсы, получай редкие машины,
-        собирай гараж и развивай свою автоимперию.
-      </div>
-    </div>
-
-    <div class="section-title">
-      <h2>Кейсы</h2>
-      <span id="caseCount">5 кейсов</span>
-    </div>
-
-    <div class="cases" id="cases"></div>
-
-    <div class="section-title">
-      <h2>Быстрая статистика</h2>
-    </div>
-
-    <div class="stat-grid">
-      <div class="stat">
-        <div class="stat-label">Уровень</div>
-        <div class="stat-value" id="homeLevel">1</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Открыто кейсов</div>
-        <div class="stat-value" id="homeOpened">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Машин в гараже</div>
-        <div class="stat-value" id="homeGarage">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Потрачено</div>
-        <div class="stat-value" id="homeSpent">0 ₽</div>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ГАРАЖ -->
-  <section class="page" id="page-garage">
-
-    <div class="section-title">
-      <h2>Мой гараж</h2>
-      <span id="garageCount">0 машин</span>
-    </div>
-
-    <div id="garageList" class="car-list"></div>
-
-  </section>
-
-  <!-- РЫНОК -->
-  <section class="page" id="page-market">
-
-    <div class="section-title">
-      <h2>Авторынок</h2>
-      <span>Покупка машин</span>
-    </div>
-
-    <div class="market-tabs" id="marketTabs">
-      <button class="market-tab active" data-rarity="all">Все</button>
-      <button class="market-tab" data-rarity="common">Обычные</button>
-      <button class="market-tab" data-rarity="rare">Редкие</button>
-      <button class="market-tab" data-rarity="epic">Эпические</button>
-      <button class="market-tab" data-rarity="legendary">Легендарные</button>
-      <button class="market-tab" data-rarity="mythic">Мифические</button>
-    </div>
-
-    <div id="marketList" class="car-list"></div>
-
-  </section>
-
-  <!-- ПРОФИЛЬ -->
-  <section class="page" id="page-profile">
-
-    <div class="profile-head">
-      <div class="avatar" id="avatar">A</div>
-      <div class="profile-name" id="profileName">Игрок</div>
-      <div class="profile-username" id="profileUsername"></div>
-    </div>
-
-    <div class="level-box">
-      <div class="level-row">
-        <span>Уровень <b id="profileLevel">1</b></span>
-        <span id="levelProgressText">0 ₽</span>
-      </div>
-
-      <div class="progress">
-        <div id="levelProgress"></div>
-      </div>
-    </div>
-
-    <div class="section-title">
-      <h2>Статистика</h2>
-    </div>
-
-    <div class="stat-grid">
-
-      <div class="stat">
-        <div class="stat-label">Баланс</div>
-        <div class="stat-value" id="profileBalance">0 ₽</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Потрачено</div>
-        <div class="stat-value" id="profileSpent">0 ₽</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Открыто</div>
-        <div class="stat-value" id="profileOpened">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Продано</div>
-        <div class="stat-value" id="profileSold">0</div>
-      </div>
-
-    </div>
-
-    <div class="section-title">
-      <h2>Ежедневная награда</h2>
-    </div>
-
-    <div class="card">
-      <div class="daily">
-        <div class="daily-info">
-          <div class="daily-title">🎁 Ежедневный бонус</div>
-          <div class="daily-text">Заходи каждый день и забирай награду.</div>
-        </div>
-
-        <button class="btn primary" id="dailyBtn" onclick="claimDaily()">
-          Забрать
-        </button>
-      </div>
-    </div>
-
-    <div class="section-title">
-      <h2>Реферальная система</h2>
-    </div>
-
-    <div class="card">
-      <div class="modal-text" style="margin-bottom:0">
-        Приглашай друзей и получай бонусы за их активность.
-      </div>
-
-      <div class="referral" id="referralCode">
-        Загрузка...
-      </div>
-
-      <button class="btn primary" style="margin-top:10px" onclick="copyReferral()">
-        Скопировать код
-      </button>
-    </div>
-
-  </section>
-
+<header class="header">
+  <div class="brand"><div class="brandMark">🚘</div><div><div class="brandName">АВТОИМПЕРИЯ</div><div class="brandSub">CAR CASES</div></div></div>
+  <div class="balance"><div class="balanceLabel">Баланс</div><div class="balanceValue" id="balance">10 000 000 ₽</div></div>
+</header>
+<main id="content"></main>
 </div>
 
-<nav class="bottom-nav">
-
-  <button class="nav-btn active" data-page="home">
-    <span class="nav-icon">🏠</span>
-    Главная
-  </button>
-
-  <button class="nav-btn" data-page="garage">
-    <span class="nav-icon">🚘</span>
-    Гараж
-  </button>
-
-  <button class="nav-btn" data-page="market">
-    <span class="nav-icon">🏪</span>
-    Рынок
-  </button>
-
-  <button class="nav-btn" data-page="profile">
-    <span class="nav-icon">👤</span>
-    Профиль
-  </button>
-
+<nav class="nav">
+<button class="navBtn active" onclick="showPage('cases')" id="navCases"><div class="navIcon">🎁</div>Кейсы</button>
+<button class="navBtn" onclick="showPage('garage')" id="navGarage"><div class="navIcon">🚘</div>Гараж</button>
+<button class="navBtn" onclick="showPage('market')" id="navMarket"><div class="navIcon">🛒</div>Рынок</button>
+<button class="navBtn" onclick="showPage('profile')" id="navProfile"><div class="navIcon">👤</div>Профиль</button>
 </nav>
 
+<div class="modal" id="modal">
+<div class="modalBox">
+  <div class="modalHead"><div class="modalTitle" id="modalTitle">Открытие кейса</div><button class="close" onclick="closeModal()">×</button></div>
+  <div class="roulette"><div class="marker"></div><div class="rouletteTrack" id="rouletteTrack"></div></div><button class="openBtn" id="manualOpenBtn" style="width:100%;margin:12px 0;display:none" onclick="startCaseOpening()">ОТКРЫТЬ КЕЙС</button>
+  <div class="result" id="result">
+    <div class="resultLabel">Твой автомобиль</div>
+    <div class="resultName" id="resultName"></div>
+    <div class="resultValue" id="resultValue"></div>
+    <div class="resultDiff" id="resultDiff"></div>
+    <div class="resultActions"><button class="keepBtn" onclick="keepResult()">ОСТАВИТЬ В ГАРАЖЕ</button><button class="instantSellBtn" onclick="sellResult()">ПРОДАТЬ СРАЗУ</button></div>
+    <div class="sellInfo" id="sellInfo"></div>
+  </div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+    <div class="resultActions">
+      <button class="keepBtn" onclick="keepResult()">ОСТАВИТЬ</button>
+      <button class="instantSellBtn" onclick="sellResult()">ПРОДАТЬ СРАЗУ</button>
+    </div>
+    <div class="sellInfo" id="sellInfo"></div>
+  </div>
+</div>
+</div>
 <div class="toast" id="toast"></div>
 
-<!-- РУЛЕТКА -->
-<div class="modal" id="rouletteModal">
-
-  <div class="modal-box">
-
-    <div class="modal-title">Открытие кейса</div>
-
-    <div class="modal-text">
-      Удача уже определена. Сейчас узнаем, какой автомобиль тебе выпал.
-    </div>
-
-    <div class="roulette">
-      <div class="roulette-line"></div>
-      <div class="roulette-track" id="rouletteTrack"></div>
-    </div>
-
-    <div id="rouletteResult" class="success" style="display:none"></div>
-
-    <button class="btn primary" id="rouletteClose" style="margin-top:12px;display:none" onclick="closeRoulette()">
-      Забрать автомобиль
-    </button>
-
-  </div>
-
-</div>
-
 <script>
-"use strict";
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();try{tg.setHeaderColor("#0b0c0f");tg.setBackgroundColor("#0b0c0f")}catch(e){}}
 
-/* =========================================================
-   CONFIG
-========================================================= */
-
-const API_BASE = "https://autoempire-gspr.onrender.com";
-
-const tg = window.Telegram && window.Telegram.WebApp
-  ? window.Telegram.WebApp
-  : null;
-
-const STORAGE_KEY = "autoEmpire2";
-
-let serverUser = null;
-let config = null;
-let currentPage = "home";
-let marketRarity = "all";
-let opening = false;
-
-let localData = {
-  balance: 5000000,
-  spent: 0,
-  opened: 0,
-  sold: 0,
-  garage: [],
-  history: []
+/* 48 популярных автомобилей.
+   Цены — игровые ориентиры, округлённые под экономику приложения. */
+const cars={
+"Lada VAZ 2114":{price:180000,rarity:"common",emoji:"🚗"},"Lada VAZ 2109":{price:160000,rarity:"common",emoji:"🚗"},"Lada Priora":{price:350000,rarity:"common",emoji:"🚗"},"Lada Granta":{price:550000,rarity:"common",emoji:"🚗"},"Daewoo Matiz":{price:280000,rarity:"common",emoji:"🚗"},"Daewoo Nexia":{price:420000,rarity:"common",emoji:"🚗"},"УАЗ Patriot":{price:750000,rarity:"common",emoji:"🚙"},"Lada Vesta":{price:1000000,rarity:"uncommon",emoji:"🚗"},
+"Hyundai Solaris":{price:1100000,rarity:"uncommon",emoji:"🚗"},"Kia Rio":{price:1150000,rarity:"uncommon",emoji:"🚗"},"Renault Logan":{price:850000,rarity:"uncommon",emoji:"🚗"},"Ford Focus":{price:1300000,rarity:"uncommon",emoji:"🚗"},"Skoda Octavia":{price:1700000,rarity:"uncommon",emoji:"🚗"},"Toyota Corolla":{price:1800000,rarity:"uncommon",emoji:"🚗"},"Volkswagen Passat":{price:1900000,rarity:"uncommon",emoji:"🚗"},"Subaru WRX":{price:3000000,rarity:"uncommon",emoji:"🏎️"},"Haval F7":{price:2200000,rarity:"uncommon",emoji:"🚙"},"Toyota Camry 70":{price:3000000,rarity:"rare",emoji:"🚘"},
+"BMW E60":{price:2200000,rarity:"rare",emoji:"🚘"},"BMW E90":{price:2400000,rarity:"rare",emoji:"🚘"},"Mercedes W212":{price:3000000,rarity:"rare",emoji:"🚘"},"Audi A6 C7":{price:3000000,rarity:"rare",emoji:"🚘"},"BMW M4 F82":{price:5000000,rarity:"epic",emoji:"🏎️"},"BMW M5 F10":{price:6000000,rarity:"epic",emoji:"🏎️"},"BMW M6":{price:7000000,rarity:"epic",emoji:"🏎️"},"BMW M3 Competition":{price:7500000,rarity:"epic",emoji:"🏎️"},"BMW M4 Competition":{price:8500000,rarity:"epic",emoji:"🏎️"},"Mercedes-AMG GT":{price:9000000,rarity:"epic",emoji:"🏎️"},"Nissan GT-R R35":{price:9500000,rarity:"epic",emoji:"🏎️"},
+"BMW M5 CS":{price:10000000,rarity:"legendary",emoji:"🏎️"},"BMW M8 Competition":{price:12000000,rarity:"legendary",emoji:"🏎️"},"Mercedes-AMG GT 63":{price:14000000,rarity:"legendary",emoji:"🏎️"},"Porsche 911 Turbo S":{price:16000000,rarity:"legendary",emoji:"🏎️"},"Lamborghini Huracan":{price:20000000,rarity:"legendary",emoji:"🏎️"},"Lamborghini Urus":{price:22000000,rarity:"legendary",emoji:"🚙"},"McLaren 720S":{price:25000000,rarity:"legendary",emoji:"🏎️"},
+"Lamborghini Aventador":{price:25000000,rarity:"mythic",emoji:"🏎️"},"Ferrari 488":{price:28000000,rarity:"mythic",emoji:"🏎️"},"Ferrari F8 Tributo":{price:32000000,rarity:"mythic",emoji:"🏎️"},"McLaren 765LT":{price:35000000,rarity:"mythic",emoji:"🏎️"},"Bentley Continental GT":{price:15000000,rarity:"mythic",emoji:"🚘"},"Porsche 918 Spyder":{price:45000000,rarity:"mythic",emoji:"🏎️"},"Rolls-Royce Phantom":{price:50000000,rarity:"mythic",emoji:"🚘"},"Bugatti Chiron":{price:100000000,rarity:"mythic",emoji:"🏎️"}
 };
 
-/* =========================================================
-   TELEGRAM INIT
-========================================================= */
+const rarityNames={common:"Обычная",rare:"Редкая",epic:"Эпическая",legendary:"Легендарная",mythic:"Мифическая"};
 
-function initTelegram(){
+const cases=[
+{id:"starter",name:"Стартовый",rarity:"common",price:300000,description:"Бюджетные автомобили",items:[["Lada VAZ 2114",42],["Lada VAZ 2109",30],["Lada Priora",20],["Lada Granta",15],["Daewoo Matiz",10],["Daewoo Nexia",10],["УАЗ Patriot",8],["Lada Vesta",5]]},
+{id:"street",name:"Уличный",rarity:"uncommon",price:900000,description:"Автомобили среднего класса",items:[["Hyundai Solaris",20],["Kia Rio",18],["Renault Logan",15],["Ford Focus",13],["Skoda Octavia",12],["Toyota Corolla",10],["Volkswagen Passat",8],["Haval F7",5],["Subaru WRX",2],["Toyota Camry 70",1]]},
+{id:"premium",name:"Премиум",rarity:"epic",price:5000000,description:"Премиальные автомобили",items:[["BMW E60",15],["BMW E90",12],["Mercedes W212",12],["Audi A6 C7",10],["BMW M4 F82",10],["BMW M5 F10",9],["BMW M6",7],["BMW M3 Competition",6],["BMW M4 Competition",5],["Mercedes-AMG GT",4],["Nissan GT-R R35",2]]},
+{id:"elite",name:"Элитный",rarity:"legendary",price:15000000,description:"Высокий риск и дорогой дроп",items:[["BMW M5 CS",20],["BMW M8 Competition",16],["Mercedes-AMG GT 63",14],["Porsche 911 Turbo S",13],["Lamborghini Huracan",12],["Lamborghini Urus",10],["McLaren 720S",8]]},
+{id:"imperial",name:"Императорский",rarity:"mythic",price:100000000,description:"Максимальная редкость",items:[["Lamborghini Aventador",20],["Ferrari 488",18],["Ferrari F8 Tributo",15],["McLaren 765LT",13],["Bentley Continental GT",10],["Porsche 918 Spyder",7],["Rolls-Royce Phantom",5],["Bugatti Chiron",2]]}
+];
 
-  if(!tg){
-    setLoadingText("Telegram WebApp SDK не найден");
-    return;
-  }
+const market=[["Lada Vesta",1000000],["BMW E60",2200000],["Toyota Camry 70",3000000],["BMW M4 F82",5000000],["BMW M5 F10",6000000],["Nissan GT-R R35",9500000],["BMW M5 CS",10000000],["Mercedes-AMG GT 63",14000000],["Porsche 911 Turbo S",16000000],["Lamborghini Huracan",20000000],["Lamborghini Aventador",25000000],["Ferrari 488",28000000],["Rolls-Royce Phantom",50000000],["Bugatti Chiron",100000000]];
 
-  try{
-    tg.ready();
-    tg.expand();
-
-    if(tg.setHeaderColor){
-      tg.setHeaderColor("#08090c");
-    }
-
-    if(tg.setBackgroundColor){
-      tg.setBackgroundColor("#08090c");
-    }
-
-    if(tg.disableVerticalSwipes){
-      tg.disableVerticalSwipes();
-    }
-
-  }catch(e){
-    console.warn("Telegram init:",e);
-  }
+const defaultData={balance:5000000,spent:0,opened:0,sold:0,garage:[],history:[]};
+let data=JSON.parse(JSON.stringify(defaultData));
+let serverReady=false,telegramUser=null,authPromise=null;
+function localBackup(){try{localStorage.setItem("autoEmpire_backup",JSON.stringify(data))}catch(e){}}
+function getLocalBackup(){try{return JSON.parse(localStorage.getItem("autoEmpire_backup"))}catch(e){return null}}
+async function api(path,method="GET",payload){
+ if(!tg||!tg.initData)throw new Error("Открой игру через Telegram");
+ const o={method,headers:{"Content-Type":"application/json","X-Telegram-Init-Data":tg.initData}};
+ if(payload!==undefined)o.body=JSON.stringify(payload);
+ const r=await fetch(path,o);let j={};try{j=await r.json()}catch(e){}
+ if(!r.ok||j.ok===false)throw new Error(j.error||("Ошибка сервера: "+r.status));return j;
 }
+function applyServerData(d){if(!d)return;data.balance=Number(d.balance||0);data.spent=Number(d.spent||0);data.opened=Number(d.opened||0);data.sold=Number(d.sold||0);data.garage=Array.isArray(d.garage)?d.garage:[];data.history=Array.isArray(d.history)?d.history:[];localBackup()}
+async function authenticate(){if(authPromise)return authPromise;authPromise=(async()=>{try{const r=await api("/api/auth","POST");telegramUser=r.user||null;applyServerData(r.data);serverReady=true;return true}catch(e){serverReady=false;const b=getLocalBackup();if(b){data={...data,...b};toast("Сервер недоступен: локальная копия")}else setTimeout(()=>toast(e.message||"Ошибка подключения"),400);return false}})();return authPromise}
+function save(){localBackup()}
+function money(n){return Math.round(n).toLocaleString("ru-RU")+" ₽"}
+function level(){return Math.floor(data.spent/2500000)+1}
+function levelProgress(){return Math.min(100,(data.spent%2500000)/2500000*100)}
+function escapeHTML(s){return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function getCar(n){return cars[n]||{price:0,rarity:"common",emoji:"🚗"}}
+function carVisual(name,small=false){return `<div class="miniCar" style="${small?"transform:translate(-50%,-50%) scale(.58);":""}"><div class="carBody"></div><div class="carRoof"></div><div class="carWindow"></div><div class="carLight"></div><div class="wheel left"></div><div class="wheel right"></div></div>`}
+function updateBalance(){document.getElementById("balance").textContent=money(data.balance)}
 
-/* =========================================================
-   LOCAL STORAGE
-========================================================= */
-
-function loadLocal(){
-
-  try{
-
-    const raw = localStorage.getItem(STORAGE_KEY);
-
-    if(raw){
-      const parsed = JSON.parse(raw);
-
-      localData = {
-        ...localData,
-        ...parsed,
-        garage:Array.isArray(parsed.garage) ? parsed.garage : [],
-        history:Array.isArray(parsed.history) ? parsed.history : []
-      };
-    }
-
-  }catch(e){
-    console.warn("Local data error:",e);
-  }
+let currentPage="cases";
+function showPage(page){
+ currentPage=page;
+ document.querySelectorAll(".navBtn").forEach(x=>x.classList.remove("active"));
+ const nav={cases:"navCases",garage:"navGarage",market:"navMarket",profile:"navProfile"};
+ document.getElementById(nav[page]).classList.add("active");
+ if(page==="cases")renderCases();if(page==="garage")renderGarage();if(page==="market")renderMarket();if(page==="profile")renderProfile();updateBalance();
 }
-
-function saveLocal(){
-
-  try{
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(localData)
-    );
-  }catch(e){}
-}
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function setLoadingText(text){
-  const el = document.getElementById("loadingText");
-  if(el) el.textContent = text;
-}
-
-function hideLoading(){
-
-  const el = document.getElementById("loading");
-
-  if(el){
-    el.classList.add("hidden");
-
-    setTimeout(()=>{
-      el.style.display = "none";
-    },300);
-  }
-}
-
-function formatMoney(value){
-
-  const n = Number(value) || 0;
-
-  if(n >= 1000000000){
-    return (n / 1000000000).toFixed(n % 1000000000 ? 1 : 0) + " млрд ₽";
-  }
-
-  if(n >= 1000000){
-    return (n / 1000000).toFixed(n % 1000000 ? 1 : 0) + " млн ₽";
-  }
-
-  if(n >= 1000){
-    return (n / 1000).toFixed(n % 1000 ? 1 : 0) + " тыс. ₽";
-  }
-
-  return n.toLocaleString("ru-RU") + " ₽";
-}
-
-function escapeHtml(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-function toast(message,error=false){
-
-  const el = document.getElementById("toast");
-
-  if(!el) return;
-
-  el.textContent = message;
-  el.classList.toggle("error",!!error);
-  el.classList.add("show");
-
-  clearTimeout(window.__toastTimer);
-
-  window.__toastTimer = setTimeout(()=>{
-    el.classList.remove("show");
-  },2800);
-}
-
-function vibration(){
-
-  try{
-    if(tg && tg.HapticFeedback){
-      tg.HapticFeedback.impactOccurred("light");
-    }else if(navigator.vibrate){
-      navigator.vibrate(15);
-    }
-  }catch(e){}
-}
-
-/* =========================================================
-   API
-========================================================= */
-
-async function api(path, options = {}){
-
-  const url = API_BASE + path;
-
-  const headers = {
-    "Accept":"application/json",
-    ...(options.headers || {})
-  };
-
-  /*
-    ВАЖНО:
-
-    Telegram initData передаём одновременно:
-    1. в body
-    2. в X-Telegram-Init-Data
-
-    Это позволяет работать с текущим server.js.
-  */
-
-  const initData = tg && tg.initData
-    ? tg.initData
-    : "";
-
-  if(initData){
-    headers["X-Telegram-Init-Data"] = initData;
-  }
-
-  let body = options.body;
-
-  if(
-    body &&
-    typeof body === "object" &&
-    !(body instanceof FormData)
-  ){
-    headers["Content-Type"] = "application/json";
-    body = JSON.stringify(body);
-  }
-
-  let response;
-
-  try{
-
-    response = await fetch(url,{
-      method:options.method || "GET",
-      headers,
-      body,
-      credentials:"omit",
-      cache:"no-store"
-    });
-
-  }catch(error){
-
-    throw new Error(
-      "Не удалось подключиться к серверу. " +
-      "Проверь соединение с интернетом."
-    );
-  }
-
-  const raw = await response.text();
-
-  let data = null;
-
-  try{
-    data = raw ? JSON.parse(raw) : null;
-  }catch(e){
-    data = null;
-  }
-
-  if(!response.ok){
-
-    const serverError =
-      data && (
-        data.error ||
-        data.message ||
-        data.details
-      );
-
-    throw new Error(
-      `HTTP ${response.status} ${response.statusText || ""}` +
-      (serverError ? ` — ${serverError}` : "") +
-      ` [${path}]`
-    );
-  }
-
-  return data;
-}
-
-/* =========================================================
-   AUTH
-========================================================= */
-
-async function authenticate(){
-
-  if(!tg){
-
-    throw new Error(
-      "Игра должна быть открыта через Telegram."
-    );
-  }
-
-  const initData = tg.initData || "";
-
-  if(!initData){
-
-    throw new Error(
-      "Telegram не передал данные авторизации. " +
-      "Закрой Mini App и открой его заново через кнопку бота."
-    );
-  }
-
-  setLoadingText("Авторизация Telegram...");
-
-  /*
-    Главное изменение:
-    запрос делается непосредственно здесь,
-    одним обычным POST-запросом.
-  */
-
-  const result = await api("/api/auth",{
-    method:"POST",
-    body:{
-      initData:initData
-    }
-  });
-
-  if(!result || result.ok !== true){
-
-    throw new Error(
-      result && result.error
-        ? result.error
-        : "Сервер не подтвердил авторизацию."
-    );
-  }
-
-  serverUser = result.user || null;
-
-  if(serverUser){
-
-    localData = {
-      ...localData,
-
-      balance:Number(serverUser.balance ?? localData.balance),
-      spent:Number(serverUser.spent ?? localData.spent),
-      opened:Number(serverUser.opened ?? localData.opened),
-      sold:Number(serverUser.sold ?? localData.sold)
-    };
-
-    saveLocal();
-  }
-
-  return result;
-}
-
-/* =========================================================
-   CONFIG
-========================================================= */
-
-async function loadConfig(){
-
-  setLoadingText("Загрузка конфигурации...");
-
-  const result = await api("/api/config");
-
-  if(!result || result.ok === false){
-    throw new Error(
-      result?.error || "Не удалось загрузить конфигурацию."
-    );
-  }
-
-  config = result;
-
-  return result;
-}
-
-/* =========================================================
-   USER
-========================================================= */
-
-async function loadUser(){
-
-  try{
-
-    const result = await api("/api/user");
-
-    if(result && result.user){
-
-      serverUser = result.user;
-
-      localData = {
-        ...localData,
-        balance:Number(result.user.balance ?? localData.balance),
-        spent:Number(result.user.spent ?? localData.spent),
-        opened:Number(result.user.opened ?? localData.opened),
-        sold:Number(result.user.sold ?? localData.sold)
-      };
-
-      saveLocal();
-    }
-
-  }catch(e){
-
-    /*
-      Не ломаем игру, если /api/user
-      недоступен — авторизация уже прошла.
-    */
-
-    console.warn("loadUser:",e.message);
-  }
-}
-
-/* =========================================================
-   LEVEL
-========================================================= */
-
-function getLevel(spent){
-
-  const n = Number(spent) || 0;
-
-  if(n < 1000000) return 1;
-  if(n < 5000000) return 2;
-  if(n < 10000000) return 3;
-  if(n < 25000000) return 4;
-  if(n < 50000000) return 5;
-  if(n < 100000000) return 6;
-  if(n < 250000000) return 7;
-  if(n < 500000000) return 8;
-  if(n < 1000000000) return 9;
-
-  return 10;
-}
-
-function getLevelBounds(level){
-
-  const bounds = [
-    [0,1000000],
-    [1000000,5000000],
-    [5000000,10000000],
-    [10000000,25000000],
-    [25000000,50000000],
-    [50000000,100000000],
-    [100000000,250000000],
-    [250000000,500000000],
-    [500000000,1000000000],
-    [1000000000,Infinity]
-  ];
-
-  return bounds[Math.max(1,Math.min(10,level))-1];
-}
-
-/* =========================================================
-   RENDER BALANCE
-========================================================= */
-
-function renderBalance(){
-
-  const balance = Number(localData.balance) || 0;
-
-  document.getElementById("headerBalance").textContent =
-    formatMoney(balance);
-
-  document.getElementById("profileBalance").textContent =
-    formatMoney(balance);
-
-  document.getElementById("profileSpent").textContent =
-    formatMoney(localData.spent);
-
-  document.getElementById("profileOpened").textContent =
-    localData.opened || 0;
-
-  document.getElementById("profileSold").textContent =
-    localData.sold || 0;
-
-  const level = getLevel(localData.spent);
-
-  document.getElementById("homeLevel").textContent =
-    level;
-
-  document.getElementById("homeOpened").textContent =
-    localData.opened || 0;
-
-  document.getElementById("homeGarage").textContent =
-    Array.isArray(localData.garage)
-      ? localData.garage.length
-      : 0;
-
-  document.getElementById("homeSpent").textContent =
-    formatMoney(localData.spent);
-
-  document.getElementById("profileLevel").textContent =
-    level;
-
-  const bounds = getLevelBounds(level);
-
-  const current = Number(localData.spent) || 0;
-
-  let progress = 100;
-
-  if(isFinite(bounds[1])){
-    progress =
-      ((current - bounds[0]) /
-      (bounds[1] - bounds[0])) * 100;
-  }
-
-  progress = Math.max(0,Math.min(100,progress));
-
-  document.getElementById("levelProgress").style.width =
-    progress + "%";
-
-  document.getElementById("levelProgressText").textContent =
-    isFinite(bounds[1])
-      ? `${formatMoney(current)} / ${formatMoney(bounds[1])}`
-      : `${formatMoney(current)} / MAX`;
-}
-
-/* =========================================================
-   CASES
-========================================================= */
 
 function renderCases(){
-
-  const container = document.getElementById("cases");
-
-  if(!container) return;
-
-  const cases =
-    config && Array.isArray(config.cases)
-      ? config.cases
-      : [];
-
-  document.getElementById("caseCount").textContent =
-    `${cases.length} кейсов`;
-
-  if(!cases.length){
-
-    container.innerHTML =
-      `<div class="empty" style="grid-column:1/-1">
-        Кейсы не загрузились.
-      </div>`;
-
-    return;
-  }
-
-  container.innerHTML = cases.map(c=>{
-
-    const id =
-      c.id ??
-      c.key ??
-      c.name;
-
-    const name =
-      c.name ??
-      c.title ??
-      "Кейс";
-
-    const price =
-      Number(c.price ?? c.cost ?? 0);
-
-    return `
-      <div class="case">
-
-        <div class="case-icon">📦</div>
-
-        <div class="case-name">
-          ${escapeHtml(name)}
-        </div>
-
-        <div class="case-price">
-          ${formatMoney(price)}
-        </div>
-
-        <button
-          class="case-button"
-          data-case-id="${escapeHtml(id)}"
-          data-case-price="${price}"
-          onclick="openCase('${String(id).replace(/'/g,"\\'")}')"
-        >
-          Открыть
-        </button>
-
-      </div>
-    `;
-
-  }).join("");
+ document.getElementById("content").innerHTML=`
+ <section class="hero">
+  <div class="heroTop"><div><div class="heroEyebrow">Автомобильная коллекция</div><div class="heroTitle">Открывай.<br>Собирай.</div>
+  <div class="heroText">Кейсы с популярными автомобилями. Собирай коллекцию или продавай машины.</div></div></div>
+  <div class="heroCar">${carVisual("BMW E60")}</div>
+  <div class="heroBottom"><div class="levelBadge"><span class="levelDot"></span>Уровень ${level()}</div><div class="heroStats"><div class="heroStat"><b>${data.opened}</b> кейсов</div><div class="heroStat"><b>${data.garage.length}</b> авто в гараже</div></div></div>
+ </section>
+ <section class="section"><div class="sectionHead"><div><div class="sectionTitle">Кейсы</div><div class="sectionSub">6 уровней стоимости</div></div></div>
+ <div class="cases">${cases.map(renderCase).join("")}</div></section>`;
+ updateBalance();
+}
+  function renderCase(c){
+ return `<div class="case"><div class="caseTop"><div class="rarity ${c.rarity}">${rarityNames[c.rarity]}</div><div style="font-size:8px;color:#777d86">${c.items.length} авто</div></div>
+ <div class="caseName">${c.name}</div><div class="casePrice">${money(c.price)}</div><div class="caseVisual">${carVisual(c.items[0][0],true)}</div>
+ <div class="caseBottom"><div class="caseChance"><span>${c.description}</span><span>100%</span></div><button class="openBtn" onclick="prepareCase('${c.id}')">ОТКРЫТЬ</button></div></div>`;
+}
+function weightedRandom(items){
+ const total=items.reduce((s,x)=>s+Number(x[1]),0);let r=Math.random()*total;
+ for(const x of items){r-=Number(x[1]);if(r<=0)return x[0]}return items[items.length-1][0];
 }
 
-/* =========================================================
-   OPEN CASE
-========================================================= */
-
-async function openCase(caseId){
-
-  if(opening){
-    toast("Кейс уже открывается.",true);
-    return;
-  }
-
-  opening = true;
-
-  vibration();
-
-  try{
-
-    const result = await api("/api/cases/open",{
-      method:"POST",
-      body:{
-        caseId
-      }
-    });
-
-    if(!result || result.ok === false){
-
-      throw new Error(
-        result?.error ||
-        "Сервер не смог открыть кейс."
-      );
-    }
-
-    /*
-      Сервер может возвращать:
-      car / item / prize / result.
-    */
-
-    const car =
-      result.car ||
-      result.item ||
-      result.prize ||
-      result.result;
-
-    if(!car){
-
-      throw new Error(
-        "Сервер открыл кейс, но не вернул автомобиль."
-      );
-    }
-
-    if(result.user){
-
-      serverUser = result.user;
-
-      localData.balance =
-        Number(result.user.balance ?? localData.balance);
-
-      localData.spent =
-        Number(result.user.spent ?? localData.spent);
-
-      localData.opened =
-        Number(result.user.opened ?? localData.opened);
-
-      localData.sold =
-        Number(result.user.sold ?? localData.sold);
-    }else{
-
-      /*
-        Резервный вариант.
-      */
-
-      const caseInfo =
-        (config?.cases || []).find(c =>
-          String(c.id ?? c.key ?? c.name) === String(caseId)
-        );
-
-      const price =
-        Number(caseInfo?.price ?? caseInfo?.cost ?? 0);
-
-      localData.balance -= price;
-      localData.spent += price;
-      localData.opened += 1;
-    }
-
-    saveLocal();
-    renderBalance();
-
-    await playRoulette(car);
-
-  }catch(error){
-
-    console.error("OPEN CASE ERROR:",error);
-
-    toast(
-      error.message ||
-      "Не удалось открыть кейс.",
-      true
-    );
-
-  }finally{
-
-    opening = false;
-  }
-}
-
-/* =========================================================
-   ROULETTE
-========================================================= */
-
-function getCarName(car){
-
-  return car.name ||
-    car.title ||
-    car.car ||
-    "Автомобиль";
-}
-
-function getCarPrice(car){
-
-  return Number(
-    car.price ??
-    car.value ??
-    car.sellPrice ??
-    0
-  );
-}
-
-function getCarEmoji(){
-
-  return "🚘";
-}
-
-async function playRoulette(car){
-
-  const modal =
-    document.getElementById("rouletteModal");
-
-  const track =
-    document.getElementById("rouletteTrack");
-
-  const resultBox =
-    document.getElementById("rouletteResult");
-
-  const close =
-    document.getElementById("rouletteClose");
-
-  modal.classList.add("show");
-
-  resultBox.style.display = "none";
-  close.style.display = "none";
-
-  track.style.transition = "none";
-  track.style.transform = "translateX(0)";
-
-  const items = [];
-
-  const winnerIndex = 28;
-
-  for(let i=0;i<36;i++){
-
-    const isWinner = i === winnerIndex;
-
-    items.push({
-      name:isWinner
-        ? getCarName(car)
-        : "Автомобиль",
-      emoji:getCarEmoji()
-    });
-  }
-
-  track.innerHTML = items.map(item=>`
-    <div class="roulette-item">
-      <div class="roulette-car">${item.emoji}</div>
-      <div class="roulette-name">
-        ${escapeHtml(item.name)}
-      </div>
-    </div>
-  `).join("");
-
-  await new Promise(resolve=>setTimeout(resolve,50));
-
-  const itemWidth = 128;
-
-  const target =
-    -(winnerIndex * itemWidth) +
-    (window.innerWidth / 2) -
-    60;
-
-  track.style.transition =
-    "transform 4.2s cubic-bezier(.08,.75,.08,1)";
-
-  track.style.transform =
-    `translateX(${target}px)`;
-
-  await new Promise(resolve=>setTimeout(resolve,4400));
-
-  resultBox.innerHTML =
-    `<b>🎉 ${escapeHtml(getCarName(car))}</b><br>
-     Стоимость: ${formatMoney(getCarPrice(car))}`;
-
-  resultBox.style.display = "block";
-  close.style.display = "block";
-
-  vibration();
-
-  /*
-    Автомобиль добавляем локально только если
-    сервер не вернул уже обновлённый гараж.
-  */
-
-  const alreadyExists =
-    localData.garage.some(item =>
-      JSON.stringify(item) === JSON.stringify(car)
-    );
-
-  if(!alreadyExists){
-    localData.garage.push(car);
-  }
-
-  saveLocal();
-  renderBalance();
-}
-
-function closeRoulette(){
-
-  document
-    .getElementById("rouletteModal")
-    .classList.remove("show");
-
-  renderGarage();
-}
-
-/* =========================================================
-   GARAGE
-========================================================= */
-
-async function loadGarage(){
-
-  try{
-
-    const result = await api("/api/garage");
-
-    const cars =
-      Array.isArray(result)
-        ? result
-        : result?.garage;
-
-    if(Array.isArray(cars)){
-
-      localData.garage = cars;
-      saveLocal();
-    }
-
-  }catch(e){
-
-    console.warn("Garage:",e.message);
-  }
-}
+let audioContext=null,spinning=false,currentResult=null,currentCase=null,casePrepared=false,rouletteTimer=null,noiseBuffer=null;
+function getAudio(){if(!audioContext)audioContext=new(window.AudioContext||window.webkitAudioContext)();return audioContext}
+function makeNoiseBuffer(){if(!audioContext||noiseBuffer)return;const n=Math.floor(audioContext.sampleRate*.15);noiseBuffer=audioContext.createBuffer(1,n,audioContext.sampleRate);const d=noiseBuffer.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1}
+function rouletteTick(intensity=.045){try{const c=getAudio();makeNoiseBuffer();const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();f.type="bandpass";f.frequency.value=1800+Math.random()*700;f.Q.value=3;g.gain.setValueAtTime(.001,c.currentTime);g.gain.exponentialRampToValueAtTime(intensity,c.currentTime+.002);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.045);s.buffer=noiseBuffer;s.connect(f);f.connect(g);g.connect(c.destination);s.start();s.stop(c.currentTime+.05)}catch(e){}}
+function rouletteWinSound(){try{const c=getAudio();[523,659,784].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain(),t=c.currentTime+i*.09;o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.1,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+.3);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.31)})}catch(e){}}
+function prepareCase(id){if(spinning)return;const c=cases.find(x=>x.id===id);if(!c)return;if(!serverReady){toast("Подключаюсь к серверу...");authenticate().then(ok=>{if(ok)prepareCase(id)});return}if(data.balance<c.price){toast("Недостаточно средств");return}currentCase=c;currentResult=null;casePrepared=true;document.getElementById("modal").classList.add("show");document.getElementById("modalTitle").textContent="Кейс · "+c.name;document.getElementById("result").classList.remove("show");document.getElementById("manualOpenBtn").style.display="block";document.getElementById("manualOpenBtn").disabled=false;buildRoulette(c);}
+async function startCaseOpening(){if(!casePrepared||!currentCase||spinning)return;if(data.balance<currentCase.price){toast("Недостаточно средств");return}casePrepared=false;spinning=true;document.getElementById("manualOpenBtn").style.display="none";try{getAudio().resume()}catch(e){}try{const r=await api("/api/cases/open","POST",{caseId:currentCase.id});applyServerData(r.data);const winner=r.result.name,value=Number(r.result.value||0);if(!cars[winner])cars[winner]={price:value,rarity:r.result.rarity||currentCase.rarity,emoji:"🚘"};else cars[winner].price=value;spinRoulette(currentCase,winner,value)}catch(e){spinning=false;casePrepared=true;document.getElementById("manualOpenBtn").style.display="block";toast(e.message||"Ошибка открытия кейса")}}
+function buildRoulette(c){const track=document.getElementById("rouletteTrack");track.innerHTML="";const list=[];for(let i=0;i<36;i++)list.push(c.items[i%c.items.length][0]);list.forEach(name=>{const card=document.createElement("div");card.className="rouletteCard";card.innerHTML=`<div class="rouletteImage">${carVisual(name,true)}</div><div><div class="rouletteName">${escapeHTML(name)}</div><div class="roulettePrice">${money(getCar(name).price)}</div></div>`;track.appendChild(card)});track.style.transition="none";track.style.transform="translateX(0)"}
+function spinRoulette(c,winner,value){const track=document.getElementById("rouletteTrack"),cards=Array.from(track.children),winnerIndex=27,cardWidth=120;cards[winnerIndex].innerHTML=`<div class="rouletteImage">${carVisual(winner,true)}</div><div><div class="rouletteName">${escapeHTML(winner)}</div><div class="roulettePrice">${money(value)}</div></div>`;const center=document.querySelector(".roulette").clientWidth/2,target=-(winnerIndex*cardWidth)+center-56,duration=4500;let ticks=0;clearInterval(rouletteTimer);rouletteTimer=setInterval(()=>{const progress=Math.min(1,ticks/50);rouletteTick(.025+progress*.045);ticks++;if(ticks>=52){clearInterval(rouletteTimer);rouletteTimer=null}},78);requestAnimationFrame(()=>{track.style.transition=`transform ${duration}ms cubic-bezier(.08,.72,.14,1)`;track.style.transform=`translateX(${target}px)`});setTimeout(()=>{clearInterval(rouletteTimer);rouletteTimer=null;finishCase(c,winner,value)},duration+120)}
+function finishCase(c,winner,value){currentResult={name:winner,value:Number(value),casePrice:c.price};const diff=currentResult.value-c.price;document.getElementById("resultName").textContent=winner;document.getElementById("resultValue").textContent=money(currentResult.value);const d=document.getElementById("resultDiff");if(diff>0){d.textContent="+"+money(diff);d.className="resultDiff profit"}else if(diff<0){d.textContent="-"+money(-diff);d.className="resultDiff loss"}else{d.textContent="В ноль";d.className="resultDiff neutral"}document.getElementById("sellInfo").textContent="Мгновенная продажа: "+money(Math.floor(currentResult.value*.85))+" (85% от стоимости)";document.getElementById("result").classList.add("show");spinning=false;rouletteWinSound()}
+async function keepResult(){if(!currentResult||!currentCase)return;try{const r=await api("/api/cases/keep","POST",{name:currentResult.name});applyServerData(r.data);toast("Автомобиль добавлен в гараж");closeModal(true);currentResult=null;currentCase=null;updateBalance();if(currentPage==="garage")renderGarage()}catch(e){toast(e.message||"Не удалось сохранить автомобиль")}}
+async function sellResult(){if(!currentResult||!currentCase)return;try{const r=await api("/api/cases/sell","POST",{name:currentResult.name});applyServerData(r.data);toast(currentResult.name+" продан за "+money(r.sellPrice||0));closeModal(true);currentResult=null;currentCase=null;updateBalance();if(currentPage==="garage")renderGarage()}catch(e){toast(e.message||"Не удалось продать автомобиль")}}
+function closeModal(force=false){if(spinning&&!force)return;clearInterval(rouletteTimer);rouletteTimer=null;if(!force&&casePrepared){casePrepared=false;currentCase=null;currentResult=null}document.getElementById("modal").classList.remove("show");document.getElementById("manualOpenBtn").style.display="none"}
 
 function renderGarage(){
-
-  const container =
-    document.getElementById("garageList");
-
-  const garage =
-    Array.isArray(localData.garage)
-      ? localData.garage
-      : [];
-
-  document.getElementById("garageCount").textContent =
-    `${garage.length} машин`;
-
-  if(!garage.length){
-
-    container.innerHTML = `
-      <div class="empty">
-        🚘<br><br>
-        Гараж пока пуст.<br>
-        Открой первый кейс!
-      </div>
-    `;
-
-    return;
-  }
-
-  container.innerHTML =
-    garage.map((car,index)=>{
-
-      const name = getCarName(car);
-      const price = getCarPrice(car);
-
-      return `
-        <div class="car">
-
-          <div class="car-top">
-
-            <div>
-              <div class="car-name">
-                ${escapeHtml(name)}
-              </div>
-
-              <div class="car-rarity">
-                ${escapeHtml(
-                  car.rarity ||
-                  car.quality ||
-                  "Автомобиль"
-                )}
-              </div>
-            </div>
-
-            <div class="car-price">
-              ${formatMoney(price)}
-            </div>
-
-          </div>
-
-          <div class="car-actions">
-
-            <button
-              class="btn danger"
-              onclick="sellGarageCar(${index})"
-            >
-              Продать
-            </button>
-
-          </div>
-
-        </div>
-      `;
-
-    }).join("");
+ const content=document.getElementById("content");
+ if(!data.garage.length){content.innerHTML=`<section class="section"><div class="sectionHead"><div><div class="sectionTitle">Гараж</div><div class="sectionSub">Твоя коллекция</div></div></div><div class="empty">В гараже пока нет автомобилей.<br>Открой первый кейс.</div></section>`;return}
+ content.innerHTML=`<section class="section"><div class="sectionHead"><div><div class="sectionTitle">Гараж</div><div class="sectionSub">Твоя коллекция · ${data.garage.length} авто</div></div></div><div class="garageTools"><span>Сортировка коллекции</span><select id="garageSort" onchange="renderGarage()"><option value="new">Сначала новые</option><option value="high">Сначала дорогие</option><option value="low">Сначала дешёвые</option></select></div>
+ <div class="grid">${data.garage.map((car,i)=>({...car,_index:i})).sort((a,b)=>{const sort=document.getElementById('garageSort')?.value||'new';return sort==='high'?Number(b.value)-Number(a.value):sort==='low'?Number(a.value)-Number(b.value):b._index-a._index}).map((car)=>{const i=car._index;const c=getCar(car.name);return `<div class="carCard"><div class="carImage">${carVisual(car.name,true)}</div><div class="carInfo"><div class="carName">${escapeHTML(car.name)}</div><div class="carValue">${money(car.value)}</div><span class="rarityTag">${rarityNames[c.rarity]}</span></div><button class="sellBtn" onclick="sellCar(${i})">ПРОДАТЬ · ${money(Math.floor(car.value*.85))}</button></div>`}).join("")}</div></section>`;
 }
+async function sellCar(i){if(!serverReady){toast("Нет соединения с сервером");return}try{const r=await api("/api/garage/sell","POST",{index:i});applyServerData(r.data);toast("Продано за "+money(r.sellPrice||0));renderGarage();updateBalance()}catch(e){toast(e.message||"Не удалось продать")}}
 
-/* =========================================================
-   SELL GARAGE
-========================================================= */
-
-async function sellGarageCar(index){
-
-  if(!confirm("Продать этот автомобиль?")){
-    return;
-  }
-
-  try{
-
-    const result = await api("/api/garage/sell",{
-      method:"POST",
-      body:{
-        index
-      }
-    });
-
-    if(result?.user){
-
-      localData.balance =
-        Number(result.user.balance ?? localData.balance);
-
-      localData.spent =
-        Number(result.user.spent ?? localData.spent);
-
-      localData.opened =
-        Number(result.user.opened ?? localData.opened);
-
-      localData.sold =
-        Number(result.user.sold ?? localData.sold);
-
-    }else{
-
-      const car = localData.garage[index];
-
-      if(car){
-        localData.balance += getCarPrice(car);
-        localData.sold++;
-      }
-
-    }
-
-    localData.garage.splice(index,1);
-
-    saveLocal();
-
-    renderBalance();
-    renderGarage();
-
-    toast("Автомобиль продан.");
-
-    vibration();
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      error.message ||
-      "Не удалось продать автомобиль.",
-      true
-    );
-  }
-}
-
-/* =========================================================
-   MARKET
-========================================================= */
-
-function getAllCars(){
-
-  if(!config){
-    return [];
-  }
-
-  if(Array.isArray(config.cars)){
-    return config.cars;
-  }
-
-  return [];
-}
-
+let marketFilter="all",marketQuery="";
 function renderMarket(){
-
-  const container =
-    document.getElementById("marketList");
-
-  let cars = getAllCars();
-
-  if(marketRarity !== "all"){
-
-    cars = cars.filter(car =>
-      String(
-        car.rarity ||
-        car.quality ||
-        ""
-      ).toLowerCase() === marketRarity
-    );
-  }
-
-  if(!cars.length){
-
-    container.innerHTML =
-      `<div class="empty">
-        Машин в этой категории нет.
-      </div>`;
-
-    return;
-  }
-
-  container.innerHTML =
-    cars.map((car,index)=>{
-
-      const name = getCarName(car);
-      const price = getCarPrice(car);
-
-      return `
-        <div class="car">
-
-          <div class="car-top">
-
-            <div>
-              <div class="car-name">
-                ${escapeHtml(name)}
-              </div>
-
-              <div class="car-rarity">
-                ${escapeHtml(
-                  car.rarity ||
-                  car.quality ||
-                  "Автомобиль"
-                )}
-              </div>
-            </div>
-
-            <div class="car-price">
-              ${formatMoney(price)}
-            </div>
-
-          </div>
-
-          <div class="car-actions">
-
-            <button
-              class="btn primary"
-              onclick="buyMarketCar(${index})"
-            >
-              Купить
-            </button>
-
-          </div>
-
-        </div>
-      `;
-
-    }).join("");
+ document.getElementById("content").innerHTML=`<section class="section"><div class="sectionHead"><div><div class="sectionTitle">Автомаркет</div><div class="sectionSub">Подбери автомобиль под свой бюджет</div></div><div class="sectionSub">${market.length} авто</div></div>
+ <div class="marketTools"><input class="marketSearch" id="marketSearch" placeholder="⌕  Поиск по марке или модели" value="${escapeHTML(marketQuery)}" oninput="setMarketQuery(this.value)"><div class="filterRow"><button class="filterChip ${marketFilter==='all'?'active':''}" onclick="setMarketFilter('all')">Все авто</button><button class="filterChip ${marketFilter==='budget'?'active':''}" onclick="setMarketFilter('budget')">До 2 млн</button><button class="filterChip ${marketFilter==='premium'?'active':''}" onclick="setMarketFilter('premium')">2–10 млн</button><button class="filterChip ${marketFilter==='luxury'?'active':''}" onclick="setMarketFilter('luxury')">10 млн+</button></div></div>
+ <div id="marketResults">${marketRows()}</div></section>`;
 }
+function marketRows(){const list=market.filter(([name,price])=>name.toLowerCase().includes(marketQuery.trim().toLowerCase())&&(marketFilter==='all'||(marketFilter==='budget'&&price<2000000)||(marketFilter==='premium'&&price>=2000000&&price<10000000)||(marketFilter==='luxury'&&price>=10000000))).slice().sort((a,b)=>a[1]-b[1]);if(!list.length)return '<div class="marketEmpty">Ничего не найдено.<br>Попробуй изменить поиск или фильтр.</div>';return list.map(([name,price])=>`<div class="marketCard"><div class="marketImage">${carVisual(name,true)}</div><div class="marketInfo"><div class="marketName">${escapeHTML(name)}</div><div class="marketPrice">${money(price)}</div><div class="sectionSub">${rarityNames[getCar(name).rarity]||'Автомобиль'}</div></div><button class="marketBuy" onclick="buyMarket('${name}',${price})">Купить</button></div>`).join('')}
+function setMarketFilter(filter){marketFilter=filter;renderMarket()}
+function setMarketQuery(query){marketQuery=query;const el=document.getElementById('marketResults');if(el)el.innerHTML=marketRows()}
 
-async function buyMarketCar(index){
-
-  let cars = getAllCars();
-
-  if(marketRarity !== "all"){
-    cars = cars.filter(car =>
-      String(
-        car.rarity ||
-        car.quality ||
-        ""
-      ).toLowerCase() === marketRarity
-    );
-  }
-
-  const car = cars[index];
-
-  if(!car){
-    toast("Автомобиль не найден.",true);
-    return;
-  }
-
-  try{
-
-    const result = await api("/api/market/buy",{
-      method:"POST",
-      body:{
-        name:getCarName(car)
-      }
-    });
-
-    if(result?.user){
-
-      localData.balance =
-        Number(result.user.balance ?? localData.balance);
-
-      localData.spent =
-        Number(result.user.spent ?? localData.spent);
-
-      localData.opened =
-        Number(result.user.opened ?? localData.opened);
-
-    }else{
-
-      const price = getCarPrice(car);
-
-      if(localData.balance < price){
-        throw new Error("Недостаточно денег.");
-      }
-
-      localData.balance -= price;
-    }
-
-    localData.garage.push(
-      result?.car ||
-      result?.item ||
-      car
-    );
-
-    saveLocal();
-
-    renderBalance();
-    renderGarage();
-
-    toast(`Куплен: ${getCarName(car)}`);
-
-    vibration();
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      error.message ||
-      "Не удалось купить автомобиль.",
-      true
-    );
-  }
-}
-
-/* =========================================================
-   DAILY
-========================================================= */
-
-async function claimDaily(){
-
-  const btn =
-    document.getElementById("dailyBtn");
-
-  btn.disabled = true;
-
-  try{
-
-    const result =
-      await api("/api/daily",{
-        method:"POST",
-        body:{}
-      });
-
-    if(result?.user){
-
-      localData.balance =
-        Number(result.user.balance ?? localData.balance);
-
-      localData.spent =
-        Number(result.user.spent ?? localData.spent);
-
-      localData.opened =
-        Number(result.user.opened ?? localData.opened);
-
-      localData.sold =
-        Number(result.user.sold ?? localData.sold);
-
-      saveLocal();
-      renderBalance();
-    }
-
-    toast(
-      result?.message ||
-      `🎁 Ежедневная награда получена!`
-    );
-
-  }catch(error){
-
-    toast(
-      error.message ||
-      "Награда пока недоступна.",
-      true
-    );
-
-  }finally{
-
-    btn.disabled = false;
-  }
-}
-
-/* =========================================================
-   REFERRAL
-========================================================= */
-
-async function loadReferral(){
-
-  const el =
-    document.getElementById("referralCode");
-
-  try{
-
-    const result =
-      await api("/api/referral");
-
-    const code =
-      result?.code ||
-      result?.referralCode ||
-      result?.referral_code;
-
-    el.textContent =
-      code ||
-      "Реферальный код пока недоступен.";
-
-  }catch(e){
-
-    if(serverUser){
-
-      el.textContent =
-        serverUser.referral_code ||
-        serverUser.referralCode ||
-        "Код недоступен.";
-
-    }else{
-
-      el.textContent =
-        "Код недоступен.";
-    }
-  }
-}
-
-async function copyReferral(){
-
-  const text =
-    document.getElementById("referralCode")
-      .textContent;
-
-  try{
-
-    await navigator.clipboard.writeText(text);
-
-    toast("Реферальный код скопирован.");
-
-  }catch(e){
-
-    toast("Не удалось скопировать код.",true);
-  }
-}
-
-/* =========================================================
-   PROFILE
-========================================================= */
+async function buyMarket(name,price){if(!serverReady){toast("Нет соединения с сервером");return}if(data.balance<price){toast("Недостаточно средств");return}try{const r=await api("/api/market/buy","POST",{name});applyServerData(r.data);updateBalance();toast("Автомобиль добавлен в гараж")}catch(e){toast(e.message||"Не удалось купить")}}
 
 function renderProfile(){
-
-  const name =
-    serverUser?.first_name ||
-    serverUser?.name ||
-    "Игрок";
-
-  const username =
-    serverUser?.username
-      ? "@" + serverUser.username
-      : "";
-
-  document.getElementById("profileName")
-    .textContent = name;
-
-  document.getElementById("profileUsername")
-    .textContent = username;
-
-  const avatar =
-    document.getElementById("avatar");
-
-  if(serverUser?.photo_url){
-
-    avatar.innerHTML =
-      `<img src="${escapeHtml(serverUser.photo_url)}" alt="">`;
-
-  }else{
-
-    avatar.textContent =
-      String(name).charAt(0).toUpperCase();
-  }
-
-  const ref =
-    serverUser?.referral_code ||
-    serverUser?.referralCode;
-
-  if(ref){
-    document.getElementById("referralCode")
-      .textContent = ref;
-  }
-
-  renderBalance();
+ const lvl=level();
+ document.getElementById("content").innerHTML=`<section class="section"><div class="sectionHead"><div><div class="sectionTitle">Профиль</div><div class="sectionSub">Статистика</div></div></div>
+ <div class="profile"><div class="profileCaption">AUTOEMPIRE MEMBER</div><div class="profileTop"><div class="avatar">🚘</div><div><div class="profileName">${escapeHTML(telegramUser?.first_name||tg?.initDataUnsafe?.user?.first_name||'Владелец')}</div><div class="profileLevel">Уровень ${lvl} · Коллекционер</div></div></div>
+ <div class="progress"><div class="progressLine"><span>Прогресс уровня</span><span>${Math.floor(data.spent%2500000).toLocaleString("ru-RU")} / 2 500 000 ₽</span></div><div class="progressBar"><div class="progressFill" style="width:${levelProgress()}%"></div></div></div>
+ <div class="stats"><div class="stat"><div class="statValue">${data.opened}</div><div class="statLabel">КЕЙСОВ</div></div><div class="stat"><div class="statValue">${data.garage.length}</div><div class="statLabel">АВТО</div></div><div class="stat"><div class="statValue">${money(data.spent)}</div><div class="statLabel">ПОТРАЧЕНО</div></div></div><div class="stats"><div class="stat"><div class="statValue">${data.sold||0}</div><div class="statLabel">ПРОДАНО</div></div><div class="stat"><div class="statValue">${money(data.balance)}</div><div class="statLabel">БАЛАНС</div></div><div class="stat"><div class="statValue">${money(data.garage.reduce((sum,c)=>sum+Number(c.value||0),0))}</div><div class="statLabel">ЦЕНА ГАРАЖА</div></div></div></div></section>`;
 }
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function switchPage(page){
-
-  currentPage = page;
-
-  document
-    .querySelectorAll(".page")
-    .forEach(el=>{
-      el.classList.toggle(
-        "active",
-        el.id === "page-" + page
-      );
-    });
-
-  document
-    .querySelectorAll(".nav-btn")
-    .forEach(btn=>{
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page === page
-      );
-    });
-
-  if(page === "garage"){
-    renderGarage();
-  }
-
-  if(page === "market"){
-    renderMarket();
-  }
-
-  if(page === "profile"){
-    renderProfile();
-    loadReferral();
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-}
-
-document
-  .querySelectorAll(".nav-btn")
-  .forEach(btn=>{
-
-    btn.addEventListener("click",()=>{
-
-      switchPage(btn.dataset.page);
-
-    });
-
-  });
-
-/* =========================================================
-   MARKET FILTER
-========================================================= */
-
-document
-  .getElementById("marketTabs")
-  .addEventListener("click",event=>{
-
-    const btn =
-      event.target.closest(".market-tab");
-
-    if(!btn) return;
-
-    marketRarity =
-      btn.dataset.rarity || "all";
-
-    document
-      .querySelectorAll(".market-tab")
-      .forEach(x=>{
-        x.classList.remove("active");
-      });
-
-    btn.classList.add("active");
-
-    renderMarket();
-  });
-
-/* =========================================================
-   START
-========================================================= */
-
-async function startApp(){
-
-  loadLocal();
-  initTelegram();
-
-  renderBalance();
-  renderGarage();
-
-  /*
-    Нельзя запускать игру без Telegram initData.
-    Это важно для настоящей авторизации.
-  */
-
-  if(!tg || !tg.initData){
-
-    setLoadingText(
-      "Откройте Автоимперию через Telegram"
-    );
-
-    setTimeout(()=>{
-
-      hideLoading();
-
-      toast(
-        "Открой игру через Telegram-бота.",
-        true
-      );
-
-    },600);
-
-    return;
-  }
-
-  try{
-
-    setLoadingText("Авторизация Telegram...");
-
-    await authenticate();
-
-    setLoadingText("Загрузка игры...");
-
-    await loadConfig();
-
-    await loadUser();
-
-    await loadGarage();
-
-    renderCases();
-    renderMarket();
-    renderGarage();
-    renderProfile();
-    renderBalance();
-
-    setLoadingText("Готово");
-
-    await new Promise(resolve =>
-      setTimeout(resolve,250)
-    );
-
-    hideLoading();
-
-  }catch(error){
-
-    console.error("START ERROR:",error);
-
-    setLoadingText("Ошибка загрузки");
-
-    /*
-      ВАЖНО:
-      теперь пользователь увидит настоящий endpoint
-      и HTTP-код, а не просто "некорректный ответ 405".
-    */
-
-    setTimeout(()=>{
-
-      hideLoading();
-
-      toast(
-        error.message ||
-        "Не удалось загрузить игру.",
-        true
-      );
-
-    },500);
-  }
-}
-
-/* =========================================================
-   GLOBAL ERROR HANDLERS
-========================================================= */
-
-window.addEventListener("error",event=>{
-
-  console.error(
-    "GLOBAL ERROR:",
-    event.error || event.message
-  );
-
-});
-
-window.addEventListener(
-  "unhandledrejection",
-  event=>{
-
-    console.error(
-      "UNHANDLED PROMISE:",
-      event.reason
-    );
-
-  }
-);
-
-/* =========================================================
-   RUN
-========================================================= */
-
-startApp();
-
+let toastTimer;
+function toast(text){const el=document.getElementById("toast");el.textContent=text;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),1800)}
+renderCases();updateBalance();
+if(tg&&tg.initData){authenticate().then(ok=>{if(ok){updateBalance();showPage(currentPage)}})}else{setTimeout(()=>toast("Открой игру через Telegram"),500)}
+document.addEventListener("gesturestart",e=>e.preventDefault());
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal"&&!spinning)closeModal()});
 </script>
-
 </body>
 </html>
